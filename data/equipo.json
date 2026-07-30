@@ -1,0 +1,319 @@
+{
+  "_instrucciones": "Equipo del club. Para agregar una foto: sube el archivo a assets/equipo/ y escribe su nombre en el campo 'foto' (ej: \"andrea.jpg\"). Si queda vacío, se muestra un monograma con las iniciales.",
+  "periodo": "2026",
+  "coordinacion": {
+    "titulo": "Coordinación General",
+    "nota": "Acepta propuestas y proyectos, actúa como comité de ética y representa al club ante la universidad y organizaciones externas (Art. 8).",
+    "mesa": [
+      {
+        "cargo": "Presidencia",
+        "nombre": "Andrea Díaz Inzunza",
+        "hanzi": "瑛淑",
+        "carrera": "Antropología UC",
+        "email": "adi@uc.cl",
+        "equipo": "Equipo Xuexi",
+        "foto": ""
+      },
+      {
+        "cargo": "Vicepresidencia",
+        "nombre": "Catalina Leiva Gutiérrez",
+        "hanzi": "",
+        "carrera": "Ciencia Política UC",
+        "email": "cleivg@uc.cl",
+        "equipo": "Equipo Wailian",
+        "foto": ""
+      },
+      {
+        "cargo": "Secretaría",
+        "nombre": "Josefa Leiva Freraut",
+        "hanzi": "林书画",
+        "carrera": "Arquitectura UC",
+        "email": "jleive@estudiante.uc.cl",
+        "equipo": "Equipo Xinxi",
+        "foto": ""
+      },
+      {
+        "cargo": "Tesorería",
+        "nombre": "María Ignacia Barrera",
+        "hanzi": "",
+        "carrera": "Ciencia Política y Licenciada en Ciencias Sociales UC",
+        "email": "mariaignaciabarrera@uc.cl",
+        "equipo": "",
+        "foto": ""
+      }
+    ],
+    "coordinadores": [
+      {
+        "cargo": "Escritos y redacción editorial",
+        "comision": "xuexi",
+        "nombre": "Amarú Mancilla Durand",
+        "hanzi": "",
+        "carrera": "College CC.SS., Relaciones Internacionales UC",
+        "email": "amaru.mancilla.d@uc.cl",
+        "foto": ""
+      },
+      {
+        "cargo": "Divulgación y actividades",
+        "comision": "xuexi",
+        "nombre": "Rolando Maureira Harfagar",
+        "hanzi": "",
+        "carrera": "Ingeniería Comercial UCh · Magíster en Finanzas UCh",
+        "email": "",
+        "foto": ""
+      },
+      {
+        "cargo": "Idioma, comunidad y networking",
+        "comision": "wailian",
+        "nombre": "Nathaly Jeria Cabello",
+        "hanzi": "",
+        "carrera": "Letras Inglesas UC",
+        "email": "njeria@uc.cl",
+        "foto": ""
+      },
+      {
+        "cargo": "Difusión, diseño e información",
+        "comision": "xinxi",
+        "nombre": "Camila Garrido Luengo",
+        "hanzi": "凯玫拉",
+        "carrera": "Psicología UC",
+        "email": "clgarrido1@uc.cl",
+        "foto": ""
+      },
+      {
+        "cargo": "Coordinación externa",
+        "comision": "lectura",
+        "nombre": "Diego Urzúa Escobar",
+        "hanzi": "",
+        "carrera": "Psicólogo UC · Magíster en Psicología Educacional UC",
+        "email": "",
+        "foto": ""
+      }
+    ]
+  },
+  "comisiones": [
+    {
+      "id": "xuexi",
+      "zh": "学习",
+      "pinyin": "xuéxí",
+      "nombre": "Conocimiento Académico",
+      "nota": "Levanta investigación sobre China, su diáspora en Chile y la interconexión entre ambos países (Art. 5).",
+      "miembros": [
+        {
+          "nombre": "Constanza Muñoz Guajardo",
+          "hanzi": "",
+          "carrera": "Cientista Política UC · estudiante de Magíster en Estudios Internacionales UCh",
+          "foto": ""
+        },
+        {
+          "nombre": "Iván Álvarez Cifuentes",
+          "hanzi": "",
+          "carrera": "Magíster en Ciencias Sociales UCh",
+          "foto": ""
+        },
+        {
+          "nombre": "Alejandro Orrego Torres",
+          "hanzi": "阿里山大",
+          "carrera": "Biología UC · Políticas Públicas",
+          "foto": ""
+        },
+        {
+          "nombre": "Paula Nova García",
+          "hanzi": "",
+          "carrera": "Derecho UDD",
+          "foto": ""
+        },
+        {
+          "nombre": "Anasol Llanos",
+          "hanzi": "安娜",
+          "carrera": "Derecho UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Alonso Opazo Farías",
+          "hanzi": "",
+          "carrera": "Estudios Internacionales USACH",
+          "foto": ""
+        },
+        {
+          "nombre": "Catalina Lira Cofre",
+          "hanzi": "",
+          "carrera": "Derecho PUCV",
+          "foto": ""
+        },
+        {
+          "nombre": "Benjamín Godoy Retamales",
+          "hanzi": "辰曜",
+          "carrera": "Agronomía UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Emilia Pérez Farías",
+          "hanzi": "",
+          "carrera": "Derecho PUCV",
+          "foto": ""
+        }
+      ]
+    },
+    {
+      "id": "wailian",
+      "zh": "外联",
+      "pinyin": "wàilián",
+      "nombre": "Idioma, Comunidad y Networking",
+      "nota": "Fomenta el mandarín, forma alianzas y gestiona las actividades del club (Art. 6).",
+      "miembros": [
+        {
+          "nombre": "Elo Segura Calvo",
+          "hanzi": "柳安宇",
+          "carrera": "Pedagogía en Inglés UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Karen Quijada",
+          "hanzi": "凯琳",
+          "carrera": "Ingeniería en Negocios Internacionales UV",
+          "foto": ""
+        },
+        {
+          "nombre": "Sofía Lizama Sulantay",
+          "hanzi": "",
+          "carrera": "Administración Pública UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Carolina Bolbarán Ruiz",
+          "hanzi": "罗妍姿",
+          "carrera": "Fonoaudiología UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Carolina Marín Troncoso",
+          "hanzi": "",
+          "carrera": "Trabajadora Social UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Martina Soto Vera",
+          "hanzi": "李娜娜",
+          "carrera": "Pedagogía en Inglés UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Francisca Reyes Aliaga",
+          "hanzi": "",
+          "carrera": "Estudios Internacionales USACH",
+          "foto": ""
+        },
+        {
+          "nombre": "Valentina Ahumada Peralta",
+          "hanzi": "文婷",
+          "carrera": "Turismo y Hotelería DUOC UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Nadja Albarrán Hermosilla",
+          "hanzi": "宋纳迪",
+          "carrera": "Historia UdeC",
+          "foto": ""
+        },
+        {
+          "nombre": "Ámbar Tapia García",
+          "hanzi": "",
+          "carrera": "Derecho UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Javier Zúñiga Gálvez",
+          "hanzi": "周卫",
+          "carrera": "Enfermería UST",
+          "foto": ""
+        },
+        {
+          "nombre": "Gabriel Ascencio Bayona",
+          "hanzi": "",
+          "carrera": "Derecho UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Benjamín Varas Ortega",
+          "hanzi": "",
+          "carrera": "Física UC",
+          "foto": ""
+        }
+      ]
+    },
+    {
+      "id": "xinxi",
+      "zh": "信息",
+      "pinyin": "xìnxī",
+      "nombre": "Difusión, Diseño e Información",
+      "nota": "Convierte el trabajo de las otras comisiones en material publicable y administra las redes (Art. 7).",
+      "miembros": [
+        {
+          "nombre": "Yael Astorga Valenzuela",
+          "hanzi": "",
+          "carrera": "Ingeniera Civil Informática PUCV",
+          "foto": ""
+        },
+        {
+          "nombre": "Ariana Sánchez Prado",
+          "hanzi": "",
+          "carrera": "Diseño Gráfico DUOC UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Alejandro Betanzo Herrera",
+          "hanzi": "",
+          "carrera": "Periodismo UC",
+          "foto": ""
+        },
+        {
+          "nombre": "Grisell Romero Prado",
+          "hanzi": "罗梦茹",
+          "carrera": "Administración de Empresas UGM",
+          "foto": ""
+        },
+        {
+          "nombre": "Francisco Díaz Barahona",
+          "hanzi": "",
+          "carrera": "Ingeniero Civil Químico · Magíster en Estudios sobre Asia UCh",
+          "foto": ""
+        }
+      ]
+    }
+  ],
+  "fundadores": {
+    "fecha": "26 de febrero de 2025",
+    "cita": "¿Y si hacemos un club sobre China?",
+    "nombres": [
+      "María Ignacia Barrera Alvarado",
+      "Andrea Díaz Inzunza",
+      "Amarú Mancilla Durand",
+      "Carolina Marín Troncoso",
+      "Constanza Muñoz Guajardo",
+      "Catalina Leiva Gutiérrez"
+    ]
+  },
+  "historia": [
+    {
+      "periodo": "Primera Coordinación, 2025",
+      "cargos": [
+        {
+          "cargo": "Presidencia y Coordinación Xinxi",
+          "nombre": "Andrea Díaz Inzunza"
+        },
+        {
+          "cargo": "Vicepresidencia y Coordinación Wailian",
+          "nombre": "Catalina Leiva Gutiérrez"
+        },
+        {
+          "cargo": "Secretaría · Equipo Wailian",
+          "nombre": "María Ignacia Barrera"
+        },
+        {
+          "cargo": "Tesorería · Equipo Wailian",
+          "nombre": "Carolina Marín Troncoso"
+        }
+      ]
+    }
+  ]
+}
