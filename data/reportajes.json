@@ -1,0 +1,21 @@
+{
+  "_instrucciones": "Reportajes, columnas e investigaciones de la Comisión Xuexi (学习). Para publicar uno, copia un bloque completo entre llaves y edítalo. El campo 'archivo' es opcional: si subes un PDF a assets/reportajes/ y escribes aquí su nombre, aparece un botón de descarga.",
+  "_areas": [
+    "Economía y Negocios",
+    "Ciencia y Tecnología",
+    "RR.II. y Diplomacia",
+    "Cultura, Arte y Lengua",
+    "Políticas Públicas y Gobernanza",
+    "Otros"
+  ],
+  "_ejemplo": {
+    "titulo": "Título del reportaje",
+    "autor": "Nombre de quien lo escribió",
+    "area": "Cultura, Arte y Lengua",
+    "fecha": "2026-05-20",
+    "resumen": "Dos o tres líneas que inviten a leerlo.",
+    "enlace": "",
+    "archivo": ""
+  },
+  "reportajes": []
+}

@@ -79,6 +79,30 @@ Si algo queda mal escrito, GitHub te avisa con un ⚠️ antes de guardar.
 
 ---
 
+## Cómo publicar un reportaje
+
+Los reportajes de la Comisión Xuexi viven en
+**[`data/reportajes.json`](data/reportajes.json)**. Copia el bloque `_ejemplo`
+dentro de la lista `reportajes` y edítalo:
+
+| Campo | Qué va |
+|---|---|
+| `titulo` | Nombre del reportaje |
+| `autor` | Quién lo escribió |
+| `area` | Una de las seis áreas del Art. 5 |
+| `fecha` | Año-mes-día, ej. `"2026-05-20"` |
+| `resumen` | Dos o tres líneas que inviten a leerlo |
+| `enlace` | Si está publicado en otro lado (Instagram, Drive, Medium) |
+| `archivo` | Si subes el PDF a `assets/reportajes/`, su nombre |
+
+Puedes usar `enlace`, `archivo`, ambos o ninguno. Los filtros por área
+aparecen solos, según las áreas que tengan reportajes.
+
+Mientras la lista esté vacía, la sección invita a enviar trabajos en vez de
+verse rota.
+
+---
+
 ## Cómo actualizar el equipo
 
 El equipo vive en **[`data/equipo.json`](data/equipo.json)** y se edita igual que la agenda,
@@ -144,9 +168,11 @@ librerías. Lo que ves en el repositorio es exactamente lo que se publica.
 ├── admin.html          Panel para cargar actividades
 ├── data/
 │   ├── eventos.json    ← La agenda. Esto es lo que se edita seguido.
-│   └── equipo.json     ← El equipo y la coordinación.
+│   ├── equipo.json     ← El equipo y la coordinación.
+│   └── reportajes.json ← Los reportajes publicados.
 ├── assets/             Imágenes: logo, sello y fotos de actividades
-│   └── equipo/         Retratos de las personas
+│   ├── equipo/         Retratos de las personas
+│   └── reportajes/     PDF de los reportajes
 ├── CNAME               El dominio (no tocar)
 └── .nojekyll           Config de GitHub Pages (no tocar)
 ```
