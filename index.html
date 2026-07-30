@@ -678,8 +678,8 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
     </div>
     <div>
       <h4>Contacto</h4>
-      <a href="mailto:xuexiclub.uc@gmail.com">xuexiclub.uc@gmail.com</a>
       <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
     </div>
   </div>
   <div class="wrap legal">
@@ -914,8 +914,8 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
       document.getElementById('equipo-render').innerHTML =
         '<p class="vacio-eq" style="border:1px dashed var(--line);border-radius:3px;padding:30px;' +
         'text-align:center;color:var(--cream-faint)">No pudimos cargar el equipo. ' +
-        'Escríbenos a <a href="mailto:xuexiclub.uc@gmail.com" style="color:var(--gold)">' +
-        'xuexiclub.uc@gmail.com</a>.</p>';
+        'Escríbenos por <a href="https://instagram.com/xuexiclub.uc" target="_blank" ' +
+        'rel="noopener" style="color:var(--gold)">Instagram</a>.</p>';
       console.error('Equipo:', err);
     });
 
@@ -932,8 +932,8 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
     })
     .catch(function(err){
       lista.innerHTML = '<p class="aviso">No pudimos cargar la agenda en este momento.<br>' +
-        'Escríbenos a <a href="mailto:xuexiclub.uc@gmail.com" style="color:var(--gold)">' +
-        'xuexiclub.uc@gmail.com</a> o revisa nuestro Instagram.</p>';
+        'Escríbenos por <a href="https://instagram.com/xuexiclub.uc" target="_blank" ' +
+        'rel="noopener" style="color:var(--gold)">Instagram</a>.</p>';
       console.error('Agenda:', err);
     });
 })();
