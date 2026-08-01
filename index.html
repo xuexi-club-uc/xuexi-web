@@ -447,6 +447,9 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
 .foot a:hover{color:var(--gold)}
 .legal{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);font-size:.72rem;color:var(--cream-faint);
   display:flex;gap:14px;justify-content:space-between;flex-wrap:wrap}
+.legal-admin{color:var(--cream-faint);text-decoration:underline;text-decoration-color:var(--line);
+  text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
+.legal-admin:hover{color:var(--gold);text-decoration-color:var(--gold-deep)}
 
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -876,7 +879,7 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   </div>
   <div class="wrap legal">
     <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
-    <span>Hecho por la Comisión Xinxi 信息</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin.html" class="legal-admin">Panel del equipo</a></span>
   </div>
 </footer>
 
