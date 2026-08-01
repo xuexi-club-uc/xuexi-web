@@ -40,7 +40,7 @@
       "comision": "wailian",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
-      "estado": "abierto",
+      "estado": "lleno",
       "hanzi": "麦",
       "cupos": 0,
       "imagen": "reencuentro-karaoke.jpg"
@@ -70,7 +70,7 @@
       "comision": "wailian",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
-      "estado": "abierto",
+      "estado": "lleno",
       "hanzi": "笔",
       "cupos": 0,
       "imagen": "reencuentro-caligrafia.jpg"

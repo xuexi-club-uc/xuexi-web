@@ -239,6 +239,13 @@ section{position:relative;z-index:1;padding:clamp(52px,7vw,92px) 0}
 .dest-lugar{font-size:.8rem;color:var(--cream-dim);margin:8px 20px 0}
 .dest-insc{font-size:.72rem;color:var(--cream-faint);margin:10px 20px 18px;padding-top:10px;
   border-top:1px solid var(--line)}
+.dest-cerrado{opacity:.72}
+.dest-cerrado:hover{opacity:1}
+.dest-cerrado .dest-media img{filter:grayscale(.35)}
+.dest-badge{position:absolute;left:0;right:0;bottom:0;padding:7px 10px;text-align:center;
+  background:rgba(20,16,16,.82);backdrop-filter:blur(2px);color:var(--gold);
+  font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+.dest-cerrado .dest-insc{color:var(--vermilion)}
 
 /* COMUNIDAD */
 .community{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}
@@ -604,15 +611,16 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
       apoya Primavera UC</p>
   </div>
   <div class="dest-grid">
-    <article class="dest-card">
+    <article class="dest-card dest-cerrado">
       <div class="dest-media">
         <img src="assets/reencuentro-karaoke.jpg" alt="Afiche: Karaoke chino 开麦吧!, Reencuentro UC">
         <span class="dest-zh">麦</span>
+        <span class="dest-badge">Inscripción cerrada</span>
       </div>
       <p class="dest-hora">11:00 – 13:00 hrs</p>
       <h3>Karaoke chino <span class="zh">开麦吧!</span></h3>
       <p class="dest-lugar">Zona 2 · Campus San Joaquín</p>
-      <p class="dest-insc">Inscripción previa por QR en el afiche del club</p>
+      <p class="dest-insc">Inscripción cerrada — cupos completos</p>
     </article>
     <article class="dest-card">
       <div class="dest-media">
@@ -624,15 +632,16 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
       <p class="dest-lugar">Zona 2 · Campus San Joaquín</p>
       <p class="dest-insc">Inscripción previa por QR en el afiche del club</p>
     </article>
-    <article class="dest-card">
+    <article class="dest-card dest-cerrado">
       <div class="dest-media">
         <img src="assets/reencuentro-caligrafia.jpg" alt="Afiche: Taller de Caligrafía China, Reencuentro UC">
         <span class="dest-zh">笔</span>
+        <span class="dest-badge">Inscripción cerrada</span>
       </div>
       <p class="dest-hora">11:00 – 13:10 hrs</p>
       <h3>Taller de caligrafía china</h3>
       <p class="dest-lugar">Zona 2 · Campus San Joaquín</p>
-      <p class="dest-insc">Inscripción previa por QR en el afiche del club</p>
+      <p class="dest-insc">Inscripción cerrada — cupos completos</p>
     </article>
   </div>
 </section>
