@@ -246,16 +246,19 @@ details.rep{position:relative;border-bottom:1px solid var(--line);transition:bac
 details.rep:hover{background:var(--card)}
 details.rep[open]{background:var(--card)}
 
-details.rep summary{display:grid;grid-template-columns:76px 1fr;gap:22px;align-items:start;
+details.rep{--fch-col:94px}
+details.rep summary{display:grid;grid-template-columns:var(--fch-col) 1fr;gap:24px;align-items:start;
   padding:26px 20px 26px 4px;cursor:pointer;list-style:none;transition:padding-left .28s}
 details.rep summary::-webkit-details-marker{display:none}
 details.rep summary:hover{padding-left:14px}
 details.rep summary:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
 
 .rep .fch{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--cream-faint);
-  line-height:1.5;padding-top:6px;text-align:right;border-right:1px solid var(--line);padding-right:20px}
-.rep .fch b{display:block;font-weight:normal;font-size:1.5rem;color:var(--gold);
-  font-family:var(--serif);line-height:1;margin-bottom:3px}
+  line-height:1.5;padding-top:6px;text-align:right;border-right:1px solid var(--line);
+  padding-right:22px;white-space:nowrap}
+.rep .fch b{display:block;font-weight:normal;font-size:1.6rem;color:var(--gold);
+  font-family:var(--serif);line-height:1;margin-bottom:4px}
+.rep .fch span{display:block}
 .rep .cnt{min-width:0}
 .rep .ar{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);
   font-weight:600;margin-bottom:9px}
@@ -281,7 +284,8 @@ details.rep-destacado h3{font-size:clamp(1.6rem,3.3vw,2.5rem);max-width:20ch}
 details.rep-destacado .ar::after{content:'· Destacado';color:var(--vermilion);margin-left:8px}
 
 /* cuerpo del artículo */
-.rep-cuerpo{padding:0 20px 44px calc(76px + 22px);animation:rep-abrir .34s cubic-bezier(.2,.8,.3,1)}
+.rep-cuerpo{padding:0 20px 44px calc(var(--fch-col) + 28px);
+  animation:rep-abrir .34s cubic-bezier(.2,.8,.3,1)}
 @keyframes rep-abrir{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 .rep-meta{display:flex;flex-wrap:wrap;gap:18px;padding-bottom:20px;margin-bottom:26px;
   border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.66rem;
@@ -317,7 +321,7 @@ details.rep-destacado .ar::after{content:'· Destacado';color:var(--vermilion);m
   details.rep summary{grid-template-columns:1fr;gap:12px;padding:24px 4px}
   .rep .fch{text-align:left;border-right:0;padding:0 0 4px;border-bottom:1px solid var(--line);
     display:flex;align-items:baseline;gap:9px;max-width:max-content}
-  .rep .fch b{margin:0}
+  .rep .fch b{margin:0;font-size:1.4rem}
   .rep-cuerpo{padding:0 4px 36px}
   .rep-texto p{font-size:1rem}
 }

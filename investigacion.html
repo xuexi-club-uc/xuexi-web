@@ -6,7 +6,7 @@
 <title>Investigación · Xuexi Club UC</title>
 <meta name="description" content="Reportajes, columnas y áreas de investigación de la Comisión Xuexi (学习) del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=2">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -128,7 +128,7 @@
   </div>
 </footer>
 
-<script src="assets/nav.js"></script>
+<script src="assets/nav.js?v=2"></script>
 <script>
   document.getElementById('anio').textContent = new Date().getFullYear();
 
@@ -202,8 +202,8 @@
       var f = r.fecha ? fecha(r.fecha) : null;
       var dest = (i === 0 && filtroRep === 'todo') ? ' rep-destacado' : '';
       return '<details class="rep' + dest + '"' + (dest ? ' open' : '') + '><summary>' +
-        '<p class="fch">' + (f ? '<b>' + f.getDate() + '</b>' + MESES[f.getMonth()] + ' ' +
-          f.getFullYear() : '') + '</p>' +
+        '<p class="fch">' + (f ? '<b>' + f.getDate() + '</b><span>' + MESES[f.getMonth()] + ' ' +
+          f.getFullYear() + '</span>' : '') + '</p>' +
         '<div class="cnt">' +
           '<p class="ar">' + esc(r.area || '') +
             (r.tipo ? '<i>·</i>' + esc(r.tipo) : '') + '</p>' +
