@@ -6,7 +6,7 @@
 <title>Investigación · Xuexi Club UC</title>
 <meta name="description" content="Reportajes, columnas y áreas de investigación de la Comisión Xuexi (学习) del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=2">
+<link rel="stylesheet" href="assets/site.css?v=3">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -69,20 +69,6 @@
         <span class="zh">投稿</span> Envía tu trabajo</a>
     </div>
 
-    <div class="areas">
-      <article class="area-c" id="economia"><span class="zh">经济</span><h3>Economía y Negocios</h3>
-        <p>China en el comercio global y su vínculo con Chile y América Latina.</p></article>
-      <article class="area-c" id="diplomacia"><span class="zh">外交</span><h3>Diplomacia y RR.II.</h3>
-        <p>Política exterior, multilateralismo y la Franja y la Ruta.</p></article>
-      <article class="area-c" id="cultura"><span class="zh">文化</span><h3>Cultura, Arte y Lengua</h3>
-        <p>Literatura, cine, caligrafía y el aprendizaje del mandarín.</p></article>
-      <article class="area-c" id="ciencia"><span class="zh">科技</span><h3>Ciencia y Tecnología</h3>
-        <p>Innovación, energía y transición digital.</p></article>
-      <article class="area-c" id="politicas"><span class="zh">治理</span><h3>Políticas Públicas y Gobernanza</h3>
-        <p>Estado, ciudad y desarrollo.</p></article>
-      <article class="area-c" id="otros"><span class="zh">其他</span><h3>Otros</h3>
-        <p>Todo lo que no cabe en una sola caja — y suele ser lo más interesante.</p></article>
-    </div>
   </div>
 </section>
 
@@ -128,7 +114,7 @@
   </div>
 </footer>
 
-<script src="assets/nav.js?v=2"></script>
+<script src="assets/nav.js?v=3"></script>
 <script>
   document.getElementById('anio').textContent = new Date().getFullYear();
 
@@ -148,6 +134,27 @@
   }
 
   var reportajes = [], filtroRep = 'todo';
+
+  // Los enlaces del menú (investigacion.html#economia, …) filtran por área
+  var SLUGS = {
+    economia:   'Economía y Negocios',
+    ciencia:    'Ciencia y Tecnología',
+    diplomacia: 'RR.II. y Diplomacia',
+    cultura:    'Cultura, Arte y Lengua',
+    politicas:  'Políticas Públicas y Gobernanza',
+    otros:      'Otros'
+  };
+
+  function areaDelHash(){
+    return SLUGS[(location.hash || '').replace('#', '')] || 'todo';
+  }
+
+  function marcarChip(){
+    var chips = document.querySelectorAll('#rep-filtros .chip');
+    [].forEach.call(chips, function(c){
+      c.setAttribute('aria-pressed', String(c.dataset.r === filtroRep));
+    });
+  }
 
   function fechaLarga(iso){
     if (!iso) return '';
@@ -198,10 +205,9 @@
       cont.innerHTML = '<p class="aviso">No hay reportajes en esta área todavía.</p>';
       return;
     }
-    cont.innerHTML = vis.map(function(r, i){
+    cont.innerHTML = vis.map(function(r){
       var f = r.fecha ? fecha(r.fecha) : null;
-      var dest = (i === 0 && filtroRep === 'todo') ? ' rep-destacado' : '';
-      return '<details class="rep' + dest + '"' + (dest ? ' open' : '') + '><summary>' +
+      return '<details class="rep"><summary>' +
         '<p class="fch">' + (f ? '<b>' + f.getDate() + '</b><span>' + MESES[f.getMonth()] + ' ' +
           f.getFullYear() + '</span>' : '') + '</p>' +
         '<div class="cnt">' +
@@ -245,7 +251,16 @@
       document.getElementById('rep-total').textContent =
         n ? n + (n === 1 ? ' publicado' : ' publicados') : '';
       pintarFiltrosRep(d._areas || []);
+      filtroRep = areaDelHash();
+      marcarChip();
       pintarReportajes();
+
+      window.addEventListener('hashchange', function(){
+        filtroRep = areaDelHash();
+        marcarChip();
+        pintarReportajes();
+        document.getElementById('rep-lista').scrollIntoView({block:'start'});
+      });
     })
     .catch(function(){
       document.getElementById('rep-lista').innerHTML =
