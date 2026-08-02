@@ -1,5 +1,5 @@
 {
-  "_instrucciones": "Reportajes, columnas e investigaciones de la Comisión Xuexi (学习). Para publicar uno, copia un bloque completo entre llaves y edítalo. El campo 'archivo' es opcional: si subes un PDF a assets/reportajes/ y escribes aquí su nombre, aparece un botón de descarga.",
+  "_instrucciones": "Reportajes y columnas de la Comisión Xuexi (学习), rescatados del sitio de Google Sites del club. Para publicar uno nuevo, copia un bloque del array 'reportajes' y edítalo. 'parrafos' es una lista de strings, uno por párrafo. Si 'extracto' es true, se muestra un aviso de que es un fragmento y no el texto completo.",
   "_areas": [
     "Economía y Negocios",
     "Ciencia y Tecnología",
@@ -8,14 +8,93 @@
     "Políticas Públicas y Gobernanza",
     "Otros"
   ],
-  "_ejemplo": {
-    "titulo": "Título del reportaje",
-    "autor": "Nombre de quien lo escribió",
-    "area": "Cultura, Arte y Lengua",
-    "fecha": "2026-05-20",
-    "resumen": "Dos o tres líneas que inviten a leerlo.",
-    "enlace": "",
-    "archivo": ""
-  },
-  "reportajes": []
+  "reportajes": [
+    {
+      "titulo": "Mindfulness sí, monjes no: la gran paradoja del budismo en China",
+      "autor": "Diego Urzúa Escobar",
+      "autorDetalle": "Psicólogo UC-Chile. Estudiante de Magíster en Psicología Educacional.",
+      "area": "Cultura, Arte y Lengua",
+      "fecha": "2026-05-19",
+      "resumen": "El Partido no destruye el budismo: lo administra, separando la 'cultura tradicional' que promueve de la 'religión' que vigila.",
+      "cita": "Una persona meditando sola no le disputa nada al Partido. Un monasterio con miles de fieles que reconocen a un líder extranjero, sí.",
+      "extracto": false,
+      "parrafos": [
+        "«La idea de que el Partido Comunista Chino destruye la religión es una mentira del enemigo para sembrar discordia». La frase no es de un militante de línea dura. Es del Dalai Lama, en 1954, durante una visita oficial a Beijing en la que se reunió varias veces con Mao Zedong. Por entonces coqueteaba abiertamente con el marxismo. Las vueltas de la historia: el mismo hombre que sería tildado décadas después de agente de la CIA, alguna vez defendió en público al régimen que hoy lo persigue.",
+        "Setenta años más tarde, la pregunta sigue abierta: ¿qué hace exactamente el Partido con el budismo? La respuesta corta es que no lo destruye. Lo administra. Y lo hace mediante una distinción categorial tan eficaz como poco discutida: separar la «cultura tradicional» (传统文化) de la «religión» (宗教).",
+        "La cultura tradicional es todo aquello que el Partido considera herencia china digna de ser protegida e incluso promovida activamente, siempre que cumpla una condición: no amenazar la identidad nacional. Bajo ese paraguas entra el Tai-Chi en las plazas, la caligrafía, la medicina tradicional y, crucialmente, una versión específica del budismo: la meditación como herramienta de salud mental, las enseñanzas monásticas como guía ética secular, el 念 (nián) reconvertido en mindfulness exportable. Despojado de su dimensión trascendente, el budismo se vuelve políticamente útil.",
+        "La religión, en cambio, es otra cosa. Es la institución jerárquica con liderazgo propio, lealtades verticales y autoridad moral autónoma. Ahí están fuertemente restringidos: los líderes religiosos deben jurar lealtad al Estado antes que a cualquier autoridad espiritual, y tener una foto del Dalai Lama colgada en una pared cruza inmediatamente la línea del separatismo.",
+        "La lógica detrás de esta distinción no es opaca: lo que se permite es lo que no compite por la influencia. Una persona meditando sola no le disputa nada al Partido. Un monasterio con miles de fieles que reconocen a un líder extranjero, sí.",
+        "Conviene resistir la tentación de leer esto como una invención del PCCh. La subordinación de la religión al Estado tiene en China raíces mucho más antiguas que el comunismo. Incluso durante la dinastía Song, la época budista por excelencia, la corte se aseguró de ser el único promotor oficial de la fe, sin dejar espacio a instituciones autónomas. El Partido no inventó esta lógica: la heredó y la modernizó.",
+        "Lo interesante es el resultado. La práctica budista personal en China goza de excelente salud. Las instituciones monásticas tradicionales, no tanto. Es una victoria silenciosa del Partido: no tuvo que prohibir el budismo para neutralizarlo. Le bastó con redefinirlo.",
+        "¿Cómo terminó la gira del Dalai Lama por Beijing en 1954? En una de sus últimas reuniones, Mao decidió cortar de raíz cualquier coqueteo ideológico. Le dijo, sin anestesia: «Para mí, la religión es un veneno. Debemos combatirlo con todas las fuerzas».",
+        "El método cambió. La premisa, no."
+      ]
+    },
+    {
+      "titulo": "Los aranceles como herramienta estratégica del orden internacional: la ofensiva de Trump ante China",
+      "autor": "Alonso Opazo Farías",
+      "autorDetalle": "Licenciado en Estudios Internacionales, Analista en Políticas y Asuntos Internacionales USACH.",
+      "area": "RR.II. y Diplomacia",
+      "fecha": "2026-05-06",
+      "resumen": "La política arancelaria de Trump no busca proteger la economía local, sino frenar la consolidación de China en su disputa por el poder internacional.",
+      "cita": "Más que frenar a China, las políticas impulsadas por Trump parecen estar acelerando la transición hacia un nuevo orden internacional más fragmentado y competitivo.",
+      "extracto": true,
+      "parrafos": [
+        "El ascenso y consolidación de China como potencia hegemónica a nivel internacional ha emergido como uno de los principales desafíos para Estados Unidos, y por consecuencia, para Donald Trump como su actual presidente. Por esto, la utilización de aranceles ha sido un instrumento esencial por parte de Trump, dejando atrás la retórica de la imposición de la democratización liberal desde el fin de la Guerra Fría.",
+        "En 2025 esto se repitió, cuando Trump volvió a anunciar la imposición de millones de dólares en aranceles, sin embargo, en esta ocasión no fue solo a China, sino que a decenas de países en una suerte de arancel universal del 10% (Huld, 2026). Por tanto, lejos de ser una medida defensiva a favor de la protección industrial local, la imposición de aranceles más bien corresponde a una señal o mensaje político respecto a la posición de EE.UU. como hegemonía internacional, y sobre su intención de mantener ese rol, cueste lo que cueste, incluso si ello conlleva traicionar sus tradiciones y valores característicos de la nación.",
+        "Esto implicó un aumento del déficit, multiplicando las importaciones desde EE.UU., y provocando que China concentrara la expansión de sus exportaciones en socios más cercanos geopolíticamente, fundamentalmente India y el bloque ASEAN, en cifras cercanas al 30% en conjunto, a la vez que redujo en un 11% las exportaciones a EE.UU. en un plazo de meses (Chu, Wainwright & Leake, 2025).",
+        "«Más que frenar a China, las políticas impulsadas por Trump parecen estar acelerando la transición hacia un nuevo orden internacional más fragmentado y competitivo. Un orden en el que EE.UU. deja de ser el arquitecto e inspector de su funcionamiento»."
+      ]
+    },
+    {
+      "titulo": "En la encrucijada: América Latina entre China y el vacío estadounidense",
+      "autor": "Constanza Muñoz Guajardo",
+      "autorDetalle": "Cientista Política UC.",
+      "area": "RR.II. y Diplomacia",
+      "fecha": "2025-10-28",
+      "resumen": "La cumbre China–CELAC en Pekín marca un punto de inflexión: China ofrece inversión mientras Estados Unidos repliega su influencia en la región.",
+      "cita": "Las inversiones chinas, aunque atractivas, pueden implicar acuerdos que terminen comprometiendo la autonomía de los países de la región.",
+      "extracto": true,
+      "fuente": {"texto": "Imagen recuperada de France24", "url": "https://www.france24.com/es/am%C3%A9rica-latina/20250513-china-destina-10-000-millones-de-d%C3%B3lares-a-nuevos-cr%C3%A9ditos-a-am%C3%A9rica-latina"},
+      "parrafos": [
+        "La cumbre China–CELAC en Pekín marca un punto de inflexión en las relaciones entre América Latina y el gigante asiático. En un contexto de creciente fragmentación regional y un aparente repliegue de la influencia estadounidense, China se posiciona ofreciendo financiamiento e inversión donde Washington se retira.",
+        "A pesar de los beneficios potenciales de las inversiones chinas, como el financiamiento para proyectos de infraestructura o energías renovables, hay un patrón preocupante de que estos préstamos estén vinculados a recursos naturales o al control de sectores estratégicos. Esto podría generar una situación de dependencia asimétrica donde los países latinoamericanos, aunque ganen a corto plazo, se vean atados a decisiones económicas y políticas dictadas por los intereses de Beijing, más que por los de sus propios pueblos.",
+        "El desafío ahora será cómo los gobiernos latinoamericanos logran equilibrar esta relación sin poner en riesgo su autonomía política. La oferta china es tentadora, pero no debe ser aceptada sin una evaluación cuidadosa de los términos y las condiciones. Las inversiones deben alinearse con los intereses de largo plazo de la región."
+      ]
+    },
+    {
+      "titulo": "Seamos pragmáticos: Chile ante la geopolítica de la tecnología",
+      "autor": "Rolando Maureira Harfagar",
+      "autorDetalle": "Magíster en Finanzas, Universidad de Chile.",
+      "area": "Ciencia y Tecnología",
+      "fecha": "2026-05-19",
+      "resumen": "La presencia de proveedores tecnológicos chinos ha sido clave para la digitalización de Chile. Excluirlos por ideología, sin evaluar caso a caso, sería irracional.",
+      "cita": "En la economía actual, el desarrollo no se logra tomando partido, sino tomando buenas decisiones.",
+      "extracto": true,
+      "parrafos": [
+        "Mientras en gran parte de América Latina la conectividad sigue siendo un lujo irregular, en Chile ver series en 4K o trabajar remoto con baja latencia se ha vuelto casi trivial. En los últimos años Chile se ha consolidado como el tercer hub de fintechs más grande de Latinoamérica, destacando por una rápida maduración y regulación pionera (ley fintech).",
+        "Quedémonos con esto: en Chile la digitalización ha tenido un impacto positivo y real en la calidad de vida de las personas. Este fenómeno no ha surgido de manera espontánea. Detrás de esta transformación hay decisiones de política pública, apertura a la competencia internacional y acceso a tecnología capaz de desplegar infraestructura a gran escala. Es en este último punto donde la relación entre Chile y proveedores tecnológicos chinos ha sido fundamental.",
+        "La presencia tecnológica de China ha sido clave para abaratar, masificar y modernizar la conectividad del país; sin esa relación, Chile difícilmente habría avanzado tan rápido en su digitalización. Ejemplo de esto son las empresas Huawei y ZTE, ambas originarias del gigante asiático, que han tenido un rol primordial en el desarrollo de redes de telecomunicaciones.",
+        "La tecnología se ha convertido en el nuevo campo de disputa geopolítica. La presión de Estados Unidos sobre sus aliados para excluir a Huawei de las redes 5G no es un debate técnico: es un debate político. Países como Suecia, Reino Unido o Australia han sucumbido a esa presión. Chile, hasta ahora, ha mantenido una postura más pragmática, evaluando caso a caso sin subordinar su política tecnológica a la agenda de terceros. Esa autonomía vale y debe defenderse.",
+        "¿Qué significa entonces ser estratégicos en la práctica? Chile debería negociar estas relaciones tecnológicas exigiendo transferencia de conocimiento y formación de capital humano local, no solo consumir infraestructura. Diversificar sin discriminar: el objetivo no es depender exclusivamente de proveedores chinos, pero es irracional excluirlos por cuestiones puramente ideológicas."
+      ]
+    },
+    {
+      "titulo": "Yo por tí, tú por mí",
+      "autor": "Andrea Díaz Inzunza",
+      "autorDetalle": "Antropología UC.",
+      "area": "Economía y Negocios",
+      "fecha": "2025-04-02",
+      "resumen": "Tras la cumbre trilateral de Seúl, China, Japón y Corea del Sur responden en conjunto a la política arancelaria de Trump, impulsando el acuerdo RCEP.",
+      "cita": "Mientras Estados Unidos está tomando fuertes medidas proteccionistas que afectan a otros países, China desarrolla estrategias que le permiten fortalecer alianzas comerciales fuertes con sus países vecinos.",
+      "extracto": true,
+      "palabrasClave": ["China", "Estados Unidos", "Libre comercio", "Región Asiática", "Asia Pacífico"],
+      "fuente": {"texto": "Korea JoongAng Daily", "url": "https://koreajoongangdaily.joins.com/news/2025-03-30/business/economy/Trade-chiefs-of-Korea-China-Japan-discuss-advancing-trade-cooperation-at-trilateral-meeting/2273545"},
+      "parrafos": [
+        "El 30 de marzo de 2025 se realizó una cumbre trilateral en Seúl después de seis años, en la que China, Japón y Corea del Sur discutieron cómo responder en conjunto a las medidas arancelarias de la Casa Blanca sobre el acero, el aluminio y la industria automotriz, ante el temor de seguir siendo afectados por nuevas modificaciones.",
+        "Los tres países llegaron a un consenso para responder en conjunto a las modificaciones que comenzaron a regir desde el 2 de abril —el mismo día que Trump llamó «el día de la liberación»—. Se habló de propuestas para reforzar cadenas de suministro que fortalecieran el comercio regional y global, vigilando las exportaciones.",
+        "Además, decidieron impulsar el fortalecimiento de la Alianza Económica Regional Integral (RCEP), un acuerdo firmado por 15 países de la región Asia-Pacífico desde 2022, cuyo objetivo es disminuir en un 90% los aranceles entre los países que la integran. Sin embargo, no es un compromiso vinculante, sino más bien un giro para poner atención a estas materias."
+      ]
+    }
+  ]
 }

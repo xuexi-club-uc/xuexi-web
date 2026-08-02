@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eventos · Xuexi Club UC</title>
+<meta name="description" content="Agenda de talleres, charlas y actividades del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="sabias-que.html"><span class="zh">你知道吗</span>¿Sabías qué?</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="zh">活动</span><h2>Agenda viva</h2>
+      <span class="more" id="temporada"></span></div>
+
+    <div class="week" id="destacado" hidden>
+      <span class="zh">本周</span>
+      <p class="tx"><b id="destacado-titulo"></b><br><span id="destacado-meta"></span></p>
+      <a class="btn btn-sello" href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">
+        <span class="zh">报名</span> Inscríbete</a>
+    </div>
+
+    <div class="filtros" role="group" aria-label="Filtrar actividades">
+      <button class="chip" data-f="todo" aria-pressed="true"><span class="zh">全部</span> Todo</button>
+      <button class="chip" data-f="taller" aria-pressed="false">Talleres</button>
+      <button class="chip" data-f="charla" aria-pressed="false">Charlas</button>
+      <button class="chip" data-f="congreso" aria-pressed="false">Congresos</button>
+      <button class="chip" data-f="festival" aria-pressed="false">Festivales</button>
+      <button class="chip" data-f="stand" aria-pressed="false">Stands</button>
+      <button class="chip" data-f="voluntariado" aria-pressed="false">Voluntariados</button>
+    </div>
+
+    <div class="grid-ev" id="lista-eventos" aria-live="polite">
+      <p class="aviso">Cargando la agenda…</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="sabias-que.html">¿Sabías qué?</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin.html" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="assets/nav.js"></script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var ESTADOS = {
+    abierto  :{txt:'Inscripción abierta', cls:'e-abierto'},
+    pronto   :{txt:'Próximamente',        cls:'e-pronto'},
+    lleno    :{txt:'Cupos llenos',        cls:'e-lleno'},
+    online   :{txt:'Online · abierto',    cls:'e-online'},
+    realizado:{txt:'Realizado',           cls:'e-lleno'}
+  };
+  var TIPOS = {
+    taller:'Taller', charla:'Charla', congreso:'Congreso', almuerzo:'Almuerzo',
+    festival:'Festival', stand:'Stand', jornada:'Jornada de investigación',
+    voluntariado:'Voluntariado'
+  };
+  var COMISIONES = {
+    wailian:{zh:'外联', nom:'Wailian'},
+    xuexi  :{zh:'学习', nom:'Xuexi'},
+    xinxi  :{zh:'信息', nom:'Xinxi'}
+  };
+  var PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>';
+  var CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>';
+
+  var lista = document.getElementById('lista-eventos');
+  var eventos = [], filtro = 'todo';
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function fecha(iso){
+    var p = String(iso).split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  function esPasado(e){
+    var hoy = new Date(); hoy.setHours(0,0,0,0);
+    return fecha(e.fecha) < hoy;
+  }
+
+  function tarjeta(e){
+    var d = fecha(e.fecha);
+    var est = esPasado(e)
+      ? {txt:'Ya realizado', cls:'e-lleno'}
+      : (ESTADOS[e.estado] || ESTADOS.pronto);
+    var media = e.imagen
+      ? '<img src="assets/' + esc(e.imagen) + '" alt="" loading="lazy">'
+      : '<span class="glyph zh">' + esc(e.hanzi || '学') + '</span>';
+    var cupos = e.cupos > 0
+      ? '<span class="cupos">' + esc(e.cupos) + ' cupos</span>'
+      : '';
+    var com = COMISIONES[e.comision];
+    var sello = com
+      ? '<span class="ev-com" title="Comisión ' + com.nom + '"><span class="zh">' + com.zh +
+        '</span> ' + com.nom + '</span>'
+      : '';
+    return '<article class="ev' + (esPasado(e) ? ' pasado' : '') + '">' +
+      '<div class="media">' + media +
+        '<p class="fecha"><b>' + d.getDate() + '</b><span>' + MESES[d.getMonth()] + '</span></p>' +
+        '<span class="estado ' + est.cls + '">' + est.txt + '</span>' +
+      '</div>' +
+      '<div class="body">' +
+        '<p class="area">' + esc(TIPOS[e.tipo] || '') +
+          (e.areaEtiqueta ? ' · ' + esc(e.areaEtiqueta) : '') + '</p>' +
+        '<h3>' + esc(e.titulo) + '</h3>' +
+        (e.detalle ? '<p class="ev-det">' + esc(e.detalle) + '</p>' : '') +
+        '<div class="meta">' +
+          '<span class="r">' + PIN + '<span>' + esc(e.lugar) + '</span></span>' +
+          '<span class="r">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' ' +
+             MESES[d.getMonth()] + ' · ' + esc(e.hora) + '</span></span>' +
+          '<span class="ev-pie">' + sello + cupos + '</span>' +
+        '</div>' +
+      '</div></article>';
+  }
+
+  function pintar(){
+    var vis = eventos.filter(function(e){ return filtro === 'todo' || e.tipo === filtro; });
+    if (!vis.length){
+      lista.innerHTML = '<p class="aviso">No hay eventos en esta área por ahora. ' +
+                        'Escríbenos y proponemos uno.</p>';
+      return;
+    }
+    var proximos = vis.filter(function(e){ return !esPasado(e); })
+                      .sort(function(a,b){ return fecha(a.fecha) - fecha(b.fecha); });
+    var pasados  = vis.filter(esPasado)
+                      .sort(function(a,b){ return fecha(b.fecha) - fecha(a.fecha); });
+
+    var html = proximos.map(tarjeta).join('');
+    if (!proximos.length){
+      html = '<p class="aviso">No hay eventos programados por ahora — estamos armando la ' +
+             'próxima temporada.<br>Síguenos en ' +
+             '<a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener" ' +
+             'style="color:var(--gold)">@xuexiclub.uc</a> para enterarte primero.</p>' + html;
+    }
+    if (pasados.length){
+      html += '<p class="separador"><span>Eventos anteriores</span></p>' + pasados.map(tarjeta).join('');
+    }
+    lista.innerHTML = html;
+  }
+
+  [].forEach.call(document.querySelectorAll('.chip'), function(btn){
+    btn.addEventListener('click', function(){
+      [].forEach.call(document.querySelectorAll('.chip'), function(b){
+        b.setAttribute('aria-pressed', String(b === btn));
+      });
+      filtro = btn.dataset.f;
+      pintar();
+    });
+  });
+
+  function destacar(){
+    var hoy = new Date(); hoy.setHours(0,0,0,0);
+    var prox = eventos.filter(function(e){ return fecha(e.fecha) >= hoy; })[0];
+    if (!prox) return;
+    var d = fecha(prox.fecha);
+    document.getElementById('destacado-titulo').textContent = 'Próximo: ' + prox.titulo;
+    var meta = DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()] +
+               ' · ' + prox.lugar + ' · ' + prox.hora;
+    if (prox.cupos > 0) meta += ' · ' + prox.cupos + ' cupos';
+    document.getElementById('destacado-meta').textContent = meta;
+    document.getElementById('destacado').hidden = false;
+  }
+
+  fetch('data/eventos.json', {cache:'no-cache'})
+    .then(function(r){
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(function(data){
+      eventos = (data.eventos || []).sort(function(a,b){ return fecha(a.fecha) - fecha(b.fecha); });
+      if (data.temporada) document.getElementById('temporada').textContent = data.temporada;
+      pintar();
+      destacar();
+    })
+    .catch(function(err){
+      lista.innerHTML = '<p class="aviso">No pudimos cargar la agenda en este momento.<br>' +
+        'Escríbenos por <a href="https://instagram.com/xuexiclub.uc" target="_blank" ' +
+        'rel="noopener" style="color:var(--gold)">Instagram</a>.</p>';
+      console.error('Agenda:', err);
+    });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiénes somos · Xuexi Club UC</title>
+<meta name="description" content="Equipo, coordinación general y comisiones del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="sabias-que.html"><span class="zh">你知道吗</span>¿Sabías qué?</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section>
+  <div class="wrap">
+    <div class="sec-h"><span class="zh">我们</span><h2>Quiénes somos</h2>
+      <span class="more" id="eq-periodo"></span></div>
+    <div id="equipo-render">
+      <p class="vacio-eq" style="border:1px dashed var(--line);border-radius:var(--r);padding:30px;
+        text-align:center;color:var(--cream-faint);font-size:.9rem">Cargando el equipo…</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="sabias-que.html">¿Sabías qué?</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin.html" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="assets/nav.js"></script>
+<script>
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  var COM_ZH = {xuexi:'学习', wailian:'外联', xinxi:'信息', lectura:'读书'};
+
+  function iniciales(nombre){
+    var p = String(nombre).trim().split(/\s+/);
+    return ((p[0]||'')[0] || '') + ((p[1]||'')[0] || '');
+  }
+
+  function retrato(p, chico){
+    var cls = 'retrato' + (chico ? ' sm' : '');
+    if (p.foto){
+      return '<span class="' + cls + '"><img src="assets/equipo/' + esc(p.foto) +
+             '" alt="' + esc(p.nombre) + '" loading="lazy"></span>';
+    }
+    return '<span class="' + cls + '" aria-hidden="true"><span class="mono">' +
+           esc(iniciales(p.nombre)) + '</span></span>';
+  }
+
+  function tarjetaPersona(p, esCoord){
+    var com = p.comision ? COM_ZH[p.comision] : '';
+    return '<article class="persona' + (esCoord ? ' coord' : '') + '">' +
+      retrato(p, false) +
+      (com ? '<p class="com"><span class="zh">' + com + '</span> ' +
+             esc(p.comision === 'lectura' ? 'Club de lectura' :
+                 p.comision.charAt(0).toUpperCase() + p.comision.slice(1)) + '</p>' : '') +
+      '<p class="cargo">' + esc(p.cargo || '') + '</p>' +
+      '<p class="nom">' + esc(p.nombre) +
+        (p.hanzi ? ' <span class="zh">' + esc(p.hanzi) + '</span>' : '') + '</p>' +
+      '<p class="carrera">' + esc(p.carrera || '') + '</p>' +
+      (p.equipo ? '<p class="carrera" style="color:var(--cream-faint);font-size:.7rem">' +
+                  esc(p.equipo) + '</p>' : '') +
+      (p.email ? '<a href="mailto:' + esc(p.email) + '">' + esc(p.email) + '</a>' : '') +
+    '</article>';
+  }
+
+  function filaPersona(p){
+    return '<p class="p">' + retrato(p, true) + '<span class="tx"><b>' + esc(p.nombre) +
+      (p.hanzi ? ' <span class="zh">' + esc(p.hanzi) + '</span>' : '') +
+      '</b><span>' + esc(p.carrera || '') + '</span></span></p>';
+  }
+
+  function pintarEquipo(d){
+    var h = '';
+    var c = d.coordinacion || {};
+    var total = (c.mesa||[]).length + (c.coordinadores||[]).length;
+
+    h += '<div class="grupo"><div class="grupo-h"><h3>' + esc(c.titulo || 'Coordinación General') +
+         '</h3><span class="n">' + total + ' cargos</span></div>' +
+         (c.nota ? '<p class="grupo-nota">' + esc(c.nota) + '</p>' : '') +
+         '<div class="mesa">' + (c.mesa||[]).map(function(p){ return tarjetaPersona(p, false); }).join('') +
+         '</div>';
+
+    if ((c.coordinadores||[]).length){
+      h += '<div class="grupo-h" style="margin-top:22px"><h3 style="font-size:1rem">' +
+           'Coordinaciones de comisión</h3></div><div class="mesa">' +
+           c.coordinadores.map(function(p){ return tarjetaPersona(p, true); }).join('') + '</div>';
+    }
+    h += '</div>';
+
+    var nMiembros = (d.comisiones||[]).reduce(function(s,co){ return s + co.miembros.length; }, 0);
+    h += '<div class="grupo"><div class="grupo-h"><h3>Equipos de trabajo</h3>' +
+         '<span class="n">' + nMiembros + ' personas</span></div>';
+    (d.comisiones||[]).forEach(function(co){
+      h += '<div class="com-bloque"><div class="cab"><span class="zh">' + esc(co.zh) + '</span>' +
+           '<h4>' + esc(co.nombre) + '</h4>' +
+           '<span class="py">' + esc(co.pinyin || '') + '</span>' +
+           '<span class="n">' + co.miembros.length + '</span></div>' +
+           (co.nota ? '<p class="nota">' + esc(co.nota) + '</p>' : '') +
+           '<div class="equipo-lista">' + co.miembros.map(filaPersona).join('') + '</div></div>';
+    });
+    h += '</div>';
+
+    var f = d.fundadores;
+    h += '<div class="grupo" style="margin-bottom:0"><div class="grupo-h"><h3>De dónde venimos</h3></div>';
+    if (f){
+      h += '<div class="hito"><p class="fecha">Equipo fundador · ' + esc(f.fecha) + '</p>' +
+           '<p class="cita">“' + esc(f.cita) + '”</p><p>' +
+           f.nombres.map(esc).join(' · ') + '</p></div>';
+    }
+    (d.historia||[]).forEach(function(hh){
+      h += '<details class="bloque"><summary><span class="zh">2025</span> ' + esc(hh.periodo) +
+           '</summary><div class="cuerpo"><div class="equipo-lista">' +
+           hh.cargos.map(function(x){
+             return '<p class="p"><span class="tx"><b>' + esc(x.nombre) + '</b><span>' +
+                    esc(x.cargo) + '</span></span></p>'; }).join('') +
+           '</div></div></details>';
+    });
+    h += '</div>';
+
+    document.getElementById('equipo-render').innerHTML = h;
+    if (d.periodo) document.getElementById('eq-periodo').textContent = 'Período ' + d.periodo;
+  }
+
+  fetch('data/equipo.json', {cache:'no-cache'})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(pintarEquipo)
+    .catch(function(err){
+      document.getElementById('equipo-render').innerHTML =
+        '<p class="vacio-eq" style="border:1px dashed var(--line);border-radius:3px;padding:30px;' +
+        'text-align:center;color:var(--cream-faint)">No pudimos cargar el equipo. ' +
+        'Escríbenos por <a href="https://instagram.com/xuexiclub.uc" target="_blank" ' +
+        'rel="noopener" style="color:var(--gold)">Instagram</a>.</p>';
+      console.error('Equipo:', err);
+    });
+</script>
+</body>
+</html>
