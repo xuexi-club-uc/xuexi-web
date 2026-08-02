@@ -133,6 +133,8 @@
   document.getElementById('anio').textContent = new Date().getFullYear();
 
   var MESES = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var MESES_L = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto',
+                 'septiembre','octubre','noviembre','diciembre'];
 
   function esc(s){
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
@@ -147,17 +149,38 @@
 
   var reportajes = [], filtroRep = 'todo';
 
+  function fechaLarga(iso){
+    if (!iso) return '';
+    var f = fecha(iso);
+    return f.getDate() + ' de ' + MESES_L[f.getMonth()] + ' de ' + f.getFullYear();
+  }
+
   function cuerpoReportaje(r){
-    var h = '';
-    if (r.autorDetalle) h += '<p class="autor-detalle">' + esc(r.autorDetalle) + '</p>';
-    if (r.extracto) h += '<p class="aviso-extracto">Este texto es un extracto — no se pudo recuperar la ' +
-      'versión completa del artículo original.</p>';
-    (r.parrafos || []).forEach(function(p){ h += '<p>' + esc(p) + '</p>'; });
-    if (r.cita) h += '<p class="cita">“' + esc(r.cita) + '”</p>';
-    if (r.fuente) h += '<p class="fuente">Fuente: <a href="' + esc(r.fuente.url) +
-      '" target="_blank" rel="noopener">' + esc(r.fuente.texto) + '</a></p>';
-    if (r.palabrasClave && r.palabrasClave.length) h += '<div class="kw">' +
+    var h = '<div class="rep-meta">';
+    if (r.tipo)     h += '<span>' + esc(r.tipo) + '</span>';
+    if (r.recibido) h += '<span>Recibido <b>' + esc(fechaLarga(r.recibido)) + '</b></span>';
+    if (r.fecha)    h += '<span>Publicado <b>' + esc(fechaLarga(r.fecha)) + '</b></span>';
+    h += '</div>';
+
+    if (r.extracto) h += '<p class="aviso-extracto">Este texto es un extracto — no se pudo recuperar ' +
+      'la versión completa del artículo original.</p>';
+
+    var ps = r.parrafos || [];
+    h += '<div class="rep-texto rep-texto-inicio">';
+    ps.forEach(function(p, i){
+      h += '<p>' + esc(p) + '</p>';
+      if (r.cita && i === 1) h += '</div><blockquote class="rep-cita"><p>' + esc(r.cita) +
+        '</p></blockquote><div class="rep-texto">';
+    });
+    h += '</div>';
+
+    var pie = '';
+    if (r.palabrasClave && r.palabrasClave.length) pie += '<div class="kw">' +
       r.palabrasClave.map(function(k){ return '<span>' + esc(k) + '</span>'; }).join('') + '</div>';
+    if (r.fuente) pie += '<p class="fuente">Fuente: <a href="' + esc(r.fuente.url) +
+      '" target="_blank" rel="noopener">' + esc(r.fuente.texto) + '</a></p>';
+    if (pie) h += '<div class="rep-pie">' + pie + '</div>';
+
     return h;
   }
 
@@ -175,14 +198,18 @@
       cont.innerHTML = '<p class="aviso">No hay reportajes en esta área todavía.</p>';
       return;
     }
-    cont.innerHTML = vis.map(function(r){
+    cont.innerHTML = vis.map(function(r, i){
       var f = r.fecha ? fecha(r.fecha) : null;
-      return '<details class="rep"><summary>' +
-        '<p class="fch">' + (f ? f.getDate() + ' ' + MESES[f.getMonth()] + '<br>' + f.getFullYear() : '') + '</p>' +
+      var dest = (i === 0 && filtroRep === 'todo') ? ' rep-destacado' : '';
+      return '<details class="rep' + dest + '"' + (dest ? ' open' : '') + '><summary>' +
+        '<p class="fch">' + (f ? '<b>' + f.getDate() + '</b>' + MESES[f.getMonth()] + ' ' +
+          f.getFullYear() : '') + '</p>' +
         '<div class="cnt">' +
-          '<p class="ar">' + esc(r.area || '') + '</p>' +
+          '<p class="ar">' + esc(r.area || '') +
+            (r.tipo ? '<i>·</i>' + esc(r.tipo) : '') + '</p>' +
           '<h3>' + esc(r.titulo) + '</h3>' +
-          (r.autor ? '<p class="aut">Por ' + esc(r.autor) + '</p>' : '') +
+          (r.autor ? '<p class="aut">Por ' + esc(r.autor) +
+            (r.autorDetalle ? ' <span>· ' + esc(r.autorDetalle) + '</span>' : '') + '</p>' : '') +
           (r.resumen ? '<p class="res">' + esc(r.resumen) + '</p>' : '') +
           '<p class="leer"></p>' +
         '</div></summary>' +
