@@ -12,7 +12,7 @@
         "carrera": "Antropología UC",
         "email": "",
         "equipo": "Equipo Xuexi",
-        "foto": ""
+        "foto": "andrea.jpg"
       },
       {
         "cargo": "Vicepresidencia",
@@ -21,7 +21,7 @@
         "carrera": "Ciencia Política UC",
         "email": "",
         "equipo": "Equipo Wailian",
-        "foto": ""
+        "foto": "catalina-leiva.jpg"
       },
       {
         "cargo": "Secretaría",
@@ -30,7 +30,7 @@
         "carrera": "Arquitectura UC",
         "email": "",
         "equipo": "Equipo Xinxi",
-        "foto": ""
+        "foto": "josefa.jpg"
       },
       {
         "cargo": "Tesorería",
@@ -39,7 +39,7 @@
         "carrera": "Ciencia Política y Licenciada en Ciencias Sociales UC",
         "email": "",
         "equipo": "",
-        "foto": ""
+        "foto": "maria-ignacia.jpg"
       }
     ],
     "coordinadores": [
@@ -59,7 +59,7 @@
         "hanzi": "",
         "carrera": "Ingeniería Comercial UCh · Magíster en Finanzas UCh",
         "email": "",
-        "foto": ""
+        "foto": "rolando.jpg"
       },
       {
         "cargo": "Idioma, comunidad y networking",
@@ -77,7 +77,7 @@
         "hanzi": "凯玫拉",
         "carrera": "Psicología UC",
         "email": "",
-        "foto": ""
+        "foto": "camila.jpg"
       },
       {
         "cargo": "Coordinación externa",
@@ -86,7 +86,7 @@
         "hanzi": "",
         "carrera": "Psicólogo UC · Magíster en Psicología Educacional UC",
         "email": "",
-        "foto": ""
+        "foto": "diego.jpg"
       }
     ]
   },
@@ -102,37 +102,37 @@
           "nombre": "Constanza Muñoz Guajardo",
           "hanzi": "",
           "carrera": "Cientista Política UC · estudiante de Magíster en Estudios Internacionales UCh",
-          "foto": ""
+          "foto": "constanza.jpg"
         },
         {
           "nombre": "Iván Álvarez Cifuentes",
           "hanzi": "",
           "carrera": "Magíster en Ciencias Sociales UCh",
-          "foto": ""
+          "foto": "ivan.jpg"
         },
         {
           "nombre": "Alejandro Orrego Torres",
           "hanzi": "阿里山大",
           "carrera": "Biología UC · Políticas Públicas",
-          "foto": ""
+          "foto": "alejandro-orrego.jpg"
         },
         {
           "nombre": "Paula Nova García",
           "hanzi": "",
           "carrera": "Derecho UDD",
-          "foto": ""
+          "foto": "paula.jpg"
         },
         {
           "nombre": "Anasol Llanos",
           "hanzi": "安娜",
           "carrera": "Derecho UC",
-          "foto": ""
+          "foto": "anasol.jpg"
         },
         {
           "nombre": "Alonso Opazo Farías",
           "hanzi": "",
           "carrera": "Estudios Internacionales USACH",
-          "foto": ""
+          "foto": "alonso.jpg"
         },
         {
           "nombre": "Catalina Lira Cofre",
@@ -144,7 +144,7 @@
           "nombre": "Benjamín Godoy Retamales",
           "hanzi": "辰曜",
           "carrera": "Agronomía UC",
-          "foto": ""
+          "foto": "benjamin.jpg"
         },
         {
           "nombre": "Emilia Pérez Farías",
@@ -171,25 +171,25 @@
           "nombre": "Karen Quijada",
           "hanzi": "凯琳",
           "carrera": "Ingeniería en Negocios Internacionales UV",
-          "foto": ""
+          "foto": "karen.jpg"
         },
         {
           "nombre": "Sofía Lizama Sulantay",
           "hanzi": "",
           "carrera": "Administración Pública UC",
-          "foto": ""
+          "foto": "sofia-lizama.jpg"
         },
         {
           "nombre": "Carolina Bolbarán Ruiz",
           "hanzi": "罗妍姿",
           "carrera": "Fonoaudiología UC",
-          "foto": ""
+          "foto": "carolina-bolbaran.jpg"
         },
         {
           "nombre": "Carolina Marín Troncoso",
           "hanzi": "",
           "carrera": "Trabajadora Social UC",
-          "foto": ""
+          "foto": "carolina-marin.jpg"
         },
         {
           "nombre": "Martina Soto Vera",
@@ -258,25 +258,25 @@
           "nombre": "Ariana Sánchez Prado",
           "hanzi": "",
           "carrera": "Diseño Gráfico DUOC UC",
-          "foto": ""
+          "foto": "ariana.jpg"
         },
         {
           "nombre": "Alejandro Betanzo Herrera",
           "hanzi": "",
           "carrera": "Periodismo UC",
-          "foto": ""
+          "foto": "alejandro-betanzo.jpg"
         },
         {
           "nombre": "Grisell Romero Prado",
           "hanzi": "罗梦茹",
           "carrera": "Administración de Empresas UGM",
-          "foto": ""
+          "foto": "grisell.jpg"
         },
         {
           "nombre": "Francisco Díaz Barahona",
           "hanzi": "",
           "carrera": "Ingeniero Civil Químico · Magíster en Estudios sobre Asia UCh",
-          "foto": ""
+          "foto": "francisco.jpg"
         }
       ]
     }
