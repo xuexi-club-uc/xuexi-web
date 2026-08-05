@@ -115,6 +115,7 @@
 </footer>
 
 <script src="assets/nav.js?v=3"></script>
+<script src="assets/datos.js?v=1"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -240,11 +241,7 @@
     document.getElementById('destacado').hidden = false;
   }
 
-  fetch('data/eventos.json', {cache:'no-cache'})
-    .then(function(r){
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
+  cargarEventos()
     .then(function(data){
       eventos = (data.eventos || []).sort(function(a,b){ return fecha(a.fecha) - fecha(b.fecha); });
       if (data.temporada) document.getElementById('temporada').textContent = data.temporada;
