@@ -107,6 +107,15 @@
     });
   }
 
+  // El panel guarda la ruta completa ("assets/equipo/foo.jpg") y a mano se
+  // escribe sólo el nombre ("foo.jpg"). Aceptamos las dos formas.
+  function ruta(valor, carpeta){
+    var v = String(valor || '').trim();
+    if (!v) return '';
+    if (/^(https?:)?\/\//.test(v)) return v;
+    return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
   var COM_ZH = {xuexi:'学习', wailian:'外联', xinxi:'信息', lectura:'读书'};
 
   function iniciales(nombre){
@@ -117,7 +126,7 @@
   function retrato(p, chico){
     var cls = 'retrato' + (chico ? ' sm' : '');
     if (p.foto){
-      return '<span class="' + cls + '"><img src="assets/equipo/' + esc(p.foto) +
+      return '<span class="' + cls + '"><img src="' + esc(ruta(p.foto, 'assets/equipo/')) +
              '" alt="' + esc(p.nombre) + '" loading="lazy"></span>';
     }
     return '<span class="' + cls + '" aria-hidden="true"><span class="mono">' +

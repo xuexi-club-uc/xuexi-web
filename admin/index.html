@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Panel de edición · Xuexi Club UC</title>
+<link rel="icon" href="../assets/logo.png">
+<style>
+  body{margin:0;font-family:"Avenir Next",system-ui,-apple-system,"Segoe UI",sans-serif}
+  .aviso{max-width:620px;margin:0 auto;padding:56px 24px;color:#2a2222;line-height:1.6}
+  .aviso h1{font-family:"Hoefler Text",Georgia,serif;font-size:1.6rem;font-weight:normal;margin:0 0 6px}
+  .aviso .zh{font-family:"Songti SC","Noto Serif SC",serif;color:#C0392B}
+  .aviso p{margin:0 0 14px}
+  .aviso ol{padding-left:20px}
+  .aviso li{margin-bottom:9px}
+  .aviso code{background:#f2ede6;border-radius:3px;padding:2px 6px;font-size:.9em}
+  .aviso .box{border:1px solid #e0d6c6;border-left:3px solid #C0392B;
+    border-radius:4px;padding:16px 18px;background:#faf7f2;margin-bottom:22px}
+  .aviso a{color:#A81E1E}
+</style>
+</head>
+<body>
+
+<div id="aviso" class="aviso" hidden>
+  <h1><span class="zh">学习</span> Panel de edición</h1>
+  <div class="box">
+    <p style="margin:0"><b>Falta un paso para activarlo.</b> El panel necesita un
+    conector que verifique quién eres con GitHub antes de poder guardar cambios.</p>
+  </div>
+  <p>Para dejarlo funcionando:</p>
+  <ol>
+    <li>Sigue las instrucciones de <code>admin/LEEME-instalacion.md</code>
+      en el repositorio.</li>
+    <li>Cuando tengas la dirección del Worker de Cloudflare, pégala en
+      <code>admin/config.yml</code>, en la línea <code>base_url</code>.</li>
+  </ol>
+  <p>Mientras tanto, el sitio sigue funcionando con normalidad y el
+    <a href="../admin.html">panel antiguo de eventos</a> sigue disponible.</p>
+</div>
+
+<script>
+  // Si la configuración todavía trae el marcador de posición, mostramos las
+  // instrucciones en vez de un login que no va a funcionar.
+  fetch('config.yml', {cache: 'no-cache'})
+    .then(function(r){ return r.ok ? r.text() : ''; })
+    .then(function(txt){
+      if (!txt || txt.indexOf('PEGAR-AQUI-LA-URL-DEL-WORKER') !== -1){
+        document.getElementById('aviso').hidden = false;
+        return;
+      }
+      var s = document.createElement('script');
+      s.src = 'https://unpkg.com/decap-cms@^3.8.0/dist/decap-cms.js';
+      document.body.appendChild(s);
+    })
+    .catch(function(){
+      document.getElementById('aviso').hidden = false;
+    });
+</script>
+</body>
+</html>

@@ -148,6 +148,15 @@
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
+  // El panel guarda la ruta completa ("assets/foo.jpg") y la planilla sólo el
+  // nombre ("foo.jpg"). Aceptamos las dos para no depender de quién editó.
+  function ruta(valor, carpeta){
+    var v = String(valor || '').trim();
+    if (!v) return '';
+    if (/^(https?:)?\/\//.test(v)) return v;
+    return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
   function fecha(iso){
     var p = String(iso).split('-');
     return new Date(+p[0], +p[1] - 1, +p[2]);
@@ -164,7 +173,7 @@
       ? {txt:'Ya realizado', cls:'e-lleno'}
       : (ESTADOS[e.estado] || ESTADOS.pronto);
     var media = e.imagen
-      ? '<img src="assets/' + esc(e.imagen) + '" alt="" loading="lazy">'
+      ? '<img src="' + esc(ruta(e.imagen, 'assets/')) + '" alt="" loading="lazy">'
       : '<span class="glyph zh">' + esc(e.hanzi || '学') + '</span>';
     var cupos = e.cupos > 0
       ? '<span class="cupos">' + esc(e.cupos) + ' cupos</span>'

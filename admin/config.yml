@@ -1,0 +1,275 @@
+# Configuración del panel de edición (Decap CMS).
+# Quien edita no necesita tocar este archivo: se maneja desde xuexiclub.cl/admin/
+#
+# FALTA UN PASO: reemplaza PEGAR-AQUI-LA-URL-DEL-WORKER por la dirección del
+# Worker de Cloudflare. Las instrucciones están en admin/LEEME-instalacion.md
+
+backend:
+  name: github
+  repo: xuexi-club-uc/xuexi-web
+  branch: main
+  base_url: https://PEGAR-AQUI-LA-URL-DEL-WORKER
+  auth_scope: public_repo
+  commit_messages:
+    update: 'Actualiza {{collection}} desde el panel ({{author-login}})'
+    delete: 'Elimina de {{collection}} desde el panel ({{author-login}})'
+    uploadMedia: 'Sube {{path}} desde el panel ({{author-login}})'
+    deleteMedia: 'Borra {{path}} desde el panel ({{author-login}})'
+
+locale: es
+media_folder: assets
+public_folder: assets
+
+collections:
+  # ─────────────────────────── EVENTOS ───────────────────────────
+  - name: agenda
+    label: Agenda
+    files:
+      - name: eventos
+        label: Eventos
+        file: data/eventos.json
+        format: json
+        description: >-
+          Actividades del club. Los eventos con fecha pasada se mueven solos a
+          "Eventos anteriores": no hay que borrarlos.
+        fields:
+          - { name: _instrucciones, widget: hidden }
+          - { name: _referencia, widget: hidden }
+          - label: Temporada
+            name: temporada
+            widget: string
+            hint: Texto que aparece junto al título. Ej. "Segundo semestre 2026"
+          - label: Eventos
+            name: eventos
+            widget: list
+            label_singular: evento
+            summary: '{{fields.fecha}} · {{fields.titulo}}'
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - label: Fecha
+                name: fecha
+                widget: datetime
+                format: 'YYYY-MM-DD'
+                date_format: 'DD-MM-YYYY'
+                time_format: false
+                picker_utc: true
+              - { label: Hora, name: hora, widget: string, required: false, hint: 'Ej. 18:30' }
+              - { label: Lugar, name: lugar, widget: string, required: false }
+              - { label: Detalle, name: detalle, widget: text, required: false }
+              - label: Tipo
+                name: tipo
+                widget: select
+                options:
+                  - { label: Taller, value: taller }
+                  - { label: Charla, value: charla }
+                  - { label: Congreso, value: congreso }
+                  - { label: Almuerzo, value: almuerzo }
+                  - { label: Festival, value: festival }
+                  - { label: Stand, value: stand }
+                  - { label: Jornada de investigación, value: jornada }
+                  - { label: Voluntariado, value: voluntariado }
+              - label: Estado
+                name: estado
+                widget: select
+                default: pronto
+                options:
+                  - { label: Inscripción abierta, value: abierto }
+                  - { label: Próximamente, value: pronto }
+                  - { label: Cupos llenos, value: lleno }
+                  - { label: Online · abierto, value: online }
+                  - { label: Realizado, value: realizado }
+              - label: Comisión
+                name: comision
+                widget: select
+                required: false
+                options:
+                  - { label: 学习 Xuexi · Conocimiento Académico, value: xuexi }
+                  - { label: 外联 Wailian · Idioma y Comunidad, value: wailian }
+                  - { label: 信息 Xinxi · Difusión y Diseño, value: xinxi }
+              - { label: Área temática, name: areaEtiqueta, widget: string, required: false }
+              - { label: Ciclo, name: ciclo, widget: string, required: false }
+              - { label: Cupos, name: cupos, widget: number, required: false, default: 0, value_type: int, min: 0 }
+              - { label: Carácter chino, name: hanzi, widget: string, required: false, hint: 'Se muestra si no hay imagen. Ej. 书' }
+              - { label: Imagen, name: imagen, widget: image, required: false, allow_multiple: false }
+
+  # ────────────────────────── REPORTAJES ─────────────────────────
+  - name: investigacion
+    label: Investigación
+    files:
+      - name: reportajes
+        label: Reportajes
+        file: data/reportajes.json
+        format: json
+        description: Columnas y reportajes publicados por la Comisión Xuexi.
+        fields:
+          - { name: _instrucciones, widget: hidden }
+          - label: Áreas disponibles
+            name: _areas
+            widget: list
+            hint: Áreas que aparecen como filtros. Cámbialas solo si es necesario.
+          - label: Reportajes
+            name: reportajes
+            widget: list
+            label_singular: reportaje
+            summary: '{{fields.fecha}} · {{fields.titulo}}'
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Autor o autora, name: autor, widget: string }
+              - { label: Descripción del autor, name: autorDetalle, widget: string, required: false, hint: 'Ej. Cientista Política UC.' }
+              - label: Área
+                name: area
+                widget: select
+                options:
+                  - Economía y Negocios
+                  - Ciencia y Tecnología
+                  - RR.II. y Diplomacia
+                  - Cultura, Arte y Lengua
+                  - Políticas Públicas y Gobernanza
+                  - Otros
+              - { label: Tipo, name: tipo, widget: string, required: false, default: 'Columna de opinión' }
+              - label: Fecha de publicación
+                name: fecha
+                widget: datetime
+                format: 'YYYY-MM-DD'
+                date_format: 'DD-MM-YYYY'
+                time_format: false
+                picker_utc: true
+              - label: Fecha de recepción
+                name: recibido
+                widget: datetime
+                required: false
+                format: 'YYYY-MM-DD'
+                date_format: 'DD-MM-YYYY'
+                time_format: false
+                picker_utc: true
+              - { label: Resumen, name: resumen, widget: text, hint: 'Una o dos frases. Se muestra en el listado.' }
+              - { label: Cita destacada, name: cita, widget: text, required: false, hint: 'Frase que se resalta dentro del texto.' }
+              - label: Es solo un extracto
+                name: extracto
+                widget: boolean
+                default: false
+                hint: Actívalo si el texto está incompleto. Muestra un aviso al lector.
+              - label: Párrafos
+                name: parrafos
+                widget: list
+                label_singular: párrafo
+                field: { label: Texto, name: texto, widget: text }
+              - label: Palabras clave
+                name: palabrasClave
+                widget: list
+                required: false
+                label_singular: palabra clave
+              - label: Fuente
+                name: fuente
+                widget: object
+                required: false
+                collapsed: true
+                fields:
+                  - { label: Texto, name: texto, widget: string, required: false }
+                  - { label: Enlace, name: url, widget: string, required: false }
+
+  # ──────────────────────────── EQUIPO ───────────────────────────
+  - name: equipo
+    label: Equipo
+    media_folder: /assets/equipo
+    public_folder: assets/equipo
+    files:
+      - name: equipo
+        label: Quiénes somos
+        file: data/equipo.json
+        format: json
+        description: >-
+          Coordinación y comisiones. Si alguien no tiene foto, se muestra un
+          monograma con sus iniciales.
+        fields:
+          - { name: _instrucciones, widget: hidden }
+          - { label: Período, name: periodo, widget: string, hint: 'Ej. 2026' }
+          - label: Coordinación General
+            name: coordinacion
+            widget: object
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - { label: Nota, name: nota, widget: text, required: false }
+              - label: Mesa directiva
+                name: mesa
+                widget: list
+                label_singular: cargo
+                summary: '{{fields.cargo}} · {{fields.nombre}}'
+                fields:
+                  - { label: Cargo, name: cargo, widget: string }
+                  - { label: Nombre, name: nombre, widget: string }
+                  - { label: Nombre en chino, name: hanzi, widget: string, required: false }
+                  - { label: Carrera, name: carrera, widget: string, required: false }
+                  - { label: Equipo, name: equipo, widget: string, required: false }
+                  - { label: Correo, name: email, widget: string, required: false }
+                  - { label: Foto, name: foto, widget: image, required: false }
+              - label: Coordinaciones de comisión
+                name: coordinadores
+                widget: list
+                label_singular: coordinación
+                summary: '{{fields.cargo}} · {{fields.nombre}}'
+                fields:
+                  - { label: Cargo, name: cargo, widget: string }
+                  - label: Comisión
+                    name: comision
+                    widget: select
+                    required: false
+                    options:
+                      - { label: 学习 Xuexi, value: xuexi }
+                      - { label: 外联 Wailian, value: wailian }
+                      - { label: 信息 Xinxi, value: xinxi }
+                      - { label: 读书 Club de lectura, value: lectura }
+                  - { label: Nombre, name: nombre, widget: string }
+                  - { label: Nombre en chino, name: hanzi, widget: string, required: false }
+                  - { label: Carrera, name: carrera, widget: string, required: false }
+                  - { label: Correo, name: email, widget: string, required: false }
+                  - { label: Foto, name: foto, widget: image, required: false }
+          - label: Comisiones
+            name: comisiones
+            widget: list
+            label_singular: comisión
+            summary: '{{fields.zh}} {{fields.nombre}}'
+            fields:
+              - { label: Identificador, name: id, widget: string }
+              - { label: Nombre en chino, name: zh, widget: string }
+              - { label: Pinyin, name: pinyin, widget: string, required: false }
+              - { label: Nombre, name: nombre, widget: string }
+              - { label: Nota, name: nota, widget: text, required: false }
+              - label: Miembros
+                name: miembros
+                widget: list
+                label_singular: miembro
+                summary: '{{fields.nombre}}'
+                fields:
+                  - { label: Nombre, name: nombre, widget: string }
+                  - { label: Nombre en chino, name: hanzi, widget: string, required: false }
+                  - { label: Carrera, name: carrera, widget: string, required: false }
+                  - { label: Foto, name: foto, widget: image, required: false }
+          - label: Equipo fundador
+            name: fundadores
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Fecha, name: fecha, widget: string }
+              - { label: Frase, name: cita, widget: text }
+              - label: Nombres
+                name: nombres
+                widget: list
+                label_singular: nombre
+          - label: Historia
+            name: historia
+            widget: list
+            required: false
+            collapsed: true
+            label_singular: período
+            summary: '{{fields.periodo}}'
+            fields:
+              - { label: Período, name: periodo, widget: string }
+              - label: Cargos
+                name: cargos
+                widget: list
+                label_singular: cargo
+                summary: '{{fields.cargo}} · {{fields.nombre}}'
+                fields:
+                  - { label: Cargo, name: cargo, widget: string }
+                  - { label: Nombre, name: nombre, widget: string }

@@ -133,6 +133,20 @@
     return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
   }
 
+  // Las listas pueden venir como textos sueltos o, si las guardó el panel,
+  // como objetos de un solo campo. Las dejamos siempre como textos.
+  function comoTextos(v){
+    if (!Array.isArray(v)) return [];
+    return v.map(function(x){
+      if (typeof x === 'string') return x;
+      if (x && typeof x === 'object'){
+        var k = Object.keys(x)[0];
+        return k ? String(x[k]) : '';
+      }
+      return x == null ? '' : String(x);
+    }).filter(function(s){ return s.trim() !== ''; });
+  }
+
   var reportajes = [], filtroRep = 'todo';
 
   // Los enlaces del menú (investigacion.html#economia, …) filtran por área
@@ -172,7 +186,7 @@
     if (r.extracto) h += '<p class="aviso-extracto">Este texto es un extracto — no se pudo recuperar ' +
       'la versión completa del artículo original.</p>';
 
-    var ps = r.parrafos || [];
+    var ps = comoTextos(r.parrafos);
     h += '<div class="rep-texto rep-texto-inicio">';
     ps.forEach(function(p, i){
       h += '<p>' + esc(p) + '</p>';
@@ -182,8 +196,9 @@
     h += '</div>';
 
     var pie = '';
-    if (r.palabrasClave && r.palabrasClave.length) pie += '<div class="kw">' +
-      r.palabrasClave.map(function(k){ return '<span>' + esc(k) + '</span>'; }).join('') + '</div>';
+    var kws = comoTextos(r.palabrasClave);
+    if (kws.length) pie += '<div class="kw">' +
+      kws.map(function(k){ return '<span>' + esc(k) + '</span>'; }).join('') + '</div>';
     if (r.fuente) pie += '<p class="fuente">Fuente: <a href="' + esc(r.fuente.url) +
       '" target="_blank" rel="noopener">' + esc(r.fuente.texto) + '</a></p>';
     if (pie) h += '<div class="rep-pie">' + pie + '</div>';
