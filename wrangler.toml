@@ -14,5 +14,10 @@ compatibility_date = "2026-08-01"
 # persona siga en la organización. No es un dato secreto.
 account_id = "d13c3276a03fc7a37985e2e4a1ea17c6"
 
-# Las claves de GitHub NO van aquí: se guardan como secretos, fuera del
-# repositorio, con  npx wrangler secret put GITHUB_CLIENT_ID  (y CLIENT_SECRET)
+# El Client ID de la aplicación de GitHub es público (aparece en cada enlace
+# de acceso), así que puede vivir aquí.
+[vars]
+GITHUB_CLIENT_ID = "Ov23livN6TNZrSzPnvXq"
+
+# El Client Secret NO va aquí. Se guarda aparte, fuera del repositorio, con:
+#   npx wrangler secret put GITHUB_CLIENT_SECRET
