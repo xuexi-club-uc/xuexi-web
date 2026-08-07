@@ -1,0 +1,18 @@
+# Configuración del conector de acceso del panel de edición.
+#
+# Esto NO es parte del sitio web: define el pequeño servicio que se instala en
+# Cloudflare Workers y que verifica con GitHub quién entra a xuexiclub.cl/admin/
+#
+# Para volver a desplegarlo:  npx wrangler deploy
+# El código está en admin/oauth-worker.js
+
+name = "xuexi-panel"
+main = "admin/oauth-worker.js"
+compatibility_date = "2026-08-01"
+
+# Cuenta del club, no la personal: así el conector no depende de que una
+# persona siga en la organización. No es un dato secreto.
+account_id = "d13c3276a03fc7a37985e2e4a1ea17c6"
+
+# Las claves de GitHub NO van aquí: se guardan como secretos, fuera del
+# repositorio, con  npx wrangler secret put GITHUB_CLIENT_ID  (y CLIENT_SECRET)

@@ -1,14 +1,14 @@
 # Configuración del panel de edición (Decap CMS).
 # Quien edita no necesita tocar este archivo: se maneja desde xuexiclub.cl/admin/
 #
-# FALTA UN PASO: reemplaza PEGAR-AQUI-LA-URL-DEL-WORKER por la dirección del
-# Worker de Cloudflare. Las instrucciones están en admin/LEEME-instalacion.md
+# El conector ya está desplegado. Lo único que falta para que el panel funcione
+# son las claves de GitHub: ver admin/LEEME-instalacion.md
 
 backend:
   name: github
   repo: xuexi-club-uc/xuexi-web
   branch: main
-  base_url: https://PEGAR-AQUI-LA-URL-DEL-WORKER
+  base_url: https://xuexi-panel.xuexiclub.workers.dev
   auth_scope: public_repo
   commit_messages:
     update: 'Actualiza {{collection}} desde el panel ({{author-login}})'
