@@ -376,50 +376,63 @@
     renderMonthGrid();
   });
 
-  // Render Tarjeta de Estado de Pago de Membresía (General $2.000 / Regiones $1.000)
+  // Render Tarjeta de Estado de Pago de Membresía
   function renderPaymentStatus(user, config){
     var payBox = document.getElementById('payment-status-box');
     if (!payBox) return;
 
-    var estado = (user && user.estadoPago) || localStorage.getItem('xuexi_payment_status') || 'al_dia';
+    var params = new URLSearchParams(window.location.search);
+    var estadoUrl = params.get('estado'); // ?estado=pendiente o ?estado=al_dia
+    var tipoUrl = params.get('tipo');     // ?tipo=region o ?tipo=general
+
+    var estado = estadoUrl || (user && user.estadoPago) || localStorage.getItem('xuexi_payment_status') || 'al_dia';
+    var esRegion = tipoUrl === 'region' || (user && (user.tipoMembresia === 'region' || user.region || user.esRegion));
+
     var linkGen = (config && config.linkMercadoPagoGeneral) || 'https://mpago.li/xuexi-general-2k';
     var linkReg = (config && config.linkMercadoPagoRegion) || 'https://mpago.li/xuexi-region-1k';
-    var txtGen = (config && config.textoMontoGeneral) || '$2.000 CLP (General)';
-    var txtReg = (config && config.textoMontoRegion) || '$1.000 CLP (Regiones)';
 
     var isAlDia = estado === 'al_dia';
     var isPendiente = estado === 'pendiente';
 
     var badgeCls = isAlDia ? 'badge-al-dia' : (isPendiente ? 'badge-pendiente' : 'badge-vencida');
-    var badgeTxt = isAlDia ? '🟢 Membresía Al Día' : (isPendiente ? '🟡 Cuota Pendiente' : '🔴 Vencida');
-    var icon = isAlDia ? '💎' : '💳';
+    var badgeTxt = isAlDia ? 'Membresía Al Día' : (isPendiente ? 'Cuota Pendiente' : 'Cuota Vencida');
     var cardCls = isAlDia ? 'al-dia' : (isPendiente ? 'pendiente' : 'vencida');
 
     var hoy = new Date();
     var proxMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, (config && config.diaCobro) || 5);
     var proxFechaTxt = proxMes.getDate() + ' de ' + MESES[proxMes.getMonth()] + ' de ' + proxMes.getFullYear();
 
+    var tipoNombre = esRegion ? 'Membresía Regiones ($1.000/mes)' : 'Membresía General / RM ($2.000/mes)';
     var subText = isAlDia 
-      ? 'Próximo vencimiento: ' + proxFechaTxt + ' · Cuota: $2.000 (RM) / $1.000 (Regiones)'
-      : 'Paga tu mensualidad según tu ubicación para mantener tus beneficios activos.';
+      ? 'Tu cuota (' + tipoNombre + ') está al día. Próxima renovación: ' + proxFechaTxt + '.'
+      : 'Tienes una cuota de ' + tipoNombre + ' pendiente por regularizar.';
+
+    var btnHtml = esRegion
+      ? '<a href="' + esc(linkReg) + '" target="_blank" rel="noopener" class="pay-btn-jade" id="btn-pay-reg">' +
+          '<span class="zh" style="color:#A3E4D7;">地域</span> <span>Pagar $1.000 CLP (Regiones)</span>' +
+        '</a>'
+      : '<a href="' + esc(linkGen) + '" target="_blank" rel="noopener" class="pay-btn-gold" id="btn-pay-gen">' +
+          '<span class="zh" style="color:var(--gold);">付费</span> <span>Pagar $2.000 CLP (General / RM)</span>' +
+        '</a>';
+
+    var htmlActions = isAlDia
+      ? '<div class="pay-actions-group">' +
+          '<span style="font-size:.84rem;color:#A3E4D7;background:rgba(46,125,107,.25);border:1px solid rgba(55,145,123,.5);padding:9px 18px;border-radius:50px;font-weight:600;display:inline-flex;align-items:center;gap:6px;">' +
+            '✓ Membresía Vigente y Activa' +
+          '</span>' +
+        '</div>'
+      : '<div class="pay-actions-group">' + btnHtml + '</div>';
 
     payBox.innerHTML = '<div class="payment-card-status ' + cardCls + '">' +
       '<div class="pay-status-info">' +
-        '<span class="pay-status-icon">' + icon + '</span>' +
+        '<div class="pay-seal-icon">印</div>' +
         '<div>' +
           '<span class="pay-status-badge ' + badgeCls + '">' + badgeTxt + '</span>' +
-          '<h3 class="pay-status-title">Estado de Membresía 2026</h3>' +
+          '<h3 class="pay-status-title"><span class="zh">会费</span>Acreditación y Cuotas de Membresía</h3>' +
           '<p class="pay-status-sub">' + esc(subText) + '</p>' +
         '</div>' +
       '</div>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">' +
-        '<a href="' + esc(linkGen) + '" target="_blank" rel="noopener" class="btn-mercadopago" id="btn-pay-gen">' +
-          '<span>💳 Pagar $2.000 CLP (General / RM)</span>' +
-        '</a>' +
-        '<a href="' + esc(linkReg) + '" target="_blank" rel="noopener" class="btn-mercadopago" id="btn-pay-reg" style="background:linear-gradient(135deg,#2E7D6B,#1E5C4E);">' +
-          '<span>🌐 Pagar $1.000 CLP (Regiones)</span>' +
-        '</a>' +
-      '</div>' +
+      htmlActions +
     '</div>';
   }
 
