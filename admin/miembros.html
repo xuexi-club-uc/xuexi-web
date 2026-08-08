@@ -21,6 +21,9 @@
   .code-list li{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.84rem}
   .tag-usado{background:rgba(192,57,43,.3);color:#F5C6CB;padding:2px 8px;border-radius:10px;font-size:.7rem}
   .tag-libre{background:rgba(46,139,87,.3);color:#A3E4D7;padding:2px 8px;border-radius:10px;font-size:.7rem}
+
+  /* LOCK BOX */
+  .admin-lock-box{max-width:440px;margin:80px auto;background:rgba(30,22,20,.9);border:1px solid var(--line);border-radius:8px;padding:32px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.6)}
 </style>
 </head>
 <body>
@@ -31,16 +34,48 @@
       <img src="../assets/logo.png" alt="">
       <span><span class="zh">学习</span> XUEXI CLUB · ADMIN</span>
     </a>
-    <a class="cta" href="../admin/">Volver al CMS</a>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <button id="btn-admin-logout" class="btn btn-outline" style="display:none;padding:4px 12px;font-size:.78rem;">Salir de Admin</button>
+      <a class="cta" href="../admin/">CMS General</a>
+    </div>
   </div>
 </header>
 
-<main class="admin-panel-container">
+<!-- BLOQUE DE AUTENTICACIÓN (MOSTRADO SI NO ES ADMIN) -->
+<div id="admin-lock-container" class="wrap">
+  <div class="admin-lock-box">
+    <span class="zh" style="font-size:2.6rem;color:var(--gold);display:block;margin-bottom:8px;">🔒 管理员</span>
+    <h2 style="font-family:var(--serif);font-size:1.4rem;margin:0 0 8px;color:var(--cream);">Acceso Restringido</h2>
+    <p style="font-size:.85rem;color:var(--cream-dim);margin:0 0 20px;line-height:1.45;">
+      Esta sección está reservada exclusivamente para la mesa directiva y coordinación del Xuexi Club UC.
+    </p>
+
+    <div id="admin-auth-error" style="display:none;background:rgba(192,57,43,.2);border:1px solid var(--granate);color:#F5C6CB;padding:8px 12px;border-radius:4px;font-size:.8rem;margin-bottom:14px;"></div>
+
+    <form id="form-admin-login" style="display:flex;flex-direction:column;gap:12px;text-align:left;">
+      <div>
+        <label style="font-size:.78rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Correo de Administración / Miembro</label>
+        <input type="email" id="admin-email" required placeholder="admin@xuexiclub.cl" style="width:100%;padding:10px;background:rgba(20,14,14,.7);border:1px solid var(--line);border-radius:4px;color:var(--cream);font-family:inherit;">
+      </div>
+
+      <div>
+        <label style="font-size:.78rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Contraseña de Acceso</label>
+        <input type="password" id="admin-pass" required placeholder="••••••••" style="width:100%;padding:10px;background:rgba(20,14,14,.7);border:1px solid var(--line);border-radius:4px;color:var(--cream);font-family:inherit;">
+      </div>
+
+      <button type="submit" class="btn" style="margin-top:6px;width:100%;">Desbloquear Panel</button>
+    </form>
+  </div>
+</div>
+
+<!-- CONTENIDO DEL PANEL ADMIN (OCULTO HASTA AUTENTICAR) -->
+<main id="admin-content" class="admin-panel-container" style="display:none;">
   <div class="admin-top">
     <div>
       <span class="zh" style="color:var(--gold);font-size:1.2rem;">会员管理</span>
       <h1 class="admin-title">Gestión de Miembros e Invitaciones</h1>
     </div>
+    <span style="font-size:.78rem;color:var(--gold);background:rgba(212,175,97,.12);border:1px solid rgba(212,175,97,.3);padding:4px 12px;border-radius:50px;">Sesión Admin Activa</span>
   </div>
 
   <div class="admin-grid">
@@ -117,11 +152,75 @@
 <script src="../assets/auth.js"></script>
 <script>
 (function(){
+  var lockContainer = document.getElementById('admin-lock-container');
+  var contentMain = document.getElementById('admin-content');
+  var formLogin = document.getElementById('form-admin-login');
+  var authError = document.getElementById('admin-auth-error');
+  var btnAdminLogout = document.getElementById('btn-admin-logout');
+
   var btnGenCode = document.getElementById('btn-gen-code');
   var newCodeBox = document.getElementById('new-code-box');
   var newCodeText = document.getElementById('new-code-text');
   var historyList = document.getElementById('code-history');
   var formEvent = document.getElementById('form-event-interno');
+
+  function esAdmin(user){
+    if (localStorage.getItem('xuexi_admin_session') === 'true') return true;
+    if (user && (user.rol === 'admin' || user.email === 'admin@xuexiclub.cl')) return true;
+    return false;
+  }
+
+  function desbloquearPanel(){
+    lockContainer.style.display = 'none';
+    contentMain.style.display = 'block';
+    btnAdminLogout.style.display = 'inline-block';
+    renderCodes();
+  }
+
+  function bloquearPanel(){
+    lockContainer.style.display = 'block';
+    contentMain.style.display = 'none';
+    btnAdminLogout.style.display = 'none';
+  }
+
+  // Verificar sesión
+  window.XuexiAuth.onAuth(function(user){
+    if (esAdmin(user)) {
+      desbloquearPanel();
+    } else {
+      bloquearPanel();
+    }
+  });
+
+  // Login de Admin
+  formLogin.addEventListener('submit', function(e){
+    e.preventDefault();
+    authError.style.display = 'none';
+
+    var email = document.getElementById('admin-email').value.trim();
+    var pass = document.getElementById('admin-pass').value;
+
+    window.XuexiAuth.login(email, pass).then(function(res){
+      var u = res.user;
+      if (esAdmin(u)) {
+        localStorage.setItem('xuexi_admin_session', 'true');
+        desbloquearPanel();
+      } else {
+        authError.textContent = "Tu cuenta no tiene privilegios de administración.";
+        authError.style.display = 'block';
+      }
+    }).catch(function(err){
+      authError.textContent = err.message || "Credenciales incorrectas.";
+      authError.style.display = 'block';
+    });
+  });
+
+  btnAdminLogout.addEventListener('click', function(){
+    localStorage.removeItem('xuexi_admin_session');
+    window.XuexiAuth.logout().then(function(){
+      bloquearPanel();
+    });
+  });
 
   function randomCode(){
     var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -206,8 +305,6 @@
       formEvent.reset();
     }
   });
-
-  renderCodes();
 })();
 </script>
 </body>
