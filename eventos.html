@@ -169,12 +169,18 @@
 
   function tarjeta(e){
     var d = fecha(e.fecha);
+    var evId = e.id || encodeURIComponent(e.titulo);
+    var urlSubpagina = 'evento.html?id=' + encodeURIComponent(evId);
     var est = esPasado(e)
       ? {txt:'Ya realizado', cls:'e-lleno'}
       : (ESTADOS[e.estado] || ESTADOS.pronto);
     var media = e.imagen
       ? '<img src="' + esc(ruta(e.imagen, 'assets/')) + '" alt="" loading="lazy">'
       : '<span class="glyph zh">' + esc(e.hanzi || '学') + '</span>';
+    var cantFotos = (e.galeria && e.galeria.length) ? e.galeria.length : 0;
+    var badgeGaleria = cantFotos > 0
+      ? '<span class="badge-galeria" title="' + cantFotos + ' fotos del evento">📸 ' + cantFotos + ' fotos</span>'
+      : '';
     var cupos = e.cupos > 0
       ? '<span class="cupos">' + esc(e.cupos) + ' cupos</span>'
       : '';
@@ -184,20 +190,25 @@
         '</span> ' + com.nom + '</span>'
       : '';
     return '<article class="ev' + (esPasado(e) ? ' pasado' : '') + '">' +
-      '<div class="media">' + media +
-        '<p class="fecha"><b>' + d.getDate() + '</b><span>' + MESES[d.getMonth()] + '</span></p>' +
-        '<span class="estado ' + est.cls + '">' + est.txt + '</span>' +
-      '</div>' +
+      '<a href="' + urlSubpagina + '" class="media-link">' +
+        '<div class="media">' + media +
+          '<p class="fecha"><b>' + d.getDate() + '</b><span>' + MESES[d.getMonth()] + '</span></p>' +
+          '<span class="estado ' + est.cls + '">' + est.txt + '</span>' +
+        '</div>' +
+      '</a>' +
       '<div class="body">' +
         '<p class="area">' + esc(TIPOS[e.tipo] || '') +
           (e.areaEtiqueta ? ' · ' + esc(e.areaEtiqueta) : '') + '</p>' +
-        '<h3>' + esc(e.titulo) + '</h3>' +
+        '<h3><a href="' + urlSubpagina + '" class="ev-titulo-link">' + esc(e.titulo) + '</a></h3>' +
         (e.detalle ? '<p class="ev-det">' + esc(e.detalle) + '</p>' : '') +
         '<div class="meta">' +
           '<span class="r">' + PIN + '<span>' + esc(e.lugar) + '</span></span>' +
           '<span class="r">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' ' +
              MESES[d.getMonth()] + ' · ' + esc(e.hora) + '</span></span>' +
-          '<span class="ev-pie">' + sello + cupos + '</span>' +
+          '<span class="ev-pie">' + sello + badgeGaleria + cupos + '</span>' +
+          '<div class="ev-accion">' +
+            '<a href="' + urlSubpagina + '" class="btn-link-ev">Ver detalle y galería →</a>' +
+          '</div>' +
         '</div>' +
       '</div></article>';
   }

@@ -31,6 +31,7 @@
   "temporada": "Segundo semestre 2026",
   "eventos": [
     {
+      "id": "karaoke-chino",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -43,9 +44,11 @@
       "detalle": "Parte de Reencuentro UC. Organiza Xuexi Club UC, con El Viaje del Estudiante UC. Apoya Primavera UC. Inscripción previa por QR. De 11:00 a 13:00 hrs.",
       "titulo": "Karaoke chino 开麦吧!!",
       "comision": "wailian",
-      "fecha": "2026-08-03"
+      "fecha": "2026-08-03",
+      "galeria": ["reencuentro-karaoke.jpg"]
     },
     {
+      "id": "diplomacia-pandas",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "RR.II. y Diplomacia",
       "cupos": 0,
@@ -58,9 +61,11 @@
       "detalle": "Parte de Reencuentro UC. Organiza Xuexi Club UC, con El Viaje del Estudiante UC. Apoya Primavera UC. Inscripción previa por QR. De 12:30 a 14:00 hrs.",
       "titulo": "Diplomacia de los pandas",
       "comision": "wailian",
-      "fecha": "2026-08-03"
+      "fecha": "2026-08-03",
+      "galeria": ["reencuentro-pandas.jpg"]
     },
     {
+      "id": "taller-caligrafia",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -73,9 +78,11 @@
       "detalle": "Parte de Reencuentro UC. Organiza Xuexi Club UC, con El Viaje del Estudiante UC. Apoya Primavera UC. Inscripción previa por QR. De 11:00 a 13:10 hrs.",
       "titulo": "Taller de Caligrafía China",
       "comision": "wailian",
-      "fecha": "2026-08-03"
+      "fecha": "2026-08-03",
+      "galeria": ["reencuentro-caligrafia.jpg"]
     },
     {
+      "id": "caligrafia-budista",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -88,9 +95,11 @@
       "detalle": "En colaboración con la Organización Budista Fo Guang Shan.",
       "titulo": "Taller de Caligrafía y Charla Budista",
       "comision": "wailian",
-      "fecha": "2025-11-13"
+      "fecha": "2025-11-13",
+      "galeria": ["templo.jpg"]
     },
     {
+      "id": "cocina-china",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 20,
@@ -103,9 +112,11 @@
       "detalle": "Impartido por Nathaly Jeria, Letras Inglesas UC. Nutrición y Dietética.",
       "titulo": "Taller de Cocina China: salteado de repollo con fideos de arroz y huevo",
       "comision": "wailian",
-      "fecha": "2025-11-07"
+      "fecha": "2025-11-07",
+      "galeria": ["cocina.jpg"]
     },
     {
+      "id": "taichi",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -118,9 +129,11 @@
       "detalle": "Impartido por el maestro Aznous Boisseranc, director de la escuela de Taichi Longhun Wudao y profesor del Instituto Confucio UC.",
       "titulo": "Taichi: la unidad del cuerpo, respiración y espíritu (太极三条)",
       "comision": "wailian",
-      "fecha": "2025-11-20"
+      "fecha": "2025-11-20",
+      "galeria": []
     },
     {
+      "id": "medicina-china",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -133,9 +146,11 @@
       "detalle": "Impartida por Junzi Lan, estudiante de Letras Hispánicas UC.",
       "titulo": "Acercamiento a la Medicina China",
       "comision": "wailian",
-      "fecha": "2025-11-19"
+      "fecha": "2025-11-19",
+      "galeria": []
     },
     {
+      "id": "acupuntura",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Cultura y Lengua",
       "cupos": 0,
@@ -148,9 +163,11 @@
       "detalle": "En colaboración con la comunidad InterActuando. Impartida por Alonso Vera, profesional de Medicina China y acupunturista. Incluyó demostración práctica. Entre 11:00 y 12:30 hrs.",
       "titulo": "Acercamiento a la Acupuntura",
       "comision": "wailian",
-      "fecha": "2025-11-26"
+      "fecha": "2025-11-26",
+      "galeria": []
     },
     {
+      "id": "webinar-fiberhome",
       "ciclo": "segundo-semestre",
       "areaEtiqueta": "Ciencia y Tecnología",
       "cupos": 0,
@@ -163,7 +180,8 @@
       "detalle": "Organizado con la empresa Fiberhome.",
       "titulo": "Fiberhome Technical Webinar: 50G PON y soluciones de redes ópticas",
       "comision": "xuexi",
-      "fecha": "2025-11-05"
+      "fecha": "2025-11-05",
+      "galeria": []
     }
   ]
 }

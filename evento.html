@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detalle del Evento · Xuexi Club UC</title>
+<meta name="description" content="Detalle del evento y galería de fotos del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css?v=3">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="sabias-que.html"><span class="zh">你知道吗</span>¿Sabías qué?</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido">
+  <section>
+    <div class="wrap" id="contenedor-evento">
+      <p class="aviso">Cargando detalles del evento…</p>
+    </div>
+  </section>
+</main>
+
+<!-- LIGHTBOX MODAL -->
+<div class="lightbox-modal" id="lightbox">
+  <button class="lightbox-close" id="lb-close" aria-label="Cerrar imagen">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Imagen anterior">&#10094;</button>
+  <div class="lightbox-content">
+    <img src="" alt="" class="lightbox-img" id="lb-img">
+    <div class="lightbox-caption" id="lb-caption"></div>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Imagen siguiente">&#10095;</button>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="sabias-que.html">¿Sabías qué?</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin.html" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="assets/nav.js?v=3"></script>
+<script src="assets/datos.js?v=1"></script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  var DIAS  = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var ESTADOS = {
+    abierto  :{txt:'Inscripción abierta', cls:'e-abierto'},
+    pronto   :{txt:'Próximamente',        cls:'e-pronto'},
+    lleno    :{txt:'Cupos llenos',        cls:'e-lleno'},
+    online   :{txt:'Online · abierto',    cls:'e-online'},
+    realizado:{txt:'Realizado',           cls:'e-lleno'}
+  };
+  var TIPOS = {
+    taller:'Taller', charla:'Charla', congreso:'Congreso', almuerzo:'Almuerzo',
+    festival:'Festival', stand:'Stand', jornada:'Jornada de investigación',
+    voluntariado:'Voluntariado'
+  };
+  var COMISIONES = {
+    wailian:{zh:'外联', nom:'Wailian'},
+    xuexi  :{zh:'学习', nom:'Xuexi'},
+    xinxi  :{zh:'信息', nom:'Xinxi'}
+  };
+
+  var PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>';
+  var CAL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>';
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function ruta(valor, carpeta){
+    var v = String(valor || '').trim();
+    if (!v) return '';
+    if (/^(https?:)?\/\//.test(v) || /^data:image/.test(v)) return v;
+    return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
+  function fecha(iso){
+    var p = String(iso).split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  function esPasado(e){
+    var hoy = new Date(); hoy.setHours(0,0,0,0);
+    return fecha(e.fecha) < hoy;
+  }
+
+  // Galería de fotos actual y lightbox state
+  var galeriaFotos = [];
+  var lightboxIndex = 0;
+
+  var lbModal = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCaption = document.getElementById('lb-caption');
+  var lbClose = document.getElementById('lb-close');
+  var lbPrev = document.getElementById('lb-prev');
+  var lbNext = document.getElementById('lb-next');
+
+  function abrirLightbox(index){
+    if (index < 0 || index >= galeriaFotos.length) return;
+    lightboxIndex = index;
+    var item = galeriaFotos[index];
+    lbImg.src = item.url;
+    lbCaption.textContent = (item.caption || ('Fotografía ' + (index + 1) + ' de ' + galeriaFotos.length));
+    lbModal.classList.add('active');
+  }
+
+  function cerrarLightbox(){
+    lbModal.classList.remove('active');
+  }
+
+  lbClose.addEventListener('click', cerrarLightbox);
+  lbPrev.addEventListener('click', function(){ abrirLightbox((lightboxIndex - 1 + galeriaFotos.length) % galeriaFotos.length); });
+  lbNext.addEventListener('click', function(){ abrirLightbox((lightboxIndex + 1) % galeriaFotos.length); });
+  lbModal.addEventListener('click', function(e){ if(e.target === lbModal) cerrarLightbox(); });
+  document.addEventListener('keydown', function(e){
+    if (!lbModal.classList.contains('active')) return;
+    if (e.key === 'Escape') cerrarLightbox();
+    if (e.key === 'ArrowLeft') abrirLightbox((lightboxIndex - 1 + galeriaFotos.length) % galeriaFotos.length);
+    if (e.key === 'ArrowRight') abrirLightbox((lightboxIndex + 1) % galeriaFotos.length);
+  });
+
+  // Cargar evento según parámetro ?id=...
+  var params = new URLSearchParams(window.location.search);
+  var targetId = params.get('id') || '';
+  var contenedor = document.getElementById('contenedor-evento');
+
+  window.cargarEventos().then(function(data){
+    var evs = data.eventos || [];
+    var ev = evs.find(function(e){
+      return (e.id && e.id === targetId) ||
+             (encodeURIComponent(e.id || e.titulo) === targetId) ||
+             (e.titulo && e.titulo.toLowerCase() === decodeURIComponent(targetId).toLowerCase());
+    });
+
+    if (!ev && evs.length > 0){
+      // Si no hay ID exacto, toma el primero como fallback o error
+      ev = evs[0];
+    }
+
+    if (!ev){
+      contenedor.innerHTML = '<div class="aviso">' +
+        '<h3>Evento no encontrado</h3>' +
+        '<p style="margin-top:10px;"><a href="eventos.html" class="btn btn-sello">← Volver a Eventos</a></p>' +
+      '</div>';
+      return;
+    }
+
+    document.title = ev.titulo + ' · Xuexi Club UC';
+
+    var d = fecha(ev.fecha);
+    var est = esPasado(ev) ? {txt:'Ya realizado', cls:'e-lleno'} : (ESTADOS[ev.estado] || ESTADOS.pronto);
+    var com = COMISIONES[ev.comision];
+    var sello = com ? '<span class="ev-com"><span class="zh">' + com.zh + '</span> ' + com.nom + '</span>' : '';
+
+    // Comprobar si el usuario tiene sesión o modo administrador (?admin=1 o localStorage)
+    var esAdmin = params.get('admin') === '1' || params.get('modo') === 'admin' || localStorage.getItem('xuexi_admin_session') === 'true';
+
+    // Preparar lista de fotos reales de la galería (1 foto de ejemplo)
+    var fotosIniciales = [];
+    if (ev.galeria && Array.isArray(ev.galeria) && ev.galeria.length > 0){
+      fotosIniciales = ev.galeria.slice(0, 1); // 1 foto real de ejemplo
+    } else if (ev.imagen){
+      fotosIniciales = [ev.imagen];
+    }
+
+    galeriaFotos = fotosIniciales.map(function(f, idx){
+      return { url: ruta(f, 'assets/'), caption: ev.titulo + ' — Foto de ejemplo (' + (idx + 1) + ')', nombreArchivo: f };
+    });
+
+    var mediaPortada = ev.imagen
+      ? '<img src="' + esc(ruta(ev.imagen, 'assets/')) + '" alt="' + esc(ev.titulo) + '">'
+      : '<span class="glyph zh">' + esc(ev.hanzi || '学') + '</span>';
+
+    var html = '' +
+      '<div class="ev-hero-box">' +
+        '<div class="ev-hero-top">' +
+          '<span class="ev-breadcrumb"><a href="eventos.html">← Eventos</a> &nbsp;/&nbsp; ' + esc(TIPOS[ev.tipo] || 'Actividad') + '</span>' +
+          '<span class="estado ' + est.cls + '" style="margin-left:auto">' + est.txt + '</span>' +
+        '</div>' +
+        '<h1 class="ev-hero-title">' + esc(ev.titulo) + '<span class="zh">' + esc(ev.hanzi || '') + '</span></h1>' +
+        '<div class="ev-meta-row">' +
+          '<div class="ev-meta-item">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()] + ' ' + d.getFullYear() + ' · ' + esc(ev.hora) + ' hrs.</span></div>' +
+          '<div class="ev-meta-item">' + PIN + '<span>' + esc(ev.lugar) + '</span></div>' +
+        '</div>' +
+        '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;">' +
+          sello +
+          (ev.areaEtiqueta ? '<span class="chip" style="pointer-events:none;padding:5px 12px;font-size:.68rem;">' + esc(ev.areaEtiqueta) + '</span>' : '') +
+          (ev.cupos > 0 ? '<span class="cupos" style="font-size:.78rem;color:var(--gold);">' + ev.cupos + ' cupos disponibles</span>' : '') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="ev-detail-grid">' +
+        '<div class="ev-cover-frame">' + mediaPortada + '</div>' +
+        '<div class="ev-info-card">' +
+          '<h4><span class="zh">关于</span> Sobre esta actividad</h4>' +
+          '<p>' + esc(ev.detalle || 'Actividad organizada por Xuexi Club UC.') + '</p>' +
+          (esPasado(ev)
+            ? '<p style="color:var(--gold);font-size:.84rem;">✨ Este evento ya concluyó. Puedes explorar las fotos de lo que fue la jornada a continuación.</p>'
+            : '<a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener" class="btn btn-sello" style="margin-top:auto;"><span class="zh">报名</span> Inscribirse ahora</a>'
+          ) +
+        '</div>' +
+      '</div>' +
+
+      '<div class="gallery-section">' +
+        '<div class="gallery-head">' +
+          '<h3><span class="zh">相册</span> Galería de fotos de lo que fue el evento</h3>' +
+          '<span class="gallery-counter" id="fotos-counter">GALERÍA</span>' +
+        '</div>' +
+        '<div class="gallery-grid" id="gallery-grid"></div>' +
+
+        '<!-- AVISO PUBLICO O UPLOADER RESTRINGIDO DE ADMIN -->' +
+        (esAdmin
+          ? '<div class="uploader-box" id="drop-zone">' +
+              '<div class="uploader-icon">🔒 📸</div>' +
+              '<h4>Panel de Administración · Subir fotografías del evento</h4>' +
+              '<p>Arrastra imágenes o presiona el botón para cargar fotos oficializadas a la galería de este evento.</p>' +
+              '<button class="btn btn-gold" type="button" id="btn-select-files"><span class="zh">上传</span> Seleccionar imágenes</button>' +
+              '<input type="file" id="input-files" class="uploader-input" accept="image/*" multiple>' +
+              '<div class="json-preview" id="json-output" style="display:none;"></div>' +
+            '</div>'
+          : '<div class="admin-notice-bar">' +
+              '<span>🔒 <b>Acceso restringido:</b> La carga de fotografías oficiales está reservada al equipo de la Comisión Xinxi.</span>' +
+              '<a href="admin.html">Entrar al Panel Admin →</a>' +
+            '</div>'
+        ) +
+      '</div>';
+
+    contenedor.innerHTML = html;
+
+    // Renderizar grilla de galería (1 foto real + 2 slots "Foto por subir")
+    var gridEl = document.getElementById('gallery-grid');
+    var counterEl = document.getElementById('fotos-counter');
+
+    function renderGaleria(){
+      counterEl.textContent = (galeriaFotos.length + 2) + ' FOTOGRAFÍAS';
+
+      // 1. Fotos reales existentes
+      var htmlFotos = galeriaFotos.map(function(item, idx){
+        return '<div class="gallery-card" data-idx="' + idx + '">' +
+          '<img src="' + esc(item.url) + '" alt="' + esc(item.caption) + '" loading="lazy">' +
+          '<div class="gallery-overlay"><span>🔍 Ver en pantalla completa</span></div>' +
+        '</div>';
+      }).join('');
+
+      // 2. Tarjetas placeholders de "Foto por subir"
+      var htmlPendientes = '' +
+        '<div class="gallery-card pending" title="Fotografía pendiente de publicar por la Comisión Xinxi">' +
+          '<div class="pending-icon">📷</div>' +
+          '<div class="pending-zh">待上传</div>' +
+          '<div class="pending-title">Foto por subir</div>' +
+          '<div class="pending-sub">Próximamente · Comisión Xinxi</div>' +
+        '</div>' +
+        '<div class="gallery-card pending" title="Fotografía pendiente de publicar por la Comisión Xinxi">' +
+          '<div class="pending-icon">📷</div>' +
+          '<div class="pending-zh">待上传</div>' +
+          '<div class="pending-title">Foto por subir</div>' +
+          '<div class="pending-sub">Próximamente · Comisión Xinxi</div>' +
+        '</div>';
+
+      gridEl.innerHTML = htmlFotos + htmlPendientes;
+
+      [].forEach.call(gridEl.querySelectorAll('.gallery-card:not(.pending)'), function(card){
+        card.addEventListener('click', function(){
+          var idx = parseInt(card.getAttribute('data-idx'), 10);
+          abrirLightbox(idx);
+        });
+      });
+    }
+
+    renderGaleria();
+
+    // Si está en modo administrador, activar uploader
+    if (esAdmin){
+      var dropZone = document.getElementById('drop-zone');
+      var inputFiles = document.getElementById('input-files');
+      var btnSelect = document.getElementById('btn-select-files');
+      var jsonOutputEl = document.getElementById('json-output');
+
+      btnSelect.addEventListener('click', function(){ inputFiles.click(); });
+
+      function procesarArchivos(files){
+        if (!files || !files.length) return;
+
+        [].forEach.call(files, function(file){
+          if (!file.type.startsWith('image/')) return;
+          var reader = new FileReader();
+          reader.onload = function(evt){
+            var dataUrl = evt.target.result;
+            galeriaFotos.push({
+              url: dataUrl,
+              caption: ev.titulo + ' — Foto de administración (' + file.name + ')',
+              nombreArchivo: file.name
+            });
+            renderGaleria();
+
+            var listaArchivos = galeriaFotos.map(function(f){ return f.nombreArchivo || 'assets/foto.jpg'; });
+            jsonOutputEl.style.display = 'block';
+            jsonOutputEl.innerHTML = '<strong>Copiar para data/eventos.json:</strong><br>' +
+              '<code>"galeria": ' + JSON.stringify(listaArchivos, null, 2) + '</code>';
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      inputFiles.addEventListener('change', function(e){ procesarArchivos(e.target.files); });
+
+      dropZone.addEventListener('dragover', function(e){
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+      dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragover'); });
+      dropZone.addEventListener('drop', function(e){
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        procesarArchivos(e.dataTransfer.files);
+      });
+    }
+
+  }).catch(function(err){
+    console.error(err);
+    contenedor.innerHTML = '<div class="aviso"><p>Error al cargar la información del evento.</p></div>';
+  });
+})();
+</script>
+</body>
+</html>
