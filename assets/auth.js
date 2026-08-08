@@ -101,7 +101,7 @@
           }
 
           if (encontrado.usado || localUsados.indexOf(codigo) !== -1) {
-            throw new Error("Este código de invitación ya ha sido utilizado.");
+            throw new Error("Este código de invitación es de un solo uso y ya fue utilizado anteriormente. Solicita un nuevo código a la coordinación.");
           }
 
           return encontrado;
