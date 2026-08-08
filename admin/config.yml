@@ -330,3 +330,23 @@ collections:
                   - { label: Social / Tándem, value: social }
               - { label: Detalles u Orden del Día, name: detalle, widget: text, required: false }
 
+  # ────────────────────── MEMBRESÍAS Y PAGOS ──────────────────────
+  - name: config_membresias
+    label: Membresías y Pagos
+    files:
+      - name: configuracion_pagos
+        label: Configuración de Cuotas y Pasarela
+        file: data/membresias.json
+        format: json
+        description: Configuración del monto de la mensualidad y enlace de pago de Mercado Pago / Getnet
+        fields:
+          - { label: Link Mercado Pago - General / RM ($2.000), name: linkMercadoPagoGeneral, widget: string, hint: 'Link de pago para cuota General ($2.000 CLP)' }
+          - { label: Valor Cuota General (número), name: montoGeneral, widget: number, value_type: int, default: 2000 }
+          - { label: Link Mercado Pago - Regiones ($1.000), name: linkMercadoPagoRegion, widget: string, hint: 'Link de pago para miembros en regiones ($1.000 CLP)' }
+          - { label: Valor Cuota Regiones (número), name: montoRegion, widget: number, value_type: int, default: 1000 }
+          - { label: Día de Vencimiento Mensual, name: diaCobro, widget: number, value_type: int, default: 5, min: 1, max: 31 }
+          - { label: Métodos de Pago Aceptados, name: metodosAceptados, widget: string, required: false }
+          - { label: Instrucciones para el Miembro, name: instrucciones, widget: text, required: false }
+
+
+

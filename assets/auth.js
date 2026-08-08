@@ -177,6 +177,45 @@
     }
   }
 
+  // Obtener configuración de mensualidad desde data/membresias.json
+  function obtenerConfigMembresia() {
+    return fetch('data/membresias.json', {cache:'no-cache'})
+      .then(function(r){
+        return r.ok ? r.json() : {
+          linkMercadoPago: "https://mpago.li/xuexi-club-uc",
+          montoCuota: 3000,
+          textoMonto: "$3.000 CLP",
+          diaCobro: 5
+        };
+      });
+  }
+
+  // Registrar un pago confirmado
+  function registrarPagoCompletado(user, monto, ref) {
+    var pago = {
+      fecha: new Date().toISOString().split('T')[0],
+      monto: monto || 3000,
+      metodo: 'Mercado Pago / Getnet',
+      ref: ref || ('MP-' + Math.floor(Math.random()*899999 + 100000))
+    };
+
+    if (firebaseReady && db && user && user.uid) {
+      return db.collection('miembros').doc(user.uid).update({
+        estadoPago: 'al_dia',
+        ultimoPago: pago,
+        historialPagos: firebase.firestore.FieldValue.arrayUnion(pago)
+      });
+    } else {
+      return new Promise(function(resolve){
+        var historial = JSON.parse(localStorage.getItem('xuexi_payment_history') || '[]');
+        historial.unshift(pago);
+        localStorage.setItem('xuexi_payment_history', JSON.stringify(historial));
+        localStorage.setItem('xuexi_payment_status', 'al_dia');
+        resolve(pago);
+      });
+    }
+  }
+
   // Actualizar enlace en la barra de navegación dinámicamente
   function actualizarNav() {
     var nav = document.getElementById('nav-menu');
@@ -207,6 +246,8 @@
     validarCodigo: validarCodigo,
     registrar: registrar,
     obtenerCalendarioInterno: obtenerCalendarioInterno,
+    obtenerConfigMembresia: obtenerConfigMembresia,
+    registrarPagoCompletado: registrarPagoCompletado,
     actualizarNav: actualizarNav
   };
 

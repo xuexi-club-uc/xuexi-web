@@ -69,6 +69,9 @@
       </div>
       <button type="button" class="btn btn-outline" id="btn-logout">Cerrar Sesión</button>
     </div>
+
+    <!-- TARJETA DE ESTADO DE PAGO / MERCADO PAGO -->
+    <div id="payment-status-box"></div>
   </div>
 </section>
 
@@ -373,6 +376,53 @@
     renderMonthGrid();
   });
 
+  // Render Tarjeta de Estado de Pago de Membresía (General $2.000 / Regiones $1.000)
+  function renderPaymentStatus(user, config){
+    var payBox = document.getElementById('payment-status-box');
+    if (!payBox) return;
+
+    var estado = (user && user.estadoPago) || localStorage.getItem('xuexi_payment_status') || 'al_dia';
+    var linkGen = (config && config.linkMercadoPagoGeneral) || 'https://mpago.li/xuexi-general-2k';
+    var linkReg = (config && config.linkMercadoPagoRegion) || 'https://mpago.li/xuexi-region-1k';
+    var txtGen = (config && config.textoMontoGeneral) || '$2.000 CLP (General)';
+    var txtReg = (config && config.textoMontoRegion) || '$1.000 CLP (Regiones)';
+
+    var isAlDia = estado === 'al_dia';
+    var isPendiente = estado === 'pendiente';
+
+    var badgeCls = isAlDia ? 'badge-al-dia' : (isPendiente ? 'badge-pendiente' : 'badge-vencida');
+    var badgeTxt = isAlDia ? '🟢 Membresía Al Día' : (isPendiente ? '🟡 Cuota Pendiente' : '🔴 Vencida');
+    var icon = isAlDia ? '💎' : '💳';
+    var cardCls = isAlDia ? 'al-dia' : (isPendiente ? 'pendiente' : 'vencida');
+
+    var hoy = new Date();
+    var proxMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, (config && config.diaCobro) || 5);
+    var proxFechaTxt = proxMes.getDate() + ' de ' + MESES[proxMes.getMonth()] + ' de ' + proxMes.getFullYear();
+
+    var subText = isAlDia 
+      ? 'Próximo vencimiento: ' + proxFechaTxt + ' · Cuota: $2.000 (RM) / $1.000 (Regiones)'
+      : 'Paga tu mensualidad según tu ubicación para mantener tus beneficios activos.';
+
+    payBox.innerHTML = '<div class="payment-card-status ' + cardCls + '">' +
+      '<div class="pay-status-info">' +
+        '<span class="pay-status-icon">' + icon + '</span>' +
+        '<div>' +
+          '<span class="pay-status-badge ' + badgeCls + '">' + badgeTxt + '</span>' +
+          '<h3 class="pay-status-title">Estado de Membresía 2026</h3>' +
+          '<p class="pay-status-sub">' + esc(subText) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">' +
+        '<a href="' + esc(linkGen) + '" target="_blank" rel="noopener" class="btn-mercadopago" id="btn-pay-gen">' +
+          '<span>💳 Pagar $2.000 CLP (General / RM)</span>' +
+        '</a>' +
+        '<a href="' + esc(linkReg) + '" target="_blank" rel="noopener" class="btn-mercadopago" id="btn-pay-reg" style="background:linear-gradient(135deg,#2E7D6B,#1E5C4E);">' +
+          '<span>🌐 Pagar $1.000 CLP (Regiones)</span>' +
+        '</a>' +
+      '</div>' +
+    '</div>';
+  }
+
   // Proteger ruta y cargar datos
   window.XuexiAuth.onAuth(function(user){
     if (!user) {
@@ -382,6 +432,13 @@
 
     memberName.textContent = user.nombre || user.displayName || (user.email ? user.email.split('@')[0] : 'Miembro Xuexi');
     memberEmail.textContent = (user.email || '') + (user.comision ? ' · Comisión ' + user.comision.toUpperCase() : '');
+
+    // Cargar configuración de pago y calendario
+    window.XuexiAuth.obtenerConfigMembresia().then(function(config){
+      renderPaymentStatus(user, config);
+    }).catch(function(){
+      renderPaymentStatus(user, null);
+    });
 
     window.XuexiAuth.obtenerCalendarioInterno()
       .then(function(list){

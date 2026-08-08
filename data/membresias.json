@@ -1,0 +1,11 @@
+{
+  "montoGeneral": 2000,
+  "textoMontoGeneral": "$2.000 CLP (General / RM)",
+  "linkMercadoPagoGeneral": "https://mpago.li/xuexi-general-2k",
+  "montoRegion": 1000,
+  "textoMontoRegion": "$1.000 CLP (Regiones)",
+  "linkMercadoPagoRegion": "https://mpago.li/xuexi-region-1k",
+  "diaCobro": 5,
+  "metodosAceptados": "Redcompra (Débito), Crédito, Mercado Pago, CuentaRUT",
+  "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet."
+}

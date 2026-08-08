@@ -840,3 +840,31 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   .timeline-node{left:-20px;width:16px;height:16px;top:18px}
   .timeline-card{padding:16px}
 }
+
+/* ===== ESTADO DE PAGO DE MEMBRESÍA Y MERCADO PAGO ===== */
+.payment-card-status{background:linear-gradient(135deg,rgba(30,22,20,.9),rgba(20,14,14,.95));
+  border:1px solid rgba(212,175,97,.22);border-radius:8px;padding:22px 26px;margin:24px 0 30px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;
+  box-shadow:0 10px 30px -10px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.payment-card-status::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}
+
+.payment-card-status.al-dia::before{background:#2ECC71}
+.payment-card-status.pendiente::before{background:#F39C12}
+.payment-card-status.vencida::before{background:#E74C3C}
+
+.pay-status-info{display:flex;align-items:center;gap:16px}
+.pay-status-icon{font-size:2.2rem;line-height:1}
+.pay-status-badge{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:50px;font-weight:700;display:inline-block;margin-bottom:4px}
+.badge-al-dia{background:rgba(46,204,113,.15);border:1px solid rgba(46,204,113,.4);color:#2ECC71}
+.badge-pendiente{background:rgba(243,156,18,.15);border:1px solid rgba(243,156,18,.4);color:#F39C12}
+.badge-vencida{background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.4);color:#E74C3C}
+
+.pay-status-title{font-family:var(--serif);font-size:1.15rem;margin:0 0 4px;color:var(--cream)}
+.pay-status-sub{font-size:.8rem;color:var(--cream-dim);margin:0}
+
+.btn-mercadopago{background:linear-gradient(135deg,#009EE3,#0084C0);color:#FFF!important;
+  font-weight:700;border:none;padding:10px 22px;border-radius:50px;font-size:.85rem;
+  box-shadow:0 6px 18px -4px rgba(0,158,227,.4);display:inline-flex;align-items:center;gap:8px;
+  cursor:pointer;transition:transform .2s,box-shadow .2s;text-decoration:none!important}
+.btn-mercadopago:hover{transform:translateY(-2px);box-shadow:0 10px 24px -4px rgba(0,158,227,.6);color:#FFF}
+
