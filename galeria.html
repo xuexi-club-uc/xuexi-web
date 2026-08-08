@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galería · Xuexi Club UC</title>
+<meta name="description" content="Galería fotográfica del Xuexi Club UC: talleres, charlas, festivales y momentos de nuestra comunidad.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css?v=5">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="sabias-que.html"><span class="zh">你知道吗</span>¿Sabías qué?</a></li>
+      <li><a href="galeria.html"><span class="zh">相册</span>Galería</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<!-- HERO GALERÍA -->
+<section class="gal-hero">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="zh">相册</span>
+      <h1 style="font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.2rem);">Galería fotográfica</h1>
+    </div>
+    <p class="gal-lead">Revive los mejores momentos de nuestras actividades: talleres, festivales, charlas y jornadas del Xuexi Club UC.</p>
+
+    <!-- FILTROS POR TIPO -->
+    <div class="filtros" role="group" aria-label="Filtrar por tipo de actividad" id="filtros-galeria">
+      <button class="chip" data-f="todo" aria-pressed="true"><span class="zh">全部</span> Todo</button>
+    </div>
+
+    <!-- CONTADOR -->
+    <div class="gal-stats">
+      <span id="gal-contador" class="gallery-counter">CARGANDO…</span>
+    </div>
+  </div>
+</section>
+
+<!-- CARRUSEL HORIZONTAL DE FOTOS EN GRANDE -->
+<section class="gal-carousel-section">
+  <div class="gal-carousel-wrap">
+    <button class="gal-carousel-btn gal-carousel-prev" id="carousel-prev" aria-label="Anterior">&#10094;</button>
+    <div class="gal-carousel-track" id="carousel-track">
+      <p class="aviso" style="width:100%;text-align:center;">Cargando…</p>
+    </div>
+    <button class="gal-carousel-btn gal-carousel-next" id="carousel-next" aria-label="Siguiente">&#10095;</button>
+  </div>
+  <div class="gal-carousel-dots" id="carousel-dots"></div>
+</section>
+
+<!-- MOSAICO DE FOTOS AGRUPADAS -->
+<section class="alt" style="padding-top:0;">
+  <div class="wrap">
+    <div class="gal-mosaic" id="gal-mosaic" aria-live="polite">
+      <p class="aviso">Cargando galería…</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- LIGHTBOX MODAL -->
+<div class="lightbox-modal" id="lightbox">
+  <button class="lightbox-close" id="lb-close" aria-label="Cerrar imagen">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Imagen anterior">&#10094;</button>
+  <div class="lightbox-content">
+    <img src="" alt="" class="lightbox-img" id="lb-img">
+    <div class="lightbox-caption" id="lb-caption"></div>
+  </div>
+  <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Imagen siguiente">&#10095;</button>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="sabias-que.html">¿Sabías qué?</a>
+      <a href="galeria.html">Galería</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin/" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="assets/nav.js?v=3"></script>
+<script src="assets/datos.js?v=1"></script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var MESES_CORTO = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  var TIPOS = {
+    taller:'Taller', charla:'Charla', congreso:'Congreso', almuerzo:'Almuerzo',
+    festival:'Festival', stand:'Stand', jornada:'Jornada', voluntariado:'Voluntariado'
+  };
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function ruta(valor, carpeta){
+    var v = String(valor || '').trim();
+    if (!v) return '';
+    if (/^(https?:)?\/\//.test(v)) return v;
+    return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
+  function fecha(iso){
+    var p = String(iso).split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+
+  // Lightbox state
+  var fotosVisibles = [];
+  var lightboxIndex = 0;
+
+  var lbModal = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lb-img');
+  var lbCaption = document.getElementById('lb-caption');
+
+  function abrirLightbox(index){
+    if (index < 0 || index >= fotosVisibles.length) return;
+    lightboxIndex = index;
+    var item = fotosVisibles[index];
+    lbImg.src = item.url;
+    lbCaption.textContent = item.titulo + ' — ' + item.fechaTxt;
+    lbModal.classList.add('active');
+  }
+  function cerrarLightbox(){ lbModal.classList.remove('active'); }
+
+  document.getElementById('lb-close').addEventListener('click', cerrarLightbox);
+  document.getElementById('lb-prev').addEventListener('click', function(){
+    abrirLightbox((lightboxIndex - 1 + fotosVisibles.length) % fotosVisibles.length);
+  });
+  document.getElementById('lb-next').addEventListener('click', function(){
+    abrirLightbox((lightboxIndex + 1) % fotosVisibles.length);
+  });
+  lbModal.addEventListener('click', function(e){ if(e.target === lbModal) cerrarLightbox(); });
+  document.addEventListener('keydown', function(e){
+    if (!lbModal.classList.contains('active')) return;
+    if (e.key === 'Escape') cerrarLightbox();
+    if (e.key === 'ArrowLeft') abrirLightbox((lightboxIndex - 1 + fotosVisibles.length) % fotosVisibles.length);
+    if (e.key === 'ArrowRight') abrirLightbox((lightboxIndex + 1) % fotosVisibles.length);
+  });
+
+  // Data
+  var todasLasFotos = [];
+  var filtroActivo = 'todo';
+  var mosaico = document.getElementById('gal-mosaic');
+  var contador = document.getElementById('gal-contador');
+  var filtrosBox = document.getElementById('filtros-galeria');
+
+  function renderMosaico(){
+    fotosVisibles = filtroActivo === 'todo'
+      ? todasLasFotos.slice()
+      : todasLasFotos.filter(function(f){ return f.tipo === filtroActivo; });
+
+    if (!fotosVisibles.length){
+      mosaico.innerHTML = '<p class="aviso">No hay fotos en esta categoría por el momento.</p>';
+      contador.textContent = '0 FOTOGRAFÍAS';
+      return;
+    }
+
+    contador.textContent = fotosVisibles.length + ' FOTOGRAFÍAS';
+
+    // Agrupar por evento
+    var grupos = {};
+    var orden = [];
+    fotosVisibles.forEach(function(f){
+      if (!grupos[f.eventoId]){
+        grupos[f.eventoId] = { titulo: f.titulo, tipo: f.tipo, fechaTxt: f.fechaTxt, hanzi: f.hanzi, fotos: [] };
+        orden.push(f.eventoId);
+      }
+      grupos[f.eventoId].fotos.push(f);
+    });
+
+    var html = '';
+    orden.forEach(function(evId){
+      var g = grupos[evId];
+      var tipoLabel = TIPOS[g.tipo] || '';
+      html += '<div class="gal-group">' +
+        '<div class="gal-group-head">' +
+          '<span class="gal-group-hanzi zh">' + esc(g.hanzi || '学') + '</span>' +
+          '<div>' +
+            '<h3 class="gal-group-title">' +
+              '<a href="evento.html?id=' + encodeURIComponent(evId) + '">' + esc(g.titulo) + '</a>' +
+            '</h3>' +
+            '<span class="gal-group-meta">' + esc(tipoLabel) + ' · ' + esc(g.fechaTxt) + ' · ' + g.fotos.length + ' foto' + (g.fotos.length !== 1 ? 's' : '') + '</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="gal-group-grid">';
+
+      g.fotos.forEach(function(foto){
+        var globalIdx = fotosVisibles.indexOf(foto);
+        html += '<div class="gal-thumb" data-idx="' + globalIdx + '">' +
+          '<img src="' + esc(foto.url) + '" alt="' + esc(foto.titulo) + '" loading="lazy">' +
+          '<div class="gal-thumb-over"><span>🔍</span></div>' +
+        '</div>';
+      });
+
+      html += '</div></div>';
+    });
+
+    mosaico.innerHTML = html;
+
+    // Staggered animation delays for thumbnails
+    [].forEach.call(mosaico.querySelectorAll('.gal-thumb'), function(el, i){
+      el.style.animationDelay = (i * 0.04) + 's';
+      el.addEventListener('click', function(){
+        abrirLightbox(parseInt(el.getAttribute('data-idx'), 10));
+      });
+    });
+  }
+
+  // Load data
+  window.cargarEventos().then(function(data){
+    var evs = data.eventos || [];
+    var tiposPresentes = {};
+
+    evs.forEach(function(ev){
+      var fotos = [];
+      if (ev.galeria && Array.isArray(ev.galeria) && ev.galeria.length){
+        fotos = ev.galeria;
+      } else if (ev.imagen && ev.imagen.trim()){
+        fotos = [ev.imagen];
+      }
+      if (!fotos.length) return;
+
+      var d = fecha(ev.fecha);
+      var fechaTxt = d.getDate() + ' ' + MESES_CORTO[d.getMonth()] + ' ' + d.getFullYear();
+      var evId = ev.id || encodeURIComponent(ev.titulo);
+
+      if (ev.tipo) tiposPresentes[ev.tipo] = true;
+
+      fotos.forEach(function(f){
+        todasLasFotos.push({
+          url: ruta(f, 'assets/'),
+          titulo: ev.titulo,
+          tipo: ev.tipo,
+          hanzi: ev.hanzi,
+          fechaTxt: fechaTxt,
+          fechaObj: d,
+          eventoId: evId
+        });
+      });
+    });
+
+    // Sort newest first
+    todasLasFotos.sort(function(a,b){ return b.fechaObj - a.fechaObj; });
+
+    // Build filter chips
+    Object.keys(tiposPresentes).sort().forEach(function(tipo){
+      var btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.setAttribute('data-f', tipo);
+      btn.setAttribute('aria-pressed', 'false');
+      btn.textContent = TIPOS[tipo] || tipo;
+      filtrosBox.appendChild(btn);
+    });
+
+    // Bind filter clicks
+    [].forEach.call(filtrosBox.querySelectorAll('.chip'), function(btn){
+      btn.addEventListener('click', function(){
+        [].forEach.call(filtrosBox.querySelectorAll('.chip'), function(b){
+          b.setAttribute('aria-pressed', String(b === btn));
+        });
+        filtroActivo = btn.dataset.f;
+        renderMosaico();
+      });
+    });
+
+    renderMosaico();
+
+    // ===== CARRUSEL HORIZONTAL =====
+    var track = document.getElementById('carousel-track');
+    var dotsBox = document.getElementById('carousel-dots');
+    var prevBtn = document.getElementById('carousel-prev');
+    var nextBtn = document.getElementById('carousel-next');
+    var carouselIdx = 0;
+    var carouselFotos = todasLasFotos.slice(0, 12); // max 12 slides
+
+    // Build slides
+    var slidesHtml = '';
+    carouselFotos.forEach(function(f, i){
+      slidesHtml += '<div class="gal-slide' + (i === 0 ? ' active' : '') + '">' +
+        '<img src="' + esc(f.url) + '" alt="' + esc(f.titulo) + '">' +
+        '<div class="gal-slide-info">' +
+          '<span class="gal-slide-tag">' + esc(TIPOS[f.tipo] || '') + '</span>' +
+          '<span class="gal-slide-title">' + esc(f.titulo) + '</span>' +
+          '<span class="gal-slide-date">' + esc(f.fechaTxt) + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+    track.innerHTML = slidesHtml;
+
+    // Build dots
+    var dotsHtml = '';
+    carouselFotos.forEach(function(_, i){
+      dotsHtml += '<button class="gal-dot' + (i === 0 ? ' active' : '') + '" data-i="' + i + '" aria-label="Foto ' + (i+1) + '"></button>';
+    });
+    dotsBox.innerHTML = dotsHtml;
+
+    var slides = track.querySelectorAll('.gal-slide');
+    var dots = dotsBox.querySelectorAll('.gal-dot');
+
+    function goToSlide(n){
+      if (slides.length === 0) return;
+      carouselIdx = ((n % slides.length) + slides.length) % slides.length;
+      track.style.transform = 'translateX(-' + (carouselIdx * 100) + '%)';
+      [].forEach.call(slides, function(s, i){ s.classList.toggle('active', i === carouselIdx); });
+      [].forEach.call(dots, function(d, i){ d.classList.toggle('active', i === carouselIdx); });
+    }
+
+    prevBtn.addEventListener('click', function(){ goToSlide(carouselIdx - 1); resetAuto(); });
+    nextBtn.addEventListener('click', function(){ goToSlide(carouselIdx + 1); resetAuto(); });
+    [].forEach.call(dots, function(d){
+      d.addEventListener('click', function(){ goToSlide(parseInt(d.dataset.i, 10)); resetAuto(); });
+    });
+
+    // Click slide to open lightbox
+    [].forEach.call(slides, function(s, i){
+      s.addEventListener('click', function(){ abrirLightbox(i); });
+    });
+
+    // Swipe / drag support
+    var startX = 0; var dragging = false;
+    track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; dragging = true; }, {passive:true});
+    track.addEventListener('touchend', function(e){
+      if (!dragging) return; dragging = false;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40){ goToSlide(carouselIdx + (dx < 0 ? 1 : -1)); resetAuto(); }
+    });
+    track.addEventListener('mousedown', function(e){ startX = e.clientX; dragging = true; });
+    track.addEventListener('mouseup', function(e){
+      if (!dragging) return; dragging = false;
+      var dx = e.clientX - startX;
+      if (Math.abs(dx) > 40){ goToSlide(carouselIdx + (dx < 0 ? 1 : -1)); resetAuto(); }
+    });
+
+    // Auto-play
+    var autoTimer = setInterval(function(){ goToSlide(carouselIdx + 1); }, 4500);
+    function resetAuto(){ clearInterval(autoTimer); autoTimer = setInterval(function(){ goToSlide(carouselIdx + 1); }, 4500); }
+
+    // Keyboard
+    document.addEventListener('keydown', function(e){
+      if (lbModal.classList.contains('active')) return;
+      if (e.key === 'ArrowLeft'){ goToSlide(carouselIdx - 1); resetAuto(); }
+      if (e.key === 'ArrowRight'){ goToSlide(carouselIdx + 1); resetAuto(); }
+    });
+
+  }).catch(function(err){
+    console.error(err);
+    mosaico.innerHTML = '<p class="aviso">Error al cargar la galería.</p>';
+  });
+})();
+</script>
+</body>
+</html>
