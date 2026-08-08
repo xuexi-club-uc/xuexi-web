@@ -273,3 +273,60 @@ collections:
                 fields:
                   - { label: Cargo, name: cargo, widget: string }
                   - { label: Nombre, name: nombre, widget: string }
+
+  # ────────────────────── INVITACIONES Y CÓDIGOS ─────────────────────
+  - name: miembros_invitaciones
+    label: Invitaciones y Códigos
+    files:
+      - name: invitaciones
+        label: Códigos de Invitación
+        file: data/invitaciones.json
+        format: json
+        description: Códigos válidos para que nuevos miembros puedan registrarse en xuexiclub.cl/registro.html
+        fields:
+          - label: Códigos de Invitación
+            name: codigos
+            widget: list
+            label_singular: código
+            summary: '{{fields.codigo}} · Usado: {{fields.usado}}'
+            fields:
+              - { label: Código (Ej. XUEXI2026), name: codigo, widget: string }
+              - { label: Está Usado, name: usado, widget: boolean, default: false }
+              - { label: Usado por (email), name: usadoPor, widget: string, required: false }
+              - { label: Nota / Destinatario, name: nota, widget: string, required: false }
+
+  # ──────────────────────── CALENDARIO INTERNO ───────────────────────
+  - name: miembros_calendario
+    label: Calendario Interno
+    files:
+      - name: calendario
+        label: Actividades de Miembros
+        file: data/calendario_interno.json
+        format: json
+        description: Eventos privados visibles exclusivamente en el portal de miembros (xuexiclub.cl/miembro.html)
+        fields:
+          - label: Actividades Internas
+            name: eventos
+            widget: list
+            label_singular: actividad
+            summary: '{{fields.fecha}} · {{fields.titulo}}'
+            fields:
+              - { label: Título, name: titulo, widget: string }
+              - label: Fecha
+                name: fecha
+                widget: datetime
+                format: 'YYYY-MM-DD'
+                date_format: 'DD-MM-YYYY'
+                time_format: false
+                picker_utc: true
+              - { label: Hora, name: hora, widget: string, required: false, hint: 'Ej. 18:30' }
+              - { label: Lugar / Enlace, name: lugar, widget: string, required: false }
+              - label: Tipo
+                name: tipo
+                widget: select
+                options:
+                  - { label: Reunión General / Mesa, value: interna }
+                  - { label: Capacitación Interna, value: capacitacion }
+                  - { label: Social / Tándem, value: social }
+              - { label: Detalles u Orden del Día, name: detalle, widget: text, required: false }
+

@@ -1,0 +1,16 @@
+{
+  "codigos": [
+    {
+      "codigo": "XUEXI2026",
+      "usado": false,
+      "usadoPor": "",
+      "nota": "Código de demostración para nuevos miembros"
+    },
+    {
+      "codigo": "MIEMBRO2026",
+      "usado": false,
+      "usadoPor": "",
+      "nota": "Código de bienvenida 2026"
+    }
+  ]
+}

@@ -67,7 +67,7 @@
     }
   }
 
-  // Validar código de invitación
+  // Validar código de invitación (lee primero Firestore, si no data/invitaciones.json)
   function validarCodigo(codigo) {
     codigo = (codigo || '').trim().toUpperCase();
     if (!codigo) return Promise.reject(new Error("Ingresa un código de invitación."));
@@ -80,18 +80,32 @@
         return data;
       });
     } else {
-      // Fallback demo local
-      return new Promise(function(resolve, reject){
-        var codigos = JSON.parse(localStorage.getItem('xuexi_demo_codes') || '["XUEXI2026", "MIEMBRO2026"]');
-        var usados = JSON.parse(localStorage.getItem('xuexi_demo_codes_used') || '[]');
-        if (codigos.indexOf(codigo) === -1) {
-          reject(new Error("Código de invitación inválido. (Códigos demo válidos: XUEXI2026, MIEMBRO2026)"));
-        } else if (usados.indexOf(codigo) !== -1) {
-          reject(new Error("Este código de invitación ya ha sido utilizado."));
-        } else {
-          resolve({ codigo: codigo, creado: new Date() });
-        }
-      });
+      // Leer data/invitaciones.json gestionado desde Decap CMS
+      return fetch('data/invitaciones.json', {cache:'no-cache'})
+        .then(function(r){ return r.ok ? r.json() : {codigos:[]}; })
+        .then(function(d){
+          var codigos = d.codigos || [];
+          var localUsados = JSON.parse(localStorage.getItem('xuexi_demo_codes_used') || '[]');
+
+          var encontrado = codigos.find(function(c){
+            return String(c.codigo || '').trim().toUpperCase() === codigo;
+          });
+
+          if (!encontrado) {
+            // Chequear fallback local
+            var fallback = ['XUEXI2026', 'MIEMBRO2026'];
+            if (fallback.indexOf(codigo) !== -1 && localUsados.indexOf(codigo) === -1) {
+              return { codigo: codigo };
+            }
+            throw new Error("El código de invitación no existe o es inválido.");
+          }
+
+          if (encontrado.usado || localUsados.indexOf(codigo) !== -1) {
+            throw new Error("Este código de invitación ya ha sido utilizado.");
+          }
+
+          return encontrado;
+        });
     }
   }
 
@@ -103,7 +117,6 @@
         return auth.createUserWithEmailAndPassword(email, password).then(function(cred){
           var uid = cred.user.uid;
           var batch = db.batch();
-          // Crear perfil de miembro
           batch.set(db.collection('miembros').doc(uid), {
             nombre: nombre,
             comision: comision || 'xuexi',
@@ -112,7 +125,6 @@
             codigoUsado: codigo,
             fechaRegistro: firebase.firestore.FieldValue.serverTimestamp()
           });
-          // Marcar código como usado
           batch.update(db.collection('codigos_invitacion').doc(codigo), {
             usado: true,
             usadoPor: email,
@@ -121,7 +133,6 @@
           return batch.commit();
         });
       } else {
-        // Fallback demo local
         return new Promise(function(resolve){
           var demoMembers = JSON.parse(localStorage.getItem('xuexi_demo_members') || '[]');
           var newUser = {
@@ -147,7 +158,7 @@
     });
   }
 
-  // Obtener calendario interno de miembros
+  // Obtener calendario interno de miembros (Firestore o data/calendario_interno.json)
   function obtenerCalendarioInterno() {
     if (firebaseReady && db) {
       return db.collection('calendario_interno').orderBy('fecha', 'asc').get().then(function(snap){
@@ -156,46 +167,13 @@
         return list;
       });
     } else {
-      // Fallback demo local
-      return new Promise(function(resolve){
-        var demoEvents = JSON.parse(localStorage.getItem('xuexi_demo_calendar') || 'null');
-        if (!demoEvents) {
-          demoEvents = [
-            {
-              id: 'cal-1',
-              titulo: 'Reunión General de Bienvenida a Miembros 2026',
-              fecha: '2026-08-15',
-              hora: '18:00',
-              lugar: 'Sala A-12, Campus San Joaquín / Zoom',
-              tipo: 'interna',
-              comision: 'coordinacion',
-              detalle: 'Primera asamblea general con nuevos integrantes. Presentación de líneas de trabajo y coordinación por comisiones.'
-            },
-            {
-              id: 'cal-2',
-              titulo: 'Taller Interno de Metodología de Investigación sobre China',
-              fecha: '2026-08-22',
-              hora: '17:30',
-              lugar: 'Auditorio Facultad de Historia UC',
-              tipo: 'capacitacion',
-              comision: 'xuexi',
-              detalle: 'Capacitación exclusiva para integrantes de la Comisión Xuexi sobre búsqueda en bases de datos académicas chinas (CNKI).'
-            },
-            {
-              id: 'cal-3',
-              titulo: 'Tándem de Idioma Mandarín Avanzado (Sesión Interna)',
-              fecha: '2026-08-29',
-              hora: '16:00',
-              lugar: 'Patios de Humanidades CSJ',
-              tipo: 'social',
-              comision: 'wailian',
-              detalle: 'Práctica conversacional para miembros del club previo al inicio de los talleres abiertos al público.'
-            }
-          ];
-          localStorage.setItem('xuexi_demo_calendar', JSON.stringify(demoEvents));
-        }
-        resolve(demoEvents);
-      });
+      return fetch('data/calendario_interno.json', {cache:'no-cache'})
+        .then(function(r){ return r.ok ? r.json() : {eventos:[]}; })
+        .then(function(d){
+          var evs = d.eventos || [];
+          var extraLocal = JSON.parse(localStorage.getItem('xuexi_demo_calendar') || '[]');
+          return evs.concat(extraLocal);
+        });
     }
   }
 
