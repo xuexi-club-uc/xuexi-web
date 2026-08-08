@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal de Miembros · Xuexi Club UC</title>
+<meta name="description" content="Calendario interno de actividades y recursos para integrantes del Xuexi Club UC.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css?v=5">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="galeria.html"><span class="zh">相册</span>Galería</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido">
+
+<!-- HERO MIEMBRO -->
+<section class="member-hero">
+  <div class="wrap">
+    <div class="member-header-box">
+      <div class="member-welcome">
+        <span class="zh member-avatar">会</span>
+        <div>
+          <span class="member-badge">Miembro Acreditado</span>
+          <h1 id="member-name">Bienvenido/a</h1>
+          <p id="member-email" class="member-email-text">cargando información…</p>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline" id="btn-logout">Cerrar Sesión</button>
+    </div>
+  </div>
+</section>
+
+<!-- CALENDARIO INTERNO -->
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="zh">内部日历</span>
+      <h2>Calendario Interno de Actividades</h2>
+    </div>
+    <p style="color:var(--cream-dim);max-width:60ch;margin-bottom:24px;font-size:.9rem;">
+      Espacio exclusivo para miembros del Xuexi Club UC. Aquí encontrarás las fechas de reuniones de coordinación, capacitaciones académicas, talleres internos y actividades sociales de nuestro equipo.
+    </p>
+
+    <!-- FILTROS -->
+    <div class="filtros" id="filtros-internos" style="margin-bottom:24px;">
+      <button class="chip" data-tipo="todo" aria-pressed="true"><span class="zh">全部</span> Todas</button>
+      <button class="chip" data-tipo="interna" aria-pressed="false">Reuniones General/Mesa</button>
+      <button class="chip" data-tipo="capacitacion" aria-pressed="false">Capacitaciones</button>
+      <button class="chip" data-tipo="social" aria-pressed="false">Social / Tándem</button>
+    </div>
+
+    <!-- LISTADO DE EVENTOS INTERNOS -->
+    <div id="calendar-grid" class="internal-grid">
+      <p class="aviso">Cargando calendario interno…</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="galeria.html">Galería</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin/" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="assets/nav.js?v=3"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var memberName = document.getElementById('member-name');
+  var memberEmail = document.getElementById('member-email');
+  var grid = document.getElementById('calendar-grid');
+  var btnLogout = document.getElementById('btn-logout');
+  var filtrosBox = document.getElementById('filtros-internos');
+
+  var todosLosEventos = [];
+  var filtroActivo = 'todo';
+
+  var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  function renderGrid(){
+    var filtrados = filtroActivo === 'todo'
+      ? todosLosEventos
+      : todosLosEventos.filter(function(e){ return e.tipo === filtroActivo; });
+
+    if (!filtrados.length) {
+      grid.innerHTML = '<p class="aviso">No hay actividades programadas en esta categoría por el momento.</p>';
+      return;
+    }
+
+    var html = '';
+    filtrados.forEach(function(ev){
+      var partes = (ev.fecha || '').split('-');
+      var dia = partes[2] || '';
+      var mesIdx = parseInt(partes[1], 10) - 1;
+      var mesTxt = MESES[mesIdx] || '';
+      var anio = partes[0] || '';
+
+      var tipoTag = ev.tipo === 'interna' ? 'Reunión General' : (ev.tipo === 'capacitacion' ? 'Capacitación' : 'Social');
+
+      html += '<div class="internal-card">' +
+        '<div class="internal-date-badge">' +
+          '<span class="int-day">' + esc(dia) + '</span>' +
+          '<span class="int-month">' + esc(mesTxt) + '</span>' +
+        '</div>' +
+        '<div class="internal-body">' +
+          '<div class="internal-tags">' +
+            '<span class="int-tag">' + esc(tipoTag) + '</span>' +
+            (ev.hora ? '<span class="int-time">🕒 ' + esc(ev.hora) + ' hrs</span>' : '') +
+          '</div>' +
+          '<h3 class="internal-title">' + esc(ev.titulo) + '</h3>' +
+          (ev.lugar ? '<p class="internal-place">📍 ' + esc(ev.lugar) + '</p>' : '') +
+          (ev.detalle ? '<p class="internal-desc">' + esc(ev.detalle) + '</p>' : '') +
+        '</div>' +
+      '</div>';
+    });
+
+    grid.innerHTML = html;
+  }
+
+  // Proteger ruta
+  window.XuexiAuth.onAuth(function(user){
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    memberName.textContent = user.nombre || user.displayName || (user.email ? user.email.split('@')[0] : 'Miembro Xuexi');
+    memberEmail.textContent = (user.email || '') + (user.comision ? ' · Comisión ' + user.comision.toUpperCase() : '');
+
+    // Cargar calendario
+    window.XuexiAuth.obtenerCalendarioInterno()
+      .then(function(list){
+        todosLosEventos = list;
+        renderGrid();
+      })
+      .catch(function(err){
+        console.error(err);
+        grid.innerHTML = '<p class="aviso">Error al cargar el calendario interno.</p>';
+      });
+  });
+
+  // Logout
+  btnLogout.addEventListener('click', function(){
+    window.XuexiAuth.logout().then(function(){
+      window.location.href = 'login.html';
+    });
+  });
+
+  // Filtros
+  [].forEach.call(filtrosBox.querySelectorAll('.chip'), function(btn){
+    btn.addEventListener('click', function(){
+      [].forEach.call(filtrosBox.querySelectorAll('.chip'), function(b){ b.setAttribute('aria-pressed', String(b === btn)); });
+      filtroActivo = btn.dataset.tipo;
+      renderGrid();
+    });
+  });
+})();
+</script>
+</body>
+</html>

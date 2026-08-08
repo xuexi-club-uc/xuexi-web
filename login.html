@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Voluntariados · Xuexi Club UC</title>
-<meta name="description" content="Voluntariados y colaboraciones del Xuexi Club UC con otras instituciones y eventos sobre China y Asia en Chile.">
+<title>Acceso a Miembros · Xuexi Club UC</title>
+<meta name="description" content="Portal de inicio de sesión para integrantes del Xuexi Club UC.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=3">
+<link rel="stylesheet" href="assets/site.css?v=5">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -53,42 +53,37 @@
   </div>
 </header>
 
-<main id="contenido">
+<main id="contenido" class="auth-page">
+  <div class="wrap" style="max-width:480px;padding-top:clamp(40px,6vw,70px);padding-bottom:clamp(50px,8vw,90px);">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="auth-hanzi zh">登录</span>
+        <h1>Acceso a Miembros</h1>
+        <p class="auth-sub">Ingresa a tu cuenta para ver el calendario interno de actividades.</p>
+      </div>
 
-<section>
-  <div class="wrap">
-    <div class="sec-h"><span class="zh">志愿</span><h2>Voluntariados</h2></div>
-    <p style="color:var(--cream-dim);max-width:68ch;margin-bottom:24px">
-      Actividades organizadas por otras instituciones en las que nuestro equipo participa como staff.
-      La idea es desarrollar habilidades de gestión y dirección de proyectos, y fomentar la comunicación
-      con el público.</p>
-    <div class="volu">
-      <article class="vol">
-        <p class="anio">2025 · 5 de mayo</p>
-        <h3>Puente Chino 2025</h3>
-        <p>18ᵃ versión para secundarios y 24ᵃ para universitarios, organizado por el Instituto Confucio UC.
-          Participamos como equipo audiovisual.</p>
-        <p class="quienes">Nathaly Jeria · Sofía Lizama</p>
-      </article>
-      <article class="vol">
-        <p class="anio">2025 · 25 de mayo</p>
-        <h3>Water Cube Cup 2025</h3>
-        <p>Competencia de canto chino organizada por la Academia China YIGE. Estuvimos en backstage
-          y en la entrega de premios.</p>
-        <p class="quienes">Catalina Leiva · Josefa Leiva · María Ignacia Barrera · Nathaly Jeria ·
-          César García (Hanyu UP) · Pamela Guevilao · Ale González · Max</p>
-      </article>
-      <article class="vol">
-        <p class="anio">2025 · 31 jul — 2 ago</p>
-        <h3>2° Congreso de Sinólogos Latinoamericanos<span class="zh">2025第二届拉美汉学家大会</span></h3>
-        <p>Realizado en Santiago de Chile, reunió a investigadoras e investigadores de toda la región
-          dedicados a los estudios sobre China.</p>
-        <p class="quienes">Equipo Xuexi</p>
-      </article>
+      <div id="auth-error" class="aviso" style="display:none;background:rgba(192,57,43,.15);border-color:#C0392B;color:#F5C6CB;margin-bottom:18px;font-size:.85rem;"></div>
+
+      <form id="login-form" class="auth-form">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" required placeholder="tu.correo@uc.cl">
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Contraseña</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn" id="btn-login" style="width:100%;margin-top:10px;">Ingresar al Portal</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Tienes un código de invitación? <a href="registro.html">Regístrate aquí</a></p>
+        <p style="margin-top:8px;font-size:.78rem;opacity:.7;">* El acceso a cuentas de miembros requiere haber sido admitido previamente en la comunidad del Xuexi Club UC.</p>
+      </div>
     </div>
   </div>
-</section>
-
 </main>
 
 <footer>
@@ -116,12 +111,52 @@
   </div>
   <div class="wrap legal">
     <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
-    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin.html" class="legal-admin">Panel del equipo</a></span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin/" class="legal-admin">Panel del equipo</a></span>
   </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="assets/nav.js?v=3"></script>
+<script src="assets/firebase-config.js"></script>
 <script src="assets/auth.js"></script>
-<script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var form = document.getElementById('login-form');
+  var errorDiv = document.getElementById('auth-error');
+  var btn = document.getElementById('btn-login');
+
+  // Redirigir si ya inició sesión
+  window.XuexiAuth.onAuth(function(user){
+    if (user) {
+      window.location.href = 'miembro.html';
+    }
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorDiv.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Verificando…';
+
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+
+    window.XuexiAuth.login(email, password)
+      .then(function(){
+        window.location.href = 'miembro.html';
+      })
+      .catch(function(err){
+        errorDiv.textContent = err.message || "Error al iniciar sesión.";
+        errorDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Ingresar al Portal';
+      });
+  });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Gestión de Miembros · Xuexi Club UC</title>
+<link rel="icon" href="../assets/logo.png">
+<link rel="stylesheet" href="../assets/site.css?v=5">
+<style>
+  body{background:var(--bg);color:var(--cream);font-family:var(--sans)}
+  .admin-panel-container{max-width:960px;margin:0 auto;padding:40px 20px 80px}
+  .admin-top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:30px}
+  .admin-title{font-family:var(--serif);font-size:1.6rem;margin:0}
+  .admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  @media(max-width:768px){.admin-grid{grid-template-columns:1fr}}
+  .admin-card{background:rgba(30,22,20,.6);border:1px solid var(--line);border-radius:6px;padding:24px}
+  .admin-card h2{font-family:var(--serif);font-size:1.2rem;margin-top:0;color:var(--gold);border-bottom:1px solid rgba(212,175,97,.15);padding-bottom:10px}
+  .code-display{font-family:var(--mono);font-size:1.6rem;letter-spacing:.15em;color:var(--gold);background:rgba(20,14,14,.8);padding:14px;border-radius:4px;border:1px dashed var(--gold);text-align:center;margin:16px 0}
+  .code-list{list-style:none;padding:0;margin:14px 0 0;max-height:200px;overflow-y:auto}
+  .code-list li{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.84rem}
+  .tag-usado{background:rgba(192,57,43,.3);color:#F5C6CB;padding:2px 8px;border-radius:10px;font-size:.7rem}
+  .tag-libre{background:rgba(46,139,87,.3);color:#A3E4D7;padding:2px 8px;border-radius:10px;font-size:.7rem}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="../index.html">
+      <img src="../assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB · ADMIN</span>
+    </a>
+    <a class="cta" href="../admin/">Volver al CMS</a>
+  </div>
+</header>
+
+<main class="admin-panel-container">
+  <div class="admin-top">
+    <div>
+      <span class="zh" style="color:var(--gold);font-size:1.2rem;">会员管理</span>
+      <h1 class="admin-title">Gestión de Miembros e Invitaciones</h1>
+    </div>
+  </div>
+
+  <div class="admin-grid">
+    <!-- GENERADOR DE CÓDIGOS -->
+    <div class="admin-card">
+      <h2>🎟️ Generar Código de Invitación</h2>
+      <p style="font-size:.85rem;color:var(--cream-dim);">Genera códigos únicos para enviarle a los nuevos miembros admitidos en el club.</p>
+      
+      <button type="button" class="btn" id="btn-gen-code" style="width:100%;margin-top:10px;">Generar Nuevo Código</button>
+      
+      <div id="new-code-box" style="display:none;">
+        <div class="code-display" id="new-code-text">XUEXI000</div>
+        <p style="font-size:.75rem;color:var(--gold);text-align:center;margin:0;">Copiar y entregar al miembro para que se registre en <code>xuexiclub.cl/registro.html</code></p>
+      </div>
+
+      <h3 style="font-size:.9rem;margin-top:24px;color:var(--cream);">Historial de Códigos</h3>
+      <ul class="code-list" id="code-history">
+        <li><span>Cargando códigos…</span></li>
+      </ul>
+    </div>
+
+    <!-- PUBLICAR ACTIVIDAD EN CALENDARIO INTERNO -->
+    <div class="admin-card">
+      <h2>📅 Crear Evento Interno</h2>
+      <p style="font-size:.85rem;color:var(--cream-dim);">Publica una actividad visible solo en el portal de miembros.</p>
+
+      <form id="form-event-interno" style="display:flex;flex-direction:column;gap:12px;margin-top:14px;">
+        <div>
+          <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Título del Evento</label>
+          <input type="text" id="ev-titulo" required placeholder="Ej. Reunión General de Comisión" style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Fecha</label>
+            <input type="date" id="ev-fecha" required style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);">
+          </div>
+          <div>
+            <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Hora</label>
+            <input type="text" id="ev-hora" placeholder="Ej. 18:30" style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Lugar / Plataforma</label>
+            <input type="text" id="ev-lugar" placeholder="Ej. Sala A-12 / Zoom" style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);">
+          </div>
+          <div>
+            <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Tipo de Actividad</label>
+            <select id="ev-tipo" style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);">
+              <option value="interna">Reunión General / Mesa</option>
+              <option value="capacitacion">Capacitación académica</option>
+              <option value="social">Social / Tándem</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:.8rem;color:var(--cream-dim);display:block;margin-bottom:4px;">Detalles u Orden del día</label>
+          <textarea id="ev-detalle" rows="3" placeholder="Información adicional para los integrantes…" style="width:100%;padding:8px 12px;background:rgba(20,14,14,.6);border:1px solid var(--line);border-radius:4px;color:var(--cream);font-family:inherit;"></textarea>
+        </div>
+
+        <button type="submit" class="btn" id="btn-save-event" style="margin-top:6px;">Publicar Evento Interno</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="../assets/firebase-config.js"></script>
+<script src="../assets/auth.js"></script>
+<script>
+(function(){
+  var btnGenCode = document.getElementById('btn-gen-code');
+  var newCodeBox = document.getElementById('new-code-box');
+  var newCodeText = document.getElementById('new-code-text');
+  var historyList = document.getElementById('code-history');
+  var formEvent = document.getElementById('form-event-interno');
+
+  function randomCode(){
+    var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var res = 'XUEXI-';
+    for (var i = 0; i < 5; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return res;
+  }
+
+  function renderCodes(){
+    var firebaseReady = typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length;
+    if (firebaseReady) {
+      firebase.firestore().collection('codigos_invitacion').orderBy('creado', 'desc').get()
+        .then(function(snap){
+          var html = '';
+          snap.forEach(function(doc){
+            var d = doc.data();
+            html += '<li><code>' + doc.id + '</code>' +
+              (d.usado ? '<span class="tag-usado">Usado por ' + (d.usadoPor||'miembro') + '</span>' : '<span class="tag-libre">Disponible</span>') +
+              '</li>';
+          });
+          historyList.innerHTML = html || '<li>No hay códigos aún.</li>';
+        });
+    } else {
+      var codigos = JSON.parse(localStorage.getItem('xuexi_demo_codes') || '["XUEXI2026", "MIEMBRO2026"]');
+      var usados = JSON.parse(localStorage.getItem('xuexi_demo_codes_used') || '[]');
+      var html = '';
+      codigos.forEach(function(c){
+        var esUsado = usados.indexOf(c) !== -1;
+        html += '<li><code>' + c + '</code>' +
+          (esUsado ? '<span class="tag-usado">Usado</span>' : '<span class="tag-libre">Disponible</span>') +
+          '</li>';
+      });
+      historyList.innerHTML = html;
+    }
+  }
+
+  btnGenCode.addEventListener('click', function(){
+    var code = randomCode();
+    newCodeText.textContent = code;
+    newCodeBox.style.display = 'block';
+
+    var firebaseReady = typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length;
+    if (firebaseReady) {
+      firebase.firestore().collection('codigos_invitacion').doc(code).set({
+        creado: firebase.firestore.FieldValue.serverTimestamp(),
+        usado: false,
+        usadoPor: null
+      }).then(renderCodes);
+    } else {
+      var codigos = JSON.parse(localStorage.getItem('xuexi_demo_codes') || '["XUEXI2026", "MIEMBRO2026"]');
+      if (codigos.indexOf(code) === -1) codigos.unshift(code);
+      localStorage.setItem('xuexi_demo_codes', JSON.stringify(codigos));
+      renderCodes();
+    }
+  });
+
+  formEvent.addEventListener('submit', function(e){
+    e.preventDefault();
+    var ev = {
+      titulo: document.getElementById('ev-titulo').value.trim(),
+      fecha: document.getElementById('ev-fecha').value,
+      hora: document.getElementById('ev-hora').value.trim(),
+      lugar: document.getElementById('ev-lugar').value.trim(),
+      tipo: document.getElementById('ev-tipo').value,
+      detalle: document.getElementById('ev-detalle').value.trim()
+    };
+
+    var firebaseReady = typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length;
+    if (firebaseReady) {
+      firebase.firestore().collection('calendario_interno').add(ev).then(function(){
+        alert("¡Evento publicado con éxito en el portal de miembros!");
+        formEvent.reset();
+      });
+    } else {
+      var calendar = JSON.parse(localStorage.getItem('xuexi_demo_calendar') || '[]');
+      ev.id = 'ev-' + Date.now();
+      calendar.unshift(ev);
+      localStorage.setItem('xuexi_demo_calendar', JSON.stringify(calendar));
+      alert("¡Evento publicado en modo Demo!");
+      formEvent.reset();
+    }
+  });
+
+  renderCodes();
+})();
+</script>
+</body>
+</html>

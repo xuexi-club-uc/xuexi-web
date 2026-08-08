@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registro con Invitación · Xuexi Club UC</title>
+<meta name="description" content="Registro de cuenta para miembros aceptados del Xuexi Club UC mediante código de invitación.">
+<link rel="icon" href="assets/logo.png">
+<link rel="stylesheet" href="assets/site.css?v=5">
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" alt="">
+      <span><span class="zh">学习</span> XUEXI CLUB</span>
+    </a>
+    <button class="nav-burger" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Abrir menú">
+      <span></span><span></span><span></span>
+    </button>
+    <ul id="nav-menu">
+      <li><a href="index.html#comunidad"><span class="zh">社区</span>Comunidad</a></li>
+      <li class="has-drop">
+        <a href="eventos.html"><span class="zh">活动</span>Eventos</a>
+        <ul class="drop">
+          <li><a href="eventos.html">Agenda</a></li>
+          <li><a href="voluntariados.html">Voluntariados</a></li>
+        </ul>
+      </li>
+      <li class="has-drop">
+        <a href="investigacion.html"><span class="zh">研究</span>Investigación</a>
+        <ul class="drop">
+          <li><a href="investigacion.html#economia">Economía y Negocios</a></li>
+          <li><a href="investigacion.html#ciencia">Ciencia y Tecnología</a></li>
+          <li><a href="investigacion.html#diplomacia">Diplomacia y RR.II.</a></li>
+          <li><a href="investigacion.html#cultura">Cultura, Arte y Lengua</a></li>
+          <li><a href="investigacion.html#politicas">Políticas Públicas y Gobernanza</a></li>
+          <li><a href="investigacion.html#otros">Otros</a></li>
+        </ul>
+      </li>
+      <li><a href="galeria.html"><span class="zh">相册</span>Galería</a></li>
+      <li class="has-drop">
+        <a href="equipo.html"><span class="zh">我们</span>Quiénes somos</a>
+        <ul class="drop">
+          <li><a href="equipo.html">Equipo</a></li>
+          <li><a href="red.html">Organizaciones afines</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a class="cta" href="index.html#unete">Únete</a>
+  </div>
+</header>
+
+<main id="contenido" class="auth-page">
+  <div class="wrap" style="max-width:520px;padding-top:clamp(30px,5vw,60px);padding-bottom:clamp(50px,8vw,90px);">
+    <div class="auth-card">
+      <div class="auth-header">
+        <span class="auth-hanzi zh">注册</span>
+        <h1>Registro de Miembro</h1>
+        <p class="auth-sub">Para crear tu cuenta necesitas introducir un código de invitación entregado por la coordinación del club.</p>
+      </div>
+
+      <div id="auth-error" class="aviso" style="display:none;background:rgba(192,57,43,.15);border-color:#C0392B;color:#F5C6CB;margin-bottom:18px;font-size:.85rem;"></div>
+
+      <form id="reg-form" class="auth-form">
+        <div class="form-group">
+          <label for="code">Código de Invitación <span style="color:var(--gold);">*</span></label>
+          <input type="text" id="code" required placeholder="Ej. XUEXI2026" style="letter-spacing:.08em;font-weight:600;text-transform:uppercase;">
+          <small style="color:var(--cream-faint);display:block;margin-top:4px;font-size:.74rem;">Código de 8 caracteres provisto por el equipo de coordinación.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre completo <span style="color:var(--gold);">*</span></label>
+          <input type="text" id="nombre" required placeholder="Nombre y Apellidos">
+        </div>
+
+        <div class="form-group">
+          <label for="comision">Comisión principal</label>
+          <select id="comision" style="width:100%;padding:10px 14px;background:rgba(20,16,16,.6);border:1px solid var(--line);border-radius:var(--r);color:var(--cream);font-family:inherit;">
+            <option value="xuexi">学习 Xuexi · Conocimiento Académico</option>
+            <option value="wailian">外联 Wailian · Idioma y Comunidad</option>
+            <option value="xinxi">信息 Xinxi · Difusión y Diseño</option>
+            <option value="lectura">读书 Club de Lectura</option>
+            <option value="general">Miembro General UC</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo electrónico <span style="color:var(--gold);">*</span></label>
+          <input type="email" id="email" required placeholder="nombre@uc.cl">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Contraseña (mínimo 6 caracteres) <span style="color:var(--gold);">*</span></label>
+          <input type="password" id="password" required minlength="6" placeholder="••••••••">
+        </div>
+
+        <button type="submit" class="btn" id="btn-reg" style="width:100%;margin-top:12px;">Crear Mi Cuenta</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión aquí</a></p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div>
+      <p class="big"><span class="zh">学习</span> XUEXI CLUB</p>
+      <p>Club de Lengua, Cultura y Estudios sobre China.<br>Pontificia Universidad Católica de Chile.</p>
+      <p class="motto">你的中国研究之门</p>
+    </div>
+    <div>
+      <h4>Explora</h4>
+      <a href="index.html#comunidad">Comunidad</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="voluntariados.html">Voluntariados</a>
+      <a href="investigacion.html">Investigación</a>
+      <a href="galeria.html">Galería</a>
+      <a href="equipo.html">Quiénes somos</a>
+      <a href="red.html">Con quiénes trabajamos</a>
+    </div>
+    <div>
+      <h4>Contacto</h4>
+      <a href="https://instagram.com/xuexiclub.uc" target="_blank" rel="noopener">Instagram @xuexiclub.uc</a>
+      <a href="https://forms.gle/QGBvhXRK1Yc75obk8" target="_blank" rel="noopener">Hazte miembro</a>
+    </div>
+  </div>
+  <div class="wrap legal">
+    <span>© <span id="anio"></span> Xuexi Club UC · Campus San Joaquín</span>
+    <span>Hecho por la Comisión Xinxi 信息 · <a href="admin/" class="legal-admin">Panel del equipo</a></span>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="assets/nav.js?v=3"></script>
+<script src="assets/firebase-config.js"></script>
+<script src="assets/auth.js"></script>
+<script>
+(function(){
+  document.getElementById('anio').textContent = new Date().getFullYear();
+
+  var form = document.getElementById('reg-form');
+  var errorDiv = document.getElementById('auth-error');
+  var btn = document.getElementById('btn-reg');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorDiv.style.display = 'none';
+    btn.disabled = true;
+    btn.textContent = 'Validando invitación…';
+
+    var codigo = document.getElementById('code').value.trim();
+    var nombre = document.getElementById('nombre').value.trim();
+    var comision = document.getElementById('comision').value;
+    var email = document.getElementById('email').value.trim();
+    var password = document.getElementById('password').value;
+
+    window.XuexiAuth.registrar(codigo, nombre, comision, email, password)
+      .then(function(){
+        window.location.href = 'miembro.html';
+      })
+      .catch(function(err){
+        errorDiv.textContent = err.message || "Error al crear la cuenta.";
+        errorDiv.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Crear Mi Cuenta';
+      });
+  });
+})();
+</script>
+</body>
+</html>
