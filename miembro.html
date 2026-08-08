@@ -72,29 +72,50 @@
   </div>
 </section>
 
-<!-- CALENDARIO INTERNO -->
+<!-- CALENDARIO INTERNO PREMIUM -->
 <section class="alt">
   <div class="wrap">
     <div class="sec-h">
       <span class="zh">内部日历</span>
       <h2>Calendario Interno de Actividades</h2>
     </div>
-    <p style="color:var(--cream-dim);max-width:60ch;margin-bottom:24px;font-size:.9rem;">
-      Espacio exclusivo para miembros del Xuexi Club UC. Aquí encontrarás las fechas de reuniones de coordinación, capacitaciones académicas, talleres internos y actividades sociales de nuestro equipo.
-    </p>
 
-    <!-- FILTROS -->
-    <div class="filtros" id="filtros-internos" style="margin-bottom:24px;">
-      <button class="chip" data-tipo="todo" aria-pressed="true"><span class="zh">全部</span> Todas</button>
-      <button class="chip" data-tipo="interna" aria-pressed="false">Reuniones General/Mesa</button>
-      <button class="chip" data-tipo="capacitacion" aria-pressed="false">Capacitaciones</button>
-      <button class="chip" data-tipo="social" aria-pressed="false">Social / Tándem</button>
+    <!-- PRÓXIMO EVENTO DESTACADO (HERO CARD) -->
+    <div id="hero-event-box"></div>
+
+    <!-- CONTROLES: FILTROS Y VISTAS -->
+    <div class="cal-controls">
+      <div class="filtros" id="filtros-internos" style="margin:0;">
+        <button class="chip" data-tipo="todo" aria-pressed="true"><span class="zh">全部</span> Todas</button>
+        <button class="chip" data-tipo="interna" aria-pressed="false">Reuniones</button>
+        <button class="chip" data-tipo="capacitacion" aria-pressed="false">Capacitaciones</button>
+        <button class="chip" data-tipo="social" aria-pressed="false">Social / Tándem</button>
+      </div>
+
+      <div class="view-switch">
+        <button class="view-btn active" id="btn-view-timeline" type="button">📜 Cronograma</button>
+        <button class="view-btn" id="btn-view-month" type="button">📅 Vista Mensual</button>
+      </div>
     </div>
 
-    <!-- LISTADO DE EVENTOS INTERNOS -->
-    <div id="calendar-grid" class="internal-grid">
+    <!-- VISTA MATRIZ MENSUAL (OCULTA POR DEFECTO) -->
+    <div id="month-view-box" class="month-calendar" style="display:none;">
+      <div class="month-header">
+        <button class="month-nav-btn" id="btn-month-prev" title="Mes anterior">&#10094;</button>
+        <h3 class="month-title" id="month-title-text">Agosto 2026</h3>
+        <button class="month-nav-btn" id="btn-month-next" title="Mes siguiente">&#10095;</button>
+      </div>
+      <div class="month-days-header">
+        <div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div><div>Dom</div>
+      </div>
+      <div class="month-grid-days" id="month-days-grid"></div>
+    </div>
+
+    <!-- VISTA TIMELINE CRONOLÓGICO -->
+    <div id="timeline-view-box" class="timeline-container">
       <p class="aviso">Cargando calendario interno…</p>
     </div>
+
   </div>
 </section>
 
@@ -141,59 +162,218 @@
 
   var memberName = document.getElementById('member-name');
   var memberEmail = document.getElementById('member-email');
-  var grid = document.getElementById('calendar-grid');
+  var heroBox = document.getElementById('hero-event-box');
+  var timelineBox = document.getElementById('timeline-view-box');
+  var monthBox = document.getElementById('month-view-box');
+  var monthGrid = document.getElementById('month-days-grid');
+  var monthTitle = document.getElementById('month-title-text');
   var btnLogout = document.getElementById('btn-logout');
   var filtrosBox = document.getElementById('filtros-internos');
 
+  var btnTimeline = document.getElementById('btn-view-timeline');
+  var btnMonth = document.getElementById('btn-view-month');
+
   var todosLosEventos = [];
   var filtroActivo = 'todo';
+  var vistaActiva = 'timeline'; // 'timeline' o 'month'
+
+  var currentDate = new Date();
+  var currYear = currentDate.getFullYear();
+  var currMonth = currentDate.getMonth();
 
   var MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
-  function renderGrid(){
+  function crearUrlGCal(ev){
+    var p = (ev.fecha || '').split('-');
+    if (p.length < 3) return '#';
+    var dateStr = p[0] + p[1] + p[2];
+    var startTime = '180000Z'; // default 18:00 UTC
+    if (ev.hora) {
+      var h = ev.hora.replace(':', '').trim();
+      if (h.length === 4) startTime = h + '00Z';
+    }
+    var dates = dateStr + 'T' + startTime + '/' + dateStr + 'T' + startTime;
+    return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + encodeURIComponent(ev.titulo) +
+      '&dates=' + dates +
+      '&details=' + encodeURIComponent((ev.detalle||'') + ' (Xuexi Club UC)') +
+      '&location=' + encodeURIComponent(ev.lugar||'UC CSJ');
+  }
+
+  function getHanzi(tipo){
+    if (tipo === 'interna') return '会';
+    if (tipo === 'capacitacion') return '学';
+    return '聚';
+  }
+
+  function getTipoLabel(tipo){
+    if (tipo === 'interna') return 'Reunión Coordinación';
+    if (tipo === 'capacitacion') return 'Capacitación Interna';
+    return 'Actividad Social / Tándem';
+  }
+
+  // Render Próximo Evento Destacado
+  function renderHero(){
+    var hoy = new Date();
+    hoy.setHours(0,0,0,0);
+
+    var proximos = todosLosEventos.filter(function(e){
+      var p = (e.fecha||'').split('-');
+      var f = new Date(+p[0], +p[1]-1, +p[2]);
+      return f >= hoy;
+    });
+
+    if (!proximos.length) {
+      heroBox.innerHTML = '';
+      return;
+    }
+
+    var prox = proximos[0];
+    var p = (prox.fecha||'').split('-');
+    var fObj = new Date(+p[0], +p[1]-1, +p[2]);
+    var diffDays = Math.ceil((fObj - hoy) / (1000 * 60 * 60 * 24));
+
+    var countText = diffDays === 0 ? '¡ES HOY!' : (diffDays === 1 ? '¡MAÑANA!' : 'En ' + diffDays + ' días');
+
+    heroBox.innerHTML = '<div class="cal-hero-card">' +
+      '<div class="cal-hero-top">' +
+        '<span class="cal-hero-tag">🔥 Próxima Actividad Destacada</span>' +
+        '<span class="cal-hero-countdown">' + countText + '</span>' +
+      '</div>' +
+      '<h3 class="cal-hero-title">' + esc(prox.titulo) + '</h3>' +
+      '<div class="cal-hero-meta">' +
+        '<span>📅 ' + fObj.getDate() + ' de ' + MESES[fObj.getMonth()] + ' ' + fObj.getFullYear() + '</span>' +
+        (prox.hora ? '<span>🕒 ' + esc(prox.hora) + ' hrs</span>' : '') +
+        (prox.lugar ? '<span>📍 ' + esc(prox.lugar) + '</span>' : '') +
+      '</div>' +
+      '<div class="cal-hero-actions">' +
+        '<a href="' + crearUrlGCal(prox) + '" target="_blank" rel="noopener" class="btn" style="padding:6px 16px;font-size:.8rem;">📅 Agendar en Google Calendar</a>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // Render Timeline
+  function renderTimeline(){
     var filtrados = filtroActivo === 'todo'
       ? todosLosEventos
       : todosLosEventos.filter(function(e){ return e.tipo === filtroActivo; });
 
     if (!filtrados.length) {
-      grid.innerHTML = '<p class="aviso">No hay actividades programadas en esta categoría por el momento.</p>';
+      timelineBox.innerHTML = '<p class="aviso">No hay actividades programadas en esta categoría por el momento.</p>';
       return;
     }
 
     var html = '';
     filtrados.forEach(function(ev){
-      var partes = (ev.fecha || '').split('-');
-      var dia = partes[2] || '';
-      var mesIdx = parseInt(partes[1], 10) - 1;
+      var p = (ev.fecha||'').split('-');
+      var dia = p[2] || '';
+      var mesIdx = parseInt(p[1], 10) - 1;
       var mesTxt = MESES[mesIdx] || '';
-      var anio = partes[0] || '';
 
-      var tipoTag = ev.tipo === 'interna' ? 'Reunión General' : (ev.tipo === 'capacitacion' ? 'Capacitación' : 'Social');
-
-      html += '<div class="internal-card">' +
-        '<div class="internal-date-badge">' +
-          '<span class="int-day">' + esc(dia) + '</span>' +
-          '<span class="int-month">' + esc(mesTxt) + '</span>' +
-        '</div>' +
-        '<div class="internal-body">' +
-          '<div class="internal-tags">' +
-            '<span class="int-tag">' + esc(tipoTag) + '</span>' +
-            (ev.hora ? '<span class="int-time">🕒 ' + esc(ev.hora) + ' hrs</span>' : '') +
+      html += '<div class="timeline-item">' +
+        '<div class="timeline-node"></div>' +
+        '<div class="timeline-card">' +
+          '<div class="timeline-header">' +
+            '<div class="timeline-datespan">' +
+              '<span class="date-pill">📅 ' + esc(dia) + ' ' + esc(mesTxt) + '</span>' +
+              (ev.hora ? '<span class="time-pill">🕒 ' + esc(ev.hora) + ' hrs</span>' : '') +
+            '</div>' +
+            '<span class="timeline-hanzi zh">' + getHanzi(ev.tipo) + '</span>' +
           '</div>' +
-          '<h3 class="internal-title">' + esc(ev.titulo) + '</h3>' +
-          (ev.lugar ? '<p class="internal-place">📍 ' + esc(ev.lugar) + '</p>' : '') +
-          (ev.detalle ? '<p class="internal-desc">' + esc(ev.detalle) + '</p>' : '') +
+          '<h3 class="timeline-title">' + esc(ev.titulo) + '</h3>' +
+          (ev.lugar ? '<p class="timeline-location">📍 ' + esc(ev.lugar) + '</p>' : '') +
+          (ev.detalle ? '<p class="timeline-desc">' + esc(ev.detalle) + '</p>' : '') +
+          '<div class="timeline-footer">' +
+            '<span class="int-tag">' + esc(getTipoLabel(ev.tipo)) + '</span>' +
+            '<a href="' + crearUrlGCal(ev) + '" target="_blank" rel="noopener" class="cal-add-btn">+ Añadir a Google Calendar</a>' +
+          '</div>' +
         '</div>' +
       '</div>';
     });
 
-    grid.innerHTML = html;
+    timelineBox.innerHTML = html;
   }
 
-  // Proteger ruta
+  // Render Matriz Mensual
+  function renderMonthGrid(){
+    monthTitle.textContent = MESES[currMonth] + ' ' + currYear;
+    
+    var firstDay = new Date(currYear, currMonth, 1);
+    var lastDay = new Date(currYear, currMonth + 1, 0);
+
+    // Ajustar primer día de semana (0 es Domingo -> convertir a 6; Lunes es 0)
+    var startingDay = (firstDay.getDay() + 6) % 7;
+    var monthLength = lastDay.getDate();
+
+    // Mapear eventos del mes actual
+    var eventosDelMes = {};
+    todosLosEventos.forEach(function(ev){
+      var p = (ev.fecha||'').split('-');
+      if (+p[0] === currYear && (+p[1]-1) === currMonth) {
+        var d = parseInt(p[2], 10);
+        eventosDelMes[d] = ev;
+      }
+    });
+
+    var today = new Date();
+    var isCurrentMonthYear = today.getFullYear() === currYear && today.getMonth() === currMonth;
+
+    var html = '';
+    // Días del mes anterior (relleno)
+    for (var i = 0; i < startingDay; i++) {
+      html += '<div class="day-cell other-month"></div>';
+    }
+
+    // Días del mes
+    for (var day = 1; day <= monthLength; day++) {
+      var isToday = isCurrentMonthYear && today.getDate() === day;
+      var hasEv = !!eventosDelMes[day];
+
+      var cls = 'day-cell' + (isToday ? ' today' : '') + (hasEv ? ' has-event' : '');
+      var evData = hasEv ? eventosDelMes[day] : null;
+
+      html += '<div class="' + cls + '" ' + (hasEv ? 'title="' + esc(evData.titulo) + '"' : '') + '>' +
+        '<span>' + day + '</span>' +
+      '</div>';
+    }
+
+    monthGrid.innerHTML = html;
+  }
+
+  // Event Listeners de cambio de vista
+  btnTimeline.addEventListener('click', function(){
+    vistaActiva = 'timeline';
+    btnTimeline.classList.add('active');
+    btnMonth.classList.remove('active');
+    timelineBox.style.display = 'block';
+    monthBox.style.display = 'none';
+  });
+
+  btnMonth.addEventListener('click', function(){
+    vistaActiva = 'month';
+    btnMonth.classList.add('active');
+    btnTimeline.classList.remove('active');
+    monthBox.style.display = 'block';
+    timelineBox.style.display = 'none';
+    renderMonthGrid();
+  });
+
+  document.getElementById('btn-month-prev').addEventListener('click', function(){
+    currMonth--;
+    if (currMonth < 0) { currMonth = 11; currYear--; }
+    renderMonthGrid();
+  });
+
+  document.getElementById('btn-month-next').addEventListener('click', function(){
+    currMonth++;
+    if (currMonth > 11) { currMonth = 0; currYear++; }
+    renderMonthGrid();
+  });
+
+  // Proteger ruta y cargar datos
   window.XuexiAuth.onAuth(function(user){
     if (!user) {
       window.location.href = 'login.html';
@@ -203,19 +383,22 @@
     memberName.textContent = user.nombre || user.displayName || (user.email ? user.email.split('@')[0] : 'Miembro Xuexi');
     memberEmail.textContent = (user.email || '') + (user.comision ? ' · Comisión ' + user.comision.toUpperCase() : '');
 
-    // Cargar calendario
     window.XuexiAuth.obtenerCalendarioInterno()
       .then(function(list){
-        todosLosEventos = list;
-        renderGrid();
+        // Ordenar eventos por fecha ascendente
+        todosLosEventos = list.sort(function(a,b){
+          return (a.fecha||'').localeCompare(b.fecha||'');
+        });
+        renderHero();
+        renderTimeline();
+        renderMonthGrid();
       })
       .catch(function(err){
         console.error(err);
-        grid.innerHTML = '<p class="aviso">Error al cargar el calendario interno.</p>';
+        timelineBox.innerHTML = '<p class="aviso">Error al cargar el calendario interno.</p>';
       });
   });
 
-  // Logout
   btnLogout.addEventListener('click', function(){
     window.XuexiAuth.logout().then(function(){
       window.location.href = 'login.html';
@@ -227,10 +410,11 @@
     btn.addEventListener('click', function(){
       [].forEach.call(filtrosBox.querySelectorAll('.chip'), function(b){ b.setAttribute('aria-pressed', String(b === btn)); });
       filtroActivo = btn.dataset.tipo;
-      renderGrid();
+      renderTimeline();
     });
   });
 })();
 </script>
 </body>
 </html>
+
