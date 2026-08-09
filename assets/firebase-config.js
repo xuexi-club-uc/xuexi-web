@@ -20,7 +20,7 @@
     projectId: "xuexiclub-webpage",
     storageBucket: "xuexiclub-webpage.firebasestorage.app",
     messagingSenderId: "458405473467",
-    appId: "1:458405473467:web:2a52a24e826ed4e558cd9e"
+    appId: "1:458405473467:web:4763118abe779e8858cd9e"
   };
 
   var incompleta = Object.keys(firebaseConfig).some(function(k){
