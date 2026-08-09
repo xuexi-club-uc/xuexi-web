@@ -979,8 +979,18 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
 .coord-fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
 .coord-fila input{flex:1;min-width:200px}
 .coord-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
-.coord-grid textarea{grid-column:1/-1;min-height:62px;resize:vertical}
+/* El select y el detalle ocupan la fila completa: si el select quedara solo en
+   una columna, la fila se veía coja. */
+.coord-grid select,
+.coord-grid textarea{grid-column:1/-1}
+.coord-grid textarea{min-height:62px;resize:vertical}
+.coord-grid input,.coord-grid select,.coord-grid textarea{width:100%}
 @media(max-width:640px){.coord-grid{grid-template-columns:1fr}}
+
+/* Botones a lo ancho y alineados entre sí */
+#coordinacion .btn{display:inline-block;margin-top:2px}
+.coord-fila{align-items:stretch}
+.coord-fila .btn{white-space:nowrap}
 
 #coordinacion input,#coordinacion select,#coordinacion textarea{
   background:var(--ground-2);border:1px solid var(--line);border-radius:var(--r);

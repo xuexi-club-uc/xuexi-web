@@ -172,24 +172,19 @@
   // ──────────────────────── Enlace en el menú ────────────────────────
 
   function actualizarNav(){
-    var nav = document.getElementById('nav-menu');
-    if (!nav) return;
-
-    // Mientras no haya acceso de miembros configurado, no mostramos la entrada:
-    // sería un enlace a una puerta que no abre.
-    if (!listo && !iniciar()) return;
-
+    // La entrada ya viene escrita en el HTML de cada página, así que aparece
+    // aunque el JavaScript tarde. Aquí solo cambia según haya sesión o no.
     var item = document.getElementById('nav-item-cuenta');
-    if (!item){
-      item = document.createElement('li');
-      item.id = 'nav-item-cuenta';
-      nav.appendChild(item);
-    }
+    if (!item) return;
+
+    // Sin acceso de miembros configurado, la escondemos: sería un enlace a una
+    // puerta que no abre.
+    if (!listo && !iniciar()){ item.hidden = true; return; }
 
     onAuth(function(user){
       item.innerHTML = user
-        ? '<a href="miembro.html" class="nav-member-link"><span class="zh">会员</span>Mi Portal</a>'
-        : '<a href="login.html"><span class="zh">登录</span>Acceso Miembros</a>';
+        ? '<a href="miembro.html" class="nav-member-link"><span class="zh">会员</span>Mi portal</a>'
+        : '<a href="login.html"><span class="zh">登录</span>Miembros</a>';
     });
   }
 
