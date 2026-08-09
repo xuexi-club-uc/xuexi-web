@@ -122,6 +122,10 @@
   </div>
 </section>
 
+<!-- Panel de coordinación: se rellena solo si la persona tiene rol admin.
+     La protección real está en firestore.rules, no en este atributo. -->
+<section id="coordinacion" hidden></section>
+
 </main>
 
 <footer>
@@ -159,6 +163,7 @@
 <script src="assets/nav.js?v=8"></script>
 <script src="assets/firebase-config.js"></script>
 <script src="assets/auth.js?v=8"></script>
+<script src="assets/coordinacion.js?v=8"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -442,6 +447,11 @@
       window.location.href = 'login.html';
       return;
     }
+
+    // Panel de coordinación. Si la persona no es admin, la función no dibuja
+    // nada; y aunque alguien la invocara a mano, Firestore rechazaría las
+    // escrituras.
+    if (window.XuexiCoordinacion) window.XuexiCoordinacion.iniciar(user);
 
     memberName.textContent = user.nombre || user.displayName || (user.email ? user.email.split('@')[0] : 'Miembro Xuexi');
     memberEmail.textContent = (user.email || '') + (user.comision ? ' · Comisión ' + user.comision.toUpperCase() : '');

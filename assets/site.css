@@ -967,3 +967,44 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   transform:scale(1.04)}
 
 
+
+/* ═══════════════ PANEL DE COORDINACIÓN (miembro.html) ═══════════════ */
+#coordinacion{padding:clamp(40px,6vw,72px) 0;border-top:1px solid var(--line)}
+.coord-bloque{border:1px solid var(--line);border-radius:var(--r);background:var(--card);
+  padding:24px;margin-bottom:20px}
+.coord-bloque h3{font-family:var(--serif);font-size:1.15rem;margin:0 0 4px}
+.coord-desc{font-size:.83rem;color:var(--cream-dim);margin-bottom:16px}
+.coord-sub{font-size:.74rem;color:var(--cream-faint)}
+
+.coord-fila{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.coord-fila input{flex:1;min-width:200px}
+.coord-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+.coord-grid textarea{grid-column:1/-1;min-height:62px;resize:vertical}
+@media(max-width:640px){.coord-grid{grid-template-columns:1fr}}
+
+#coordinacion input,#coordinacion select,#coordinacion textarea{
+  background:var(--ground-2);border:1px solid var(--line);border-radius:var(--r);
+  color:var(--cream);padding:10px 12px;font-family:var(--sans);font-size:.86rem}
+#coordinacion input::placeholder,#coordinacion textarea::placeholder{color:var(--cream-faint)}
+#coordinacion input:focus,#coordinacion select:focus,#coordinacion textarea:focus{
+  outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
+
+.coord-btn-mini{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;
+  padding:7px 13px;border-radius:2px;border:1px solid var(--gold-deep);background:none;
+  color:var(--gold);cursor:pointer;transition:.2s}
+.coord-btn-mini:hover{background:rgba(212,175,97,.14)}
+
+.coord-tabla{width:100%;border-collapse:collapse;margin-top:14px;font-size:.83rem}
+.coord-tabla th{text-align:left;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold-deep);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+.coord-tabla td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;
+  color:var(--cream-dim)}
+.coord-tabla code{font-family:var(--mono);font-size:.86em;color:var(--cream)}
+.coord-tabla tr.coord-usado td{opacity:.5}
+
+.coord-aviso{font-size:.83rem;color:var(--cream-faint);padding:14px 0}
+.coord-error{color:#F5B7B1}
+.coord-ok{font-size:.85rem;color:var(--jade-light);padding:12px 0;line-height:1.6}
+.coord-ok code{font-family:var(--mono);font-size:1.05em;color:var(--gold);
+  background:rgba(212,175,97,.12);padding:3px 8px;border-radius:3px}
+.coord-import{margin-top:20px;padding-top:16px;border-top:1px dashed var(--line)}
