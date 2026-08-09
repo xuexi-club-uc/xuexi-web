@@ -143,22 +143,19 @@
 
   // ─────────────────────── Datos del portal ───────────────────────
 
-  // Ojo: si el calendario se sirve desde data/calendario_interno.json, ese
-  // archivo es público. Para que sea realmente interno, debe vivir en Firestore.
+  // El calendario vive SOLO en Firestore. Antes existía una copia en
+  // data/calendario_interno.json, pero ese archivo se servía públicamente:
+  // de "interno" tenía únicamente el nombre.
   function obtenerCalendarioInterno(){
-    if (listo && db){
-      return db.collection('calendario_interno').orderBy('fecha', 'asc').get()
-        .then(function(snap){
-          var lista = [];
-          snap.forEach(function(doc){
-            var e = doc.data(); e.id = doc.id; lista.push(e);
-          });
-          return lista;
+    if (!listo && !iniciar()) return Promise.resolve([]);
+    return db.collection('calendario_interno').orderBy('fecha', 'asc').get()
+      .then(function(snap){
+        var lista = [];
+        snap.forEach(function(doc){
+          var e = doc.data(); e.id = doc.id; lista.push(e);
         });
-    }
-    return fetch('data/calendario_interno.json', {cache:'no-cache'})
-      .then(function(r){ return r.ok ? r.json() : {eventos:[]}; })
-      .then(function(d){ return d.eventos || []; })
+        return lista;
+      })
       .catch(function(){ return []; });
   }
 
