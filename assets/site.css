@@ -433,9 +433,17 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
 .nav .row{position:relative}
 .nav ul{align-items:center}
 .nav li{position:relative}
-.nav li.has-drop > a{display:flex;align-items:center;gap:5px}
-.nav li.has-drop > a::after{content:"";width:5px;height:5px;border-right:1.4px solid currentColor;
-  border-bottom:1.4px solid currentColor;transform:rotate(45deg) translateY(-2px);opacity:.7}
+/* Todos los enlaces del menú se arman igual: chino arriba, texto abajo,
+   centrados. Así comparten alto y quedan alineados entre sí. */
+.nav ul > li > a{align-items:center;text-align:center}
+/* El triángulo va en posición absoluta. Si fuera un hijo más del enlace, se
+   apilaría bajo el texto (el enlace es una columna) y haría más altos solo a
+   los ítems con desplegable, desalineándolos del resto. */
+.nav li.has-drop > a{position:relative;padding-right:11px}
+.nav li.has-drop > a::after{content:"";position:absolute;right:0;top:50%;
+  width:5px;height:5px;border-right:1.4px solid currentColor;
+  border-bottom:1.4px solid currentColor;
+  transform:translateY(-4px) rotate(45deg);opacity:.7}
 .nav .drop{display:block;position:absolute;top:calc(100% + 14px);left:50%;
   transform:translateX(-50%) translateY(4px);
   margin:0;padding:8px;list-style:none;min-width:230px;width:max-content;max-width:min(300px,90vw);

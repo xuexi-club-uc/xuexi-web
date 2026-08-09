@@ -177,9 +177,12 @@
     var item = document.getElementById('nav-item-cuenta');
     if (!item) return;
 
-    // Sin acceso de miembros configurado, la escondemos: sería un enlace a una
-    // puerta que no abre.
-    if (!listo && !iniciar()){ item.hidden = true; return; }
+    // La entrada se muestra siempre: es un enlace a login.html, que funciona en
+    // cualquier página. Antes se ocultaba cuando Firebase no estaba iniciado,
+    // pero el SDK solo se carga en login, registro y miembro — así que
+    // desaparecía del resto del sitio.
+    item.hidden = false;
+    if (!listo && !iniciar()) return;
 
     onAuth(function(user){
       item.innerHTML = user
