@@ -96,36 +96,32 @@
 
   // ───────────────────── Calendario interno ─────────────────────
 
-  function listarCalendario(){
-    var caja = document.getElementById('coord-cal-lista');
-    aviso(caja, 'Cargando…');
-    db.collection('calendario_interno').orderBy('fecha').get().then(function(snap){
-      if (snap.empty){ aviso(caja, 'El calendario interno está vacío.'); return; }
-      var filas = [];
-      snap.forEach(function(doc){
-        var d = doc.data();
-        filas.push({ id: doc.id, titulo: d.titulo || '', fecha: d.fecha || '', lugar: d.lugar || '' });
+  // No repetimos aquí el listado del calendario: ya está arriba, con mejor
+  // diseño. En vez de duplicarlo, agregamos un botón de eliminar sobre esas
+  // mismas tarjetas cuando quien mira es de la coordinación.
+  function ponerBotonesEnTarjetas(){
+    var tarjetas = document.querySelectorAll('.timeline-card[data-id]');
+    [].forEach.call(tarjetas, function(card){
+      if (card.querySelector('.coord-eliminar')) return;
+      var pie = card.querySelector('.timeline-footer');
+      if (!pie) return;
+      var b = document.createElement('button');
+      b.className = 'coord-btn-mini coord-eliminar';
+      b.textContent = 'Eliminar';
+      b.addEventListener('click', function(){
+        var id = card.getAttribute('data-id');
+        if (!confirm('¿Eliminar "' + card.getAttribute('data-titulo') + '" del calendario interno?')) return;
+        db.collection('calendario_interno').doc(id).delete()
+          .then(function(){ if (window.recargarCalendarioInterno) window.recargarCalendarioInterno(); })
+          .catch(function(e){ alert('No se pudo eliminar: ' + e.message); });
       });
-      caja.innerHTML = '<table class="coord-tabla"><thead><tr>' +
-        '<th>Fecha</th><th>Actividad</th><th></th></tr></thead><tbody>' +
-        filas.map(function(f){
-          return '<tr><td><code>' + esc(f.fecha) + '</code></td>' +
-            '<td>' + esc(f.titulo) + '</td>' +
-            '<td><button class="coord-btn-mini" data-cal-borrar="' + esc(f.id) + '">Eliminar</button></td></tr>';
-        }).join('') + '</tbody></table>';
-
-      [].forEach.call(caja.querySelectorAll('[data-cal-borrar]'), function(b){
-        b.addEventListener('click', function(){
-          var id = b.getAttribute('data-cal-borrar');
-          if (!confirm('¿Eliminar esta actividad del calendario interno?')) return;
-          db.collection('calendario_interno').doc(id).delete()
-            .then(listarCalendario)
-            .catch(function(e){ alert('No se pudo eliminar: ' + e.message); });
-        });
-      });
-    }).catch(function(e){
-      aviso(caja, 'No se pudo leer el calendario: ' + e.message, true);
+      pie.appendChild(b);
     });
+  }
+
+  function listarCalendario(){
+    // El calendario lo dibuja miembro.html; aquí solo añadimos los controles.
+    ponerBotonesEnTarjetas();
   }
 
   function agregarEvento(){
@@ -146,38 +142,41 @@
       titulo: t, fecha: f, hora: h, lugar: l, tipo: tp, detalle: d,
       creadoPor: usuario.uid
     }).then(function(){
-      caja.innerHTML = '<p class="coord-ok">Actividad agregada.</p>';
+      caja.innerHTML = '<p class="coord-ok">Actividad agregada. Aparece en el calendario de arriba.</p>';
       ['titulo','fecha','hora','lugar','detalle'].forEach(function(c){
         document.getElementById('coord-cal-' + c).value = '';
       });
-      listarCalendario();
+      if (window.recargarCalendarioInterno) window.recargarCalendarioInterno();
     }).catch(function(e){
       caja.innerHTML = '<p class="coord-aviso coord-error">No se pudo guardar: ' + esc(e.message) + '</p>';
     });
   }
 
   // Plan de la Comisión Wailian 2026, tal como está en la planilla del club.
-  // Ninguna actividad tiene fecha confirmada: la fecha que se guarda sirve para
-  // ordenar el calendario, y el texto original queda en el detalle para que
-  // nadie la lea como definitiva.
+  //
+  // Ninguna actividad tiene fecha confirmada. Por eso 'fecha' queda VACÍA
+  // cuando la planilla no da un día concreto: inventar una para poder ordenar
+  // haría que se mostrara como si fuera real. El texto original va en
+  // 'fechaTexto' y se muestra tal cual ("Octubre", "Sin fecha definida").
+  //   [ título, fecha ISO o '', texto de la fecha, tipo, detalle, a cargo, con ]
   var PLAN_WAILIAN = [
-    ['Charla: ¿Cómo hacer negocios con China?','2026-10-01','Octubre','charla','Charla con un experto en negocios con China.','Catalina Leiva','Instituto Confucio UC'],
-    ['Ciclo de Cine Chino · Sesión 1','2026-12-31','Sin fecha definida','social','Ciclo interuniversitario, con el Club de Cine de la U. de Concepción.','Nadja Albarrán','Club de Cine UdeC'],
-    ['Charla: ¿Cómo es estudiar en China?','2026-10-01','Octubre','charla','Experiencias de estudio en China (pregrado, magíster, doctorado), con y sin beca.','Catalina Leiva','Instituto Confucio UC'],
-    ['Ceremonia del té','2026-12-31','Por consultar al templo','social','Visita al templo budista Fo Guang Shan para aprender las etapas de la ceremonia.','Caro Marín','Templo Fo Guang Shan'],
-    ['Taller de Douyin Makeup','2026-12-31','Sin fecha definida','social','Técnicas de maquillaje popularizadas en Douyin.','Martina Soto','Interno'],
-    ['Taller Introducción al idioma chino I','2026-08-25','Última semana de agosto, cualquier día salvo miércoles','capacitacion','Clase básica de saludos y palabras simples. Difusión vía Consejerías Académicas.','Martina Soto','Interno'],
+    ['Charla: ¿Cómo hacer negocios con China?','','Octubre','interna','Charla con un experto en negocios con China.','Catalina Leiva','Instituto Confucio UC'],
+    ['Ciclo de Cine Chino · Sesión 1','','Sin fecha definida','social','Ciclo interuniversitario, con el Club de Cine de la U. de Concepción.','Nadja Albarrán','Club de Cine UdeC'],
+    ['Charla: ¿Cómo es estudiar en China?','','Octubre','interna','Experiencias de estudio en China (pregrado, magíster, doctorado), con y sin beca.','Catalina Leiva','Instituto Confucio UC'],
+    ['Ceremonia del té','','Por consultar al templo','social','Visita al templo budista Fo Guang Shan para aprender las etapas de la ceremonia.','Caro Marín','Templo Fo Guang Shan'],
+    ['Taller de Douyin Makeup','','Sin fecha definida','social','Técnicas de maquillaje popularizadas en Douyin.','Martina Soto','Interno'],
+    ['Taller Introducción al idioma chino I','','Última semana de agosto, cualquier día salvo miércoles','capacitacion','Clase básica de saludos y palabras simples. Difusión vía Consejerías Académicas.','Martina Soto','Interno'],
     ['Taller Introducción al idioma chino II','2026-08-21','21 al 23 de agosto','capacitacion','Clase básica de saludos y palabras simples. Difusión vía Consejerías Académicas.','Karen Quijada','Interno'],
-    ['Ciclo de Cine Chino · Sesión 2','2026-12-31','Sin fecha definida','social','Segunda sesión, con una agrupación de la Universidad de Chile.','Sofía Lizama','U. de Chile'],
-    ['Taller de Wantanes fritos','2026-08-25','Cuarta semana de agosto, sujeto a disponibilidad del laboratorio','social','Taller para aprender a preparar wantanes fritos.','Benjamín Varas','Interno'],
-    ['Taller de Taichi','2026-12-31','Por coordinar','social','Taichi y meditación como herramienta de concentración y bienestar.','Nathaly Jeria','Academia Longhun Wudao'],
-    ['Ciclo de Cine Chino · Sesión 3','2026-12-31','Por consultar','social','Tercera sesión; se propone colaboración con el Centro UC de Estudios Asiáticos.','Catalina Leiva','Centro UC de Estudios Asiáticos (a confirmar)'],
-    ['Degustación de Pasteles de Luna','2026-08-15','Agosto','social','Dulce tradicional del Festival de Medio Otoño.','Sofía Lizama','Interno'],
-    ['Ciclo de Cine Chino · Sesión 4','2026-12-31','Sin fecha definida','social','Cuarta sesión, en colaboración con equipo de la U. de Chile.','Martina Soto','U. de Chile (a confirmar)'],
-    ['Demostración Danza del León','2026-10-01','Ojalá octubre','social','Muestra de danza del león al aire libre en un campus.','Javier Zúñiga','Grupo de danza (a confirmar)'],
-    ['Charla de taoísmo','2026-10-01','Octubre','charla','Acercamiento al taoísmo como tradición filosófica y espiritual china.','Benjamín Varas','Interno'],
+    ['Ciclo de Cine Chino · Sesión 2','','Sin fecha definida','social','Segunda sesión, con una agrupación de la Universidad de Chile.','Sofía Lizama','U. de Chile'],
+    ['Taller de Wantanes fritos','','Cuarta semana de agosto, sujeto a disponibilidad del laboratorio','social','Taller para aprender a preparar wantanes fritos.','Benjamín Varas','Interno'],
+    ['Taller de Taichi','','Por coordinar','social','Taichi y meditación como herramienta de concentración y bienestar.','Nathaly Jeria','Academia Longhun Wudao'],
+    ['Ciclo de Cine Chino · Sesión 3','','Por consultar','social','Tercera sesión; se propone colaboración con el Centro UC de Estudios Asiáticos.','Catalina Leiva','Centro UC de Estudios Asiáticos (a confirmar)'],
+    ['Degustación de Pasteles de Luna','','Agosto','social','Dulce tradicional del Festival de Medio Otoño.','Sofía Lizama','Interno'],
+    ['Ciclo de Cine Chino · Sesión 4','','Sin fecha definida','social','Cuarta sesión, en colaboración con equipo de la U. de Chile.','Martina Soto','U. de Chile (a confirmar)'],
+    ['Demostración Danza del León','','Ojalá octubre','social','Muestra de danza del león al aire libre en un campus.','Javier Zúñiga','Grupo de danza (a confirmar)'],
+    ['Charla de taoísmo','','Octubre','interna','Acercamiento al taoísmo como tradición filosófica y espiritual china.','Benjamín Varas','Interno'],
     ['Taller de caligrafía','2026-09-07','Lunes 7 de septiembre','capacitacion','Arte de la escritura china con pincel y tinta.','Sofía (Xinxi)','Instituto Confucio UC (a confirmar)'],
-    ['Taller de cocina de Jiaozi','2026-08-15','Agosto','social','Taller para aprender a cocinar jiaozi.','Sofía Lizama','Interno'],
+    ['Taller de cocina de Jiaozi','','Agosto','social','Taller para aprender a cocinar jiaozi.','Sofía Lizama','Interno'],
     ['Taller de arte chino','2026-09-12','Sábado 12 de septiembre','capacitacion','Pintura china, reutilizando materiales del taller de caligrafía.','Sofía (Xinxi)','Interno'],
     ['Actividad infantil con Biblioteca Escolar Futuro','2026-09-25','25 de septiembre','social','Colaboración con Biblioteca Escolar Futuro.','Sofía (Xinxi)','Biblioteca Escolar Futuro']
   ];
@@ -192,14 +191,16 @@
       var ref = db.collection('calendario_interno').doc('wailian-2026-' + String(i+1).padStart(2,'0'));
       lote.set(ref, {
         titulo: a[0],
-        fecha: a[1],
+        fecha: a[1],          // vacía si la planilla no da un día concreto
+        fechaTexto: a[2],     // lo que dice la planilla, tal cual
+        confirmada: false,    // ninguna está confirmada todavía
         hora: '',
-        lugar: 'Por confirmar',
-        tipo: a[3] === 'charla' ? 'interna' : a[3],
-        detalle: 'FECHA TENTATIVA: ' + a[2] + ' — sin confirmar. ' + a[4] +
-                 ' · A cargo: ' + a[5] + ' · Con: ' + a[6],
+        lugar: '',
+        tipo: a[3],
+        detalle: a[4],
+        responsable: a[5],
+        colaborador: a[6],
         comision: 'wailian',
-        confirmada: false,
         creadoPor: usuario.uid
       });
     });
@@ -208,7 +209,7 @@
       caja.innerHTML = '<p class="coord-ok">Se importaron ' + PLAN_WAILIAN.length +
         ' actividades. Puedes volver a pulsar el botón si actualizas la planilla: ' +
         'se sobrescriben, no se duplican.</p>';
-      listarCalendario();
+      if (window.recargarCalendarioInterno) window.recargarCalendarioInterno();
     }).catch(function(e){
       caja.innerHTML = '<p class="coord-aviso coord-error">No se pudo importar: ' + esc(e.message) + '</p>';
     });
@@ -297,7 +298,6 @@
         '</div>' +
         '<button class="btn btn-sello" id="coord-agregar-evento">Agregar actividad</button>' +
         '<div id="coord-cal-resultado"></div>' +
-        '<div id="coord-cal-lista"></div>' +
         '<div class="coord-import">' +
           '<button class="coord-btn-mini" id="coord-importar">Importar plan Wailian 2026 (19 actividades)</button>' +
           '<p class="coord-sub">Las carga con su fecha tentativa. Ninguna está confirmada, ' +
@@ -329,6 +329,13 @@
       usuario = user;
       db = firebase.firestore();
       pintarPanel();
+    },
+    // La llama el calendario de miembro.html cada vez que se redibuja, para
+    // añadir los botones de eliminar. Si no hay sesión de coordinación, no hace
+    // nada.
+    decorarCalendario: function(){
+      if (!db || !usuario) return;
+      ponerBotonesEnTarjetas();
     }
   };
 })();

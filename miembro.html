@@ -6,7 +6,7 @@
 <title>Portal de Miembros · Xuexi Club UC</title>
 <meta name="description" content="Calendario interno de actividades y recursos para integrantes del Xuexi Club UC.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=10">
+<link rel="stylesheet" href="assets/site.css?v=11">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -160,10 +160,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="assets/nav.js?v=10"></script>
+<script src="assets/nav.js?v=11"></script>
 <script src="assets/firebase-config.js"></script>
-<script src="assets/auth.js?v=10"></script>
-<script src="assets/coordinacion.js?v=10"></script>
+<script src="assets/auth.js?v=11"></script>
+<script src="assets/coordinacion.js?v=11"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -228,8 +228,11 @@
     var hoy = new Date();
     hoy.setHours(0,0,0,0);
 
+    // Solo destacamos actividades con fecha real y confirmada: anunciar una
+    // tentativa como "próxima" sería prometer algo que puede no ocurrir.
     var proximos = todosLosEventos.filter(function(e){
-      var p = (e.fecha||'').split('-');
+      if (!e.fecha || e.confirmada === false) return false;
+      var p = e.fecha.split('-');
       var f = new Date(+p[0], +p[1]-1, +p[2]);
       return f >= hoy;
     });
@@ -280,29 +283,54 @@
       var dia = p[2] || '';
       var mesIdx = parseInt(p[1], 10) - 1;
       var mesTxt = MESES[mesIdx] || '';
+      var tieneFecha = !!ev.fecha;
+      var porConfirmar = ev.confirmada === false;
 
-      html += '<div class="timeline-item">' +
+      // Sin fecha real mostramos lo que dice la planilla ("Octubre", "Sin fecha
+      // definida"). Inventar un día para rellenar sería peor: se leería como
+      // una fecha confirmada.
+      var pastilla = tieneFecha
+        ? '<span class="date-pill">📅 ' + esc(dia) + ' ' + esc(mesTxt) + '</span>'
+        : '<span class="date-pill date-pill-vaga">🗓 ' +
+            esc(ev.fechaTexto || 'Fecha por definir') + '</span>';
+
+      html += '<div class="timeline-item' + (porConfirmar ? ' timeline-tentativo' : '') + '">' +
         '<div class="timeline-node"></div>' +
-        '<div class="timeline-card">' +
+        '<div class="timeline-card" data-id="' + esc(ev.id || '') + '" data-titulo="' + esc(ev.titulo) + '">' +
           '<div class="timeline-header">' +
             '<div class="timeline-datespan">' +
-              '<span class="date-pill">📅 ' + esc(dia) + ' ' + esc(mesTxt) + '</span>' +
+              pastilla +
               (ev.hora ? '<span class="time-pill">🕒 ' + esc(ev.hora) + ' hrs</span>' : '') +
+              (porConfirmar ? '<span class="pill-tentativo">Por confirmar</span>' : '') +
             '</div>' +
             '<span class="timeline-hanzi zh">' + getHanzi(ev.tipo) + '</span>' +
           '</div>' +
           '<h3 class="timeline-title">' + esc(ev.titulo) + '</h3>' +
           (ev.lugar ? '<p class="timeline-location">📍 ' + esc(ev.lugar) + '</p>' : '') +
           (ev.detalle ? '<p class="timeline-desc">' + esc(ev.detalle) + '</p>' : '') +
+          (ev.responsable || ev.colaborador
+            ? '<p class="timeline-quien">' +
+                (ev.responsable ? 'A cargo: <b>' + esc(ev.responsable) + '</b>' : '') +
+                (ev.responsable && ev.colaborador ? ' · ' : '') +
+                (ev.colaborador ? 'Con ' + esc(ev.colaborador) : '') +
+              '</p>'
+            : '') +
           '<div class="timeline-footer">' +
             '<span class="int-tag">' + esc(getTipoLabel(ev.tipo)) + '</span>' +
-            '<a href="' + crearUrlGCal(ev) + '" target="_blank" rel="noopener" class="cal-add-btn">+ Añadir a Google Calendar</a>' +
+            // Sin fecha no se puede agendar: el botón llevaría a un evento vacío.
+            (tieneFecha
+              ? '<a href="' + crearUrlGCal(ev) + '" target="_blank" rel="noopener" class="cal-add-btn">+ Añadir a Google Calendar</a>'
+              : '') +
           '</div>' +
         '</div>' +
       '</div>';
     });
 
     timelineBox.innerHTML = html;
+    // Si quien mira es de la coordinación, se le añaden los controles de edición.
+    if (window.XuexiCoordinacion && window.XuexiCoordinacion.decorarCalendario){
+      window.XuexiCoordinacion.decorarCalendario();
+    }
   }
 
   // Render Matriz Mensual
@@ -319,7 +347,9 @@
     // Mapear eventos del mes actual
     var eventosDelMes = {};
     todosLosEventos.forEach(function(ev){
-      var p = (ev.fecha||'').split('-');
+      // Sin fecha no hay casilla donde ponerla; aparecen en el cronograma.
+      if (!ev.fecha) return;
+      var p = ev.fecha.split('-');
       if (+p[0] === currYear && (+p[1]-1) === currMonth) {
         var d = parseInt(p[2], 10);
         eventosDelMes[d] = ev;
@@ -463,11 +493,17 @@
       renderPaymentStatus(user, null);
     });
 
+    // Recargable: la coordinación la llama tras agregar o eliminar actividades.
+    window.recargarCalendarioInterno = function(){
     window.XuexiAuth.obtenerCalendarioInterno()
       .then(function(list){
-        // Ordenar eventos por fecha ascendente
+        // Por fecha ascendente. Las que no tienen fecha van al final, no al
+        // principio: una cadena vacía ordenaría antes que cualquier fecha.
         todosLosEventos = list.sort(function(a,b){
-          return (a.fecha||'').localeCompare(b.fecha||'');
+          if (!a.fecha && !b.fecha) return (a.titulo||'').localeCompare(b.titulo||'');
+          if (!a.fecha) return 1;
+          if (!b.fecha) return -1;
+          return a.fecha.localeCompare(b.fecha);
         });
         renderHero();
         renderTimeline();
@@ -477,6 +513,9 @@
         console.error(err);
         timelineBox.innerHTML = '<p class="aviso">Error al cargar el calendario interno.</p>';
       });
+    };
+
+    window.recargarCalendarioInterno();
   });
 
   btnLogout.addEventListener('click', function(){
