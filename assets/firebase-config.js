@@ -15,12 +15,12 @@
  */
 (function() {
   var firebaseConfig = {
-    apiKey: "FALTA_API_KEY",
+    apiKey: "AIzaSyAlMj4QHgodOXMQYV59IzGQX8BFVMucWCM",
     authDomain: "xuexiclub-webpage.firebaseapp.com",
     projectId: "xuexiclub-webpage",
-    storageBucket: "FALTA_STORAGE_BUCKET",
-    messagingSenderId: "FALTA_MESSAGING_SENDER_ID",
-    appId: "FALTA_APP_ID"
+    storageBucket: "xuexiclub-webpage.firebasestorage.app",
+    messagingSenderId: "458405473467",
+    appId: "1:458405473467:web:2a52a24e826ed4e558cd9e"
   };
 
   var incompleta = Object.keys(firebaseConfig).some(function(k){
