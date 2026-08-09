@@ -1,245 +1,203 @@
-/* Módulo de Autenticación y Datos de Miembros · Xuexi Club UC */
+/* Autenticación y datos de miembros · Xuexi Club UC
+ *
+ * PRINCIPIO: este módulo falla cerrado.
+ *
+ * El sitio es estático y no tiene servidor propio, así que no puede verificar
+ * nada por sí mismo. Toda la seguridad real la aporta Firebase: la identidad
+ * (Firebase Auth) y las reglas de acceso a los datos (Firestore Rules).
+ *
+ * Si Firebase no está configurado, NO hay acceso de miembros. No existe un
+ * "modo demo": guardar contraseñas en el navegador o aceptar códigos escritos
+ * en el código fuente daría una falsa sensación de seguridad, porque cualquiera
+ * puede leer estos archivos.
+ *
+ * Los códigos de invitación viven SOLO en Firestore, nunca en el repositorio:
+ * todo lo que está aquí es público.
+ */
 (function(){
   'use strict';
 
   var db = null;
   var auth = null;
-  var firebaseReady = false;
+  var listo = false;
 
-  function initFirebase() {
-    if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
+  var SIN_CONFIGURAR = 'El acceso de miembros todavía no está habilitado. ' +
+    'Escríbenos por Instagram (@xuexiclub.uc) y te ayudamos.';
+
+  function iniciar(){
+    if (typeof firebase === 'undefined' || !firebase.apps || !firebase.apps.length) return false;
+    try {
       auth = firebase.auth();
       db = firebase.firestore();
-      firebaseReady = true;
+      listo = true;
+    } catch (e) {
+      listo = false;
     }
+    return listo;
   }
 
-  // Inicializar al cargar
-  initFirebase();
+  iniciar();
 
-  // Helper para verificar estado de autenticación
-  function onAuth(callback) {
-    if (firebaseReady && auth) {
-      return auth.onAuthStateChanged(callback);
-    } else {
-      // Fallback local/demo
-      var localUser = localStorage.getItem('xuexi_member_session');
-      if (localUser) {
-        try { callback(JSON.parse(localUser)); }
-        catch(e) { callback(null); }
-      } else {
-        callback(null);
-      }
-      return function(){};
-    }
+  function noDisponible(){
+    return Promise.reject(new Error(SIN_CONFIGURAR));
   }
 
-  // Iniciar sesión
-  function login(email, password) {
-    if (firebaseReady && auth) {
-      return auth.signInWithEmailAndPassword(email, password);
-    } else {
-      // Fallback demo local
-      return new Promise(function(resolve, reject) {
-        var demoMembers = JSON.parse(localStorage.getItem('xuexi_demo_members') || '[]');
-        var user = demoMembers.find(function(m){ return m.email.toLowerCase() === email.toLowerCase(); });
-        if (user && user.password === password) {
-          localStorage.setItem('xuexi_member_session', JSON.stringify(user));
-          resolve({ user: user });
-        } else if (email === "admin@xuexiclub.cl" && password === "demo123") {
-          var adminUser = { uid: "admin-demo", email: email, nombre: "Administrador Demo", rol: "admin" };
-          localStorage.setItem('xuexi_member_session', JSON.stringify(adminUser));
-          resolve({ user: adminUser });
-        } else {
-          reject(new Error("Correo o contraseña incorrectos (Modo Demo: usa admin@xuexiclub.cl / demo123 o tu código de registro)"));
-        }
-      });
-    }
-  }
+  // ─────────────────────────── Sesión ───────────────────────────
 
-  // Cerrar sesión
-  function logout() {
-    if (firebaseReady && auth) {
-      return auth.signOut();
-    } else {
-      localStorage.removeItem('xuexi_member_session');
-      return Promise.resolve();
-    }
-  }
-
-  // Validar código de invitación (lee primero Firestore, si no data/invitaciones.json)
-  function validarCodigo(codigo) {
-    codigo = (codigo || '').trim().toUpperCase();
-    if (!codigo) return Promise.reject(new Error("Ingresa un código de invitación."));
-
-    if (firebaseReady && db) {
-      return db.collection('codigos_invitacion').doc(codigo).get().then(function(doc){
-        if (!doc.exists) throw new Error("El código de invitación no existe o es inválido.");
-        var data = doc.data();
-        if (data.usado) throw new Error("Este código de invitación ya fue utilizado.");
-        return data;
-      });
-    } else {
-      // Leer data/invitaciones.json gestionado desde Decap CMS
-      return fetch('data/invitaciones.json', {cache:'no-cache'})
-        .then(function(r){ return r.ok ? r.json() : {codigos:[]}; })
-        .then(function(d){
-          var codigos = d.codigos || [];
-          var localUsados = JSON.parse(localStorage.getItem('xuexi_demo_codes_used') || '[]');
-
-          var encontrado = codigos.find(function(c){
-            return String(c.codigo || '').trim().toUpperCase() === codigo;
+  function onAuth(callback){
+    if (!listo && !iniciar()){ callback(null); return function(){}; }
+    return auth.onAuthStateChanged(function(user){
+      if (!user){ callback(null); return; }
+      // Adjuntamos el perfil del miembro (nombre, comisión, rol) al usuario.
+      db.collection('miembros').doc(user.uid).get()
+        .then(function(doc){
+          var perfil = doc.exists ? doc.data() : {};
+          callback({
+            uid: user.uid,
+            email: user.email,
+            nombre: perfil.nombre || user.email,
+            comision: perfil.comision || '',
+            rol: perfil.rol || 'miembro',
+            estadoPago: perfil.estadoPago || 'pendiente',
+            ultimoPago: perfil.ultimoPago || null
           });
-
-          if (!encontrado) {
-            // Chequear fallback local
-            var fallback = ['XUEXI2026', 'MIEMBRO2026'];
-            if (fallback.indexOf(codigo) !== -1 && localUsados.indexOf(codigo) === -1) {
-              return { codigo: codigo };
-            }
-            throw new Error("El código de invitación no existe o es inválido.");
-          }
-
-          if (encontrado.usado || localUsados.indexOf(codigo) !== -1) {
-            throw new Error("Este código de invitación es de un solo uso y ya fue utilizado anteriormente. Solicita un nuevo código a la coordinación.");
-          }
-
-          return encontrado;
-        });
-    }
-  }
-
-  // Registrar miembro con código
-  function registrar(codigo, nombre, comision, email, password) {
-    codigo = (codigo || '').trim().toUpperCase();
-    return validarCodigo(codigo).then(function(){
-      if (firebaseReady && auth && db) {
-        return auth.createUserWithEmailAndPassword(email, password).then(function(cred){
-          var uid = cred.user.uid;
-          var batch = db.batch();
-          batch.set(db.collection('miembros').doc(uid), {
-            nombre: nombre,
-            comision: comision || 'xuexi',
-            email: email,
-            rol: 'miembro',
-            codigoUsado: codigo,
-            fechaRegistro: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          batch.update(db.collection('codigos_invitacion').doc(codigo), {
-            usado: true,
-            usadoPor: email,
-            fechaUso: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          return batch.commit();
-        });
-      } else {
-        return new Promise(function(resolve){
-          var demoMembers = JSON.parse(localStorage.getItem('xuexi_demo_members') || '[]');
-          var newUser = {
-            uid: 'user-' + Date.now(),
-            nombre: nombre,
-            comision: comision || 'xuexi',
-            email: email,
-            password: password,
-            rol: 'miembro',
-            fechaRegistro: new Date().toISOString()
-          };
-          demoMembers.push(newUser);
-          localStorage.setItem('xuexi_demo_members', JSON.stringify(demoMembers));
-
-          var usados = JSON.parse(localStorage.getItem('xuexi_demo_codes_used') || '[]');
-          usados.push(codigo);
-          localStorage.setItem('xuexi_demo_codes_used', JSON.stringify(usados));
-
-          localStorage.setItem('xuexi_member_session', JSON.stringify(newUser));
-          resolve(newUser);
-        });
-      }
+        })
+        .catch(function(){ callback({ uid: user.uid, email: user.email, rol: 'miembro' }); });
     });
   }
 
-  // Obtener calendario interno de miembros (Firestore o data/calendario_interno.json)
-  function obtenerCalendarioInterno() {
-    if (firebaseReady && db) {
-      return db.collection('calendario_interno').orderBy('fecha', 'asc').get().then(function(snap){
-        var list = [];
-        snap.forEach(function(doc){ list.push(Object.assign({ id: doc.id }, doc.data())); });
-        return list;
+  function login(email, password){
+    if (!listo && !iniciar()) return noDisponible();
+    return auth.signInWithEmailAndPassword(email, password);
+  }
+
+  function logout(){
+    if (!listo && !iniciar()) return Promise.resolve();
+    return auth.signOut();
+  }
+
+  // ──────────────────── Códigos de invitación ────────────────────
+
+  function normalizar(codigo){
+    return String(codigo || '').trim().toUpperCase();
+  }
+
+  function validarCodigo(codigo){
+    codigo = normalizar(codigo);
+    if (!codigo) return Promise.reject(new Error('Ingresa un código de invitación.'));
+    if (!listo && !iniciar()) return noDisponible();
+
+    return db.collection('codigos_invitacion').doc(codigo).get().then(function(doc){
+      if (!doc.exists) throw new Error('El código de invitación no existe o es inválido.');
+      if (doc.data().usado){
+        throw new Error('Este código ya fue utilizado. Pide uno nuevo a la coordinación.');
+      }
+      return doc.data();
+    });
+  }
+
+  // ───────────────────────── Registro ─────────────────────────
+
+  function registrar(codigo, nombre, comision, email, password){
+    codigo = normalizar(codigo);
+    if (!listo && !iniciar()) return noDisponible();
+
+    return validarCodigo(codigo)
+      .then(function(){ return auth.createUserWithEmailAndPassword(email, password); })
+      .then(function(cred){
+        var uid = cred.user.uid;
+        var refCodigo = db.collection('codigos_invitacion').doc(codigo);
+        var refMiembro = db.collection('miembros').doc(uid);
+
+        // Transacción: si dos personas usan el mismo código a la vez, solo una
+        // lo consigue. Comprobar y marcar por separado no daría esa garantía.
+        return db.runTransaction(function(tx){
+          return tx.get(refCodigo).then(function(doc){
+            if (!doc.exists) throw new Error('El código de invitación ya no existe.');
+            if (doc.data().usado) throw new Error('Ese código acaba de ser utilizado por otra persona.');
+
+            tx.set(refMiembro, {
+              nombre: nombre,
+              comision: comision || 'xuexi',
+              email: email,
+              rol: 'miembro',
+              estadoPago: 'pendiente',
+              codigoUsado: codigo,
+              fechaRegistro: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            tx.update(refCodigo, {
+              usado: true,
+              usadoPor: uid,
+              fechaUso: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          });
+        }).catch(function(err){
+          // La cuenta quedó creada pero el código no se pudo reclamar: la
+          // borramos para no dejar usuarios sin perfil dando vueltas.
+          return cred.user.delete()
+            .catch(function(){})
+            .then(function(){ throw err; });
+        });
       });
-    } else {
-      return fetch('data/calendario_interno.json', {cache:'no-cache'})
-        .then(function(r){ return r.ok ? r.json() : {eventos:[]}; })
-        .then(function(d){
-          var evs = d.eventos || [];
-          var extraLocal = JSON.parse(localStorage.getItem('xuexi_demo_calendar') || '[]');
-          return evs.concat(extraLocal);
+  }
+
+  // ─────────────────────── Datos del portal ───────────────────────
+
+  // Ojo: si el calendario se sirve desde data/calendario_interno.json, ese
+  // archivo es público. Para que sea realmente interno, debe vivir en Firestore.
+  function obtenerCalendarioInterno(){
+    if (listo && db){
+      return db.collection('calendario_interno').orderBy('fecha', 'asc').get()
+        .then(function(snap){
+          var lista = [];
+          snap.forEach(function(doc){
+            var e = doc.data(); e.id = doc.id; lista.push(e);
+          });
+          return lista;
         });
     }
+    return fetch('data/calendario_interno.json', {cache:'no-cache'})
+      .then(function(r){ return r.ok ? r.json() : {eventos:[]}; })
+      .then(function(d){ return d.eventos || []; })
+      .catch(function(){ return []; });
   }
 
-  // Obtener configuración de mensualidad desde data/membresias.json
-  function obtenerConfigMembresia() {
+  function obtenerConfigMembresia(){
     return fetch('data/membresias.json', {cache:'no-cache'})
-      .then(function(r){
-        return r.ok ? r.json() : {
-          linkMercadoPago: "https://mpago.li/xuexi-club-uc",
-          montoCuota: 3000,
-          textoMonto: "$3.000 CLP",
-          diaCobro: 5
-        };
-      });
+      .then(function(r){ return r.ok ? r.json() : {}; })
+      .catch(function(){ return {}; });
   }
 
-  // Registrar un pago confirmado
-  function registrarPagoCompletado(user, monto, ref) {
-    var pago = {
-      fecha: new Date().toISOString().split('T')[0],
-      monto: monto || 3000,
-      metodo: 'Mercado Pago / Getnet',
-      ref: ref || ('MP-' + Math.floor(Math.random()*899999 + 100000))
-    };
+  // El estado de pago NO se puede cambiar desde el navegador: lo confirma la
+  // coordinación. Si alguien pudiera marcarse "al día" solo, no significaría
+  // nada. Las reglas de Firestore también lo impiden del lado del servidor.
 
-    if (firebaseReady && db && user && user.uid) {
-      return db.collection('miembros').doc(user.uid).update({
-        estadoPago: 'al_dia',
-        ultimoPago: pago,
-        historialPagos: firebase.firestore.FieldValue.arrayUnion(pago)
-      });
-    } else {
-      return new Promise(function(resolve){
-        var historial = JSON.parse(localStorage.getItem('xuexi_payment_history') || '[]');
-        historial.unshift(pago);
-        localStorage.setItem('xuexi_payment_history', JSON.stringify(historial));
-        localStorage.setItem('xuexi_payment_status', 'al_dia');
-        resolve(pago);
-      });
-    }
-  }
+  // ──────────────────────── Enlace en el menú ────────────────────────
 
-  // Actualizar enlace en la barra de navegación dinámicamente
-  function actualizarNav() {
+  function actualizarNav(){
     var nav = document.getElementById('nav-menu');
     if (!nav) return;
-    
-    // Evitar duplicados
-    var itemCuenta = document.getElementById('nav-item-cuenta');
-    if (!itemCuenta) {
-      itemCuenta = document.createElement('li');
-      itemCuenta.id = 'nav-item-cuenta';
-      nav.appendChild(itemCuenta);
+
+    // Mientras no haya acceso de miembros configurado, no mostramos la entrada:
+    // sería un enlace a una puerta que no abre.
+    if (!listo && !iniciar()) return;
+
+    var item = document.getElementById('nav-item-cuenta');
+    if (!item){
+      item = document.createElement('li');
+      item.id = 'nav-item-cuenta';
+      nav.appendChild(item);
     }
 
     onAuth(function(user){
-      if (user) {
-        itemCuenta.innerHTML = '<a href="miembro.html" class="nav-member-link"><span class="zh">会员</span>Mi Portal</a>';
-      } else {
-        itemCuenta.innerHTML = '<a href="login.html"><span class="zh">登录</span>Acceso Miembros</a>';
-      }
+      item.innerHTML = user
+        ? '<a href="miembro.html" class="nav-member-link"><span class="zh">会员</span>Mi Portal</a>'
+        : '<a href="login.html"><span class="zh">登录</span>Acceso Miembros</a>';
     });
   }
 
-  // Exponer API global
   window.XuexiAuth = {
+    disponible: function(){ return listo || iniciar(); },
     onAuth: onAuth,
     login: login,
     logout: logout,
@@ -247,12 +205,11 @@
     registrar: registrar,
     obtenerCalendarioInterno: obtenerCalendarioInterno,
     obtenerConfigMembresia: obtenerConfigMembresia,
-    registrarPagoCompletado: registrarPagoCompletado,
     actualizarNav: actualizarNav
   };
 
   document.addEventListener('DOMContentLoaded', function(){
-    initFirebase();
+    iniciar();
     actualizarNav();
   });
 })();

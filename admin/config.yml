@@ -273,26 +273,6 @@ collections:
                 fields:
                   - { label: Cargo, name: cargo, widget: string }
                   - { label: Nombre, name: nombre, widget: string }
-
-  # ────────────────────── INVITACIONES Y CÓDIGOS ─────────────────────
-  - name: miembros_invitaciones
-    label: Invitaciones y Códigos
-    files:
-      - name: invitaciones
-        label: Códigos de Invitación
-        file: data/invitaciones.json
-        format: json
-        description: Códigos válidos para que nuevos miembros puedan registrarse en xuexiclub.cl/registro.html
-        fields:
-          - label: Códigos de Invitación
-            name: codigos
-            widget: list
-            label_singular: código
-            summary: '{{fields.codigo}} · Usado: {{fields.usado}}'
-            fields:
-              - { label: Código (Ej. XUEXI2026), name: codigo, widget: string }
-              - { label: Está Usado, name: usado, widget: boolean, default: false }
-              - { label: Usado por (email), name: usadoPor, widget: string, required: false }
               - { label: Nota / Destinatario, name: nota, widget: string, required: false }
 
   # ──────────────────────── CALENDARIO INTERNO ───────────────────────

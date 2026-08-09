@@ -1,11 +1,12 @@
 {
   "montoGeneral": 2000,
   "textoMontoGeneral": "$2.000 CLP (General / RM)",
-  "linkMercadoPagoGeneral": "https://mpago.li/xuexi-general-2k",
+  "linkMercadoPagoGeneral": "",
   "montoRegion": 1000,
   "textoMontoRegion": "$1.000 CLP (Regiones)",
-  "linkMercadoPagoRegion": "https://mpago.li/xuexi-region-1k",
+  "linkMercadoPagoRegion": "",
   "diaCobro": 5,
   "metodosAceptados": "Redcompra (Débito), Crédito, Mercado Pago, CuentaRUT",
-  "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet."
+  "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet.",
+  "_instrucciones": "Pega en linkMercadoPagoGeneral y linkMercadoPagoRegion los enlaces que genera Mercado Pago al crear el cobro. Mientras estén vacíos, el portal muestra los montos pero no ofrece un botón de pago que no funcionaría."
 }

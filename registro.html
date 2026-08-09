@@ -6,7 +6,7 @@
 <title>Registro con Invitación · Xuexi Club UC</title>
 <meta name="description" content="Registro de cuenta para miembros aceptados del Xuexi Club UC mediante código de invitación.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=5">
+<link rel="stylesheet" href="assets/site.css?v=8">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -67,7 +67,7 @@
       <form id="reg-form" class="auth-form">
         <div class="form-group">
           <label for="code">Código de Invitación <span style="color:var(--gold);">*</span></label>
-          <input type="text" id="code" required placeholder="Ej. XUEXI2026" style="letter-spacing:.08em;font-weight:600;text-transform:uppercase;">
+          <input type="text" id="code" required placeholder="El código que te dio la coordinación" style="letter-spacing:.08em;font-weight:600;text-transform:uppercase;">
           <small style="color:var(--cream-faint);display:block;margin-top:4px;font-size:.74rem;">Código personal e inimputable de <b>un solo uso</b> provisto por la coordinación.</small>
         </div>
 
@@ -139,9 +139,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="assets/nav.js?v=3"></script>
+<script src="assets/nav.js?v=8"></script>
 <script src="assets/firebase-config.js"></script>
-<script src="assets/auth.js"></script>
+<script src="assets/auth.js?v=8"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();

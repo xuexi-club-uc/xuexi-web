@@ -1,0 +1,81 @@
+rules_version = '2';
+
+/*
+ * Reglas de acceso a los datos de miembros · Xuexi Club UC
+ *
+ * Esto es lo único que protege de verdad la información. El sitio es estático:
+ * cualquier candado escrito en JavaScript se puede saltar abriendo el código
+ * fuente. Estas reglas, en cambio, las aplica el servidor de Firebase antes de
+ * dejar leer o escribir cualquier cosa.
+ *
+ * Para publicarlas:  firebase deploy --only firestore:rules
+ * O pegarlas en Firebase Console > Firestore Database > Reglas.
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function autenticado() {
+      return request.auth != null;
+    }
+
+    function esCoordinacion() {
+      return autenticado()
+        && exists(/databases/$(database)/documents/miembros/$(request.auth.uid))
+        && get(/databases/$(database)/documents/miembros/$(request.auth.uid)).data.rol == 'admin';
+    }
+
+    // ───────────────────────────── Miembros ─────────────────────────────
+    match /miembros/{uid} {
+      // Cada persona ve su propia ficha; la coordinación ve todas.
+      allow read: if autenticado() && (request.auth.uid == uid || esCoordinacion());
+
+      // Al registrarse, cada quien crea su ficha con rol de miembro y pago
+      // pendiente. Nadie puede nacer con rol 'admin' ni marcarse pagado.
+      allow create: if autenticado()
+        && request.auth.uid == uid
+        && request.resource.data.rol == 'miembro'
+        && request.resource.data.estadoPago == 'pendiente'
+        && request.resource.data.email == request.auth.token.email;
+
+      // Puede corregir sus datos, pero NO su rol ni su estado de pago:
+      // eso lo confirma la coordinación.
+      allow update: if esCoordinacion()
+        || (autenticado() && request.auth.uid == uid
+            && request.resource.data.rol == resource.data.rol
+            && request.resource.data.estadoPago == resource.data.estadoPago);
+
+      allow delete: if esCoordinacion();
+    }
+
+    // ─────────────────────── Códigos de invitación ───────────────────────
+    match /codigos_invitacion/{codigo} {
+      // Se puede consultar un código concreto (para validarlo al registrarse),
+      // pero no listar la colección completa: nadie puede sacar el listado.
+      allow get: if true;
+      allow list: if esCoordinacion();
+
+      // Solo la coordinación crea o borra códigos.
+      allow create, delete: if esCoordinacion();
+
+      // Un código se puede marcar usado una sola vez, por quien lo está usando,
+      // y sin poder "desusarlo" ni cambiar el código en sí.
+      allow update: if esCoordinacion()
+        || (autenticado()
+            && resource.data.usado == false
+            && request.resource.data.usado == true
+            && request.resource.data.usadoPor == request.auth.uid);
+    }
+
+    // ────────────────────────── Calendario interno ──────────────────────────
+    match /calendario_interno/{doc} {
+      allow read: if autenticado();
+      allow write: if esCoordinacion();
+    }
+
+    // Todo lo que no esté nombrado arriba queda cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
