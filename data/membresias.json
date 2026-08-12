@@ -1,12 +1,12 @@
 {
   "montoGeneral": 2000,
   "textoMontoGeneral": "$2.000 CLP (General / RM)",
-  "linkMercadoPagoGeneral": "",
-  "montoRegion": 1000,
-  "textoMontoRegion": "$1.000 CLP (Regiones)",
-  "linkMercadoPagoRegion": "",
+  "linkMercadoPagoGeneral": "https://app.soymach.com/rF2V/c4yxolop",
+  "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet.",
+  "_instrucciones": "Pega en linkMercadoPagoGeneral y linkMercadoPagoRegion los enlaces que genera Mercado Pago al crear el cobro. Mientras estén vacíos, el portal muestra los montos pero no ofrece un botón de pago que no funcionaría.",
+  "linkMercadoPagoRegion": "https://app.soymach.com/rF2V/t4qdjwf0",
   "diaCobro": 5,
   "metodosAceptados": "Redcompra (Débito), Crédito, Mercado Pago, CuentaRUT",
-  "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet.",
-  "_instrucciones": "Pega en linkMercadoPagoGeneral y linkMercadoPagoRegion los enlaces que genera Mercado Pago al crear el cobro. Mientras estén vacíos, el portal muestra los montos pero no ofrece un botón de pago que no funcionaría."
+  "textoMontoRegion": "$1.000 CLP (Regiones)",
+  "montoRegion": 1000
 }
