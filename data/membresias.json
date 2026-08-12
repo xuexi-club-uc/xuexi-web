@@ -1,7 +1,7 @@
 {
   "montoGeneral": 2000,
   "textoMontoGeneral": "$2.000 CLP (General / RM)",
-  "linkMercadoPagoGeneral": "https://app.soymach.com/rF2V/c4yxolop",
+  "linkMercadoPagoGeneral": "https://mpago.la/1FJxacC",
   "instrucciones": "Selecciona la cuota correspondiente a tu ubicación para abrir la pasarela segura de Mercado Pago / Getnet.",
   "_instrucciones": "Pega en linkMercadoPagoGeneral y linkMercadoPagoRegion los enlaces que genera Mercado Pago al crear el cobro. Mientras estén vacíos, el portal muestra los montos pero no ofrece un botón de pago que no funcionaría.",
   "linkMercadoPagoRegion": "https://app.soymach.com/rF2V/t4qdjwf0",
