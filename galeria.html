@@ -6,7 +6,7 @@
 <title>Galería · Xuexi Club UC</title>
 <meta name="description" content="Galería fotográfica del Xuexi Club UC: talleres, charlas, festivales y momentos de nuestra comunidad.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=11">
+<link rel="stylesheet" href="assets/site.css?v=12">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -139,9 +139,9 @@
   </div>
 </footer>
 
-<script src="assets/nav.js?v=11"></script>
-<script src="assets/auth.js?v=11"></script>
-<script src="assets/datos.js?v=11"></script>
+<script src="assets/nav.js?v=12"></script>
+<script src="assets/auth.js?v=12"></script>
+<script src="assets/datos.js?v=12"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -160,6 +160,18 @@
     if (!v) return '';
     if (/^(https?:)?\/\//.test(v)) return v;
     return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
+  // El panel puede guardar cada foto como texto ("foto.jpg") o, según el
+  // widget, como objeto ({foto:"assets/foto.jpg"}). Aceptamos las dos formas
+  // para que no dependa de cómo se creó la entrada.
+  function comoArchivo(f){
+    if (typeof f === 'string') return f;
+    if (f && typeof f === 'object'){
+      var k = Object.keys(f)[0];
+      return k ? String(f[k]) : '';
+    }
+    return '';
   }
 
   function fecha(iso){
@@ -277,7 +289,7 @@
     evs.forEach(function(ev){
       var fotos = [];
       if (ev.galeria && Array.isArray(ev.galeria) && ev.galeria.length){
-        fotos = ev.galeria;
+        fotos = ev.galeria.map(comoArchivo).filter(Boolean);
       } else if (ev.imagen && ev.imagen.trim()){
         fotos = [ev.imagen];
       }

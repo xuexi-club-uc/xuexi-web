@@ -90,7 +90,18 @@ collections:
               - { label: Ciclo, name: ciclo, widget: string, required: false }
               - { label: Cupos, name: cupos, widget: number, required: false, default: 0, value_type: int, min: 0 }
               - { label: Carácter chino, name: hanzi, widget: string, required: false, hint: 'Se muestra si no hay imagen. Ej. 书' }
-              - { label: Imagen, name: imagen, widget: image, required: false, allow_multiple: false }
+              - { label: Imagen de portada, name: imagen, widget: image, required: false, allow_multiple: false,
+                  hint: 'La que se ve en la agenda y encabeza la subpágina del evento.' }
+              - label: Galería de fotos
+                name: galeria
+                widget: list
+                required: false
+                label_singular: foto
+                allow_add: true
+                hint: >-
+                  Fotos del evento. Aparecen en la subpágina del evento y en la
+                  página Galería. Arrastra para cambiar el orden.
+                field: { label: Foto, name: foto, widget: image }
 
   # ────────────────────────── REPORTAJES ─────────────────────────
   - name: investigacion

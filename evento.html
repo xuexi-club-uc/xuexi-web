@@ -6,7 +6,7 @@
 <title>Detalle del Evento · Xuexi Club UC</title>
 <meta name="description" content="Detalle del evento y galería de fotos del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=11">
+<link rel="stylesheet" href="assets/site.css?v=12">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -101,9 +101,9 @@
   </div>
 </footer>
 
-<script src="assets/nav.js?v=11"></script>
-<script src="assets/auth.js?v=11"></script>
-<script src="assets/datos.js?v=11"></script>
+<script src="assets/nav.js?v=12"></script>
+<script src="assets/auth.js?v=12"></script>
+<script src="assets/datos.js?v=12"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -139,6 +139,18 @@
     if (!v) return '';
     if (/^(https?:)?\/\//.test(v) || /^data:image/.test(v)) return v;
     return v.indexOf('/') !== -1 ? v.replace(/^\//, '') : carpeta + v;
+  }
+
+  // El panel puede guardar cada foto como texto ("foto.jpg") o, según el
+  // widget, como objeto ({foto:"assets/foto.jpg"}). Aceptamos las dos formas
+  // para que no dependa de cómo se creó la entrada.
+  function comoArchivo(f){
+    if (typeof f === 'string') return f;
+    if (f && typeof f === 'object'){
+      var k = Object.keys(f)[0];
+      return k ? String(f[k]) : '';
+    }
+    return '';
   }
 
   function fecha(iso){
@@ -219,19 +231,22 @@
     var com = COMISIONES[ev.comision];
     var sello = com ? '<span class="ev-com"><span class="zh">' + com.zh + '</span> ' + com.nom + '</span>' : '';
 
-    // Comprobar si el usuario tiene sesión o modo administrador (?admin=1 o localStorage)
-    var esAdmin = params.get('admin') === '1' || params.get('modo') === 'admin' || localStorage.getItem('xuexi_admin_session') === 'true';
-
-    // Preparar lista de fotos reales de la galería (1 foto de ejemplo)
+    // Todas las fotos de la galería. Si no hay ninguna, usamos la portada para
+    // que la subpágina no quede sin imagen.
     var fotosIniciales = [];
     if (ev.galeria && Array.isArray(ev.galeria) && ev.galeria.length > 0){
-      fotosIniciales = ev.galeria.slice(0, 1); // 1 foto real de ejemplo
-    } else if (ev.imagen){
+      fotosIniciales = ev.galeria.map(comoArchivo).filter(Boolean);
+    }
+    if (!fotosIniciales.length && ev.imagen){
       fotosIniciales = [ev.imagen];
     }
 
     galeriaFotos = fotosIniciales.map(function(f, idx){
-      return { url: ruta(f, 'assets/'), caption: ev.titulo + ' — Foto de ejemplo (' + (idx + 1) + ')', nombreArchivo: f };
+      return {
+        url: ruta(f, 'assets/'),
+        caption: ev.titulo + ' · Foto ' + (idx + 1) + ' de ' + fotosIniciales.length,
+        nombreArchivo: f
+      };
     });
 
     var mediaPortada = ev.imagen
@@ -294,21 +309,10 @@
         '<!-- TIRA DE MINIATURAS EN SCROLL HORIZONTAL -->' +
         '<div class="ev-thumbs-track" id="gallery-thumbs-track"></div>' +
 
-        '<!-- AVISO PUBLICO O UPLOADER RESTRINGIDO DE ADMIN -->' +
-        (esAdmin
-          ? '<div class="uploader-box" id="drop-zone">' +
-              '<div class="uploader-icon">🔒 📸</div>' +
-              '<h4>Panel de Administración · Subir fotografías del evento</h4>' +
-              '<p>Arrastra imágenes o presiona el botón para cargar fotos oficializadas a la galería de este evento.</p>' +
-              '<button class="btn btn-gold" type="button" id="btn-select-files"><span class="zh">上传</span> Seleccionar imágenes</button>' +
-              '<input type="file" id="input-files" class="uploader-input" accept="image/*" multiple>' +
-              '<div class="json-preview" id="json-output" style="display:none;"></div>' +
-            '</div>'
-          : '<div class="admin-notice-bar">' +
-              '<span>🔒 <b>Acceso restringido:</b> La carga de fotografías oficiales está reservada al equipo de la Comisión Xinxi.</span>' +
-              '<a href="admin/">Entrar al Panel Admin →</a>' +
-            '</div>'
-        ) +
+        // Las fotos se cargan desde el panel de edición, que sí verifica
+        // permisos contra GitHub. Antes había aquí un "modo administrador"
+        // que se activaba con ?admin=1 en la URL: cualquiera podía ponerlo.
+        '<p class="gal-nota">Las fotografías las publica el equipo desde el <a href="admin/">panel de edición</a>.</p>' +
       '</div>';
 
     contenedor.innerHTML = html;
@@ -349,7 +353,8 @@
     stageBtnZoom.addEventListener('click', function(){ abrirLightbox(currentStageIdx); });
 
     function renderGaleria(){
-      counterEl.textContent = (galeriaFotos.length + 2) + ' FOTOGRAFÍAS';
+      counterEl.textContent = galeriaFotos.length +
+        (galeriaFotos.length === 1 ? ' FOTOGRAFÍA' : ' FOTOGRAFÍAS');
 
       // 1. Miniaturas reales existentes
       var htmlFotos = galeriaFotos.map(function(item, idx){
@@ -358,16 +363,7 @@
         '</div>';
       }).join('');
 
-      // 2. Miniaturas pendientes
-      var htmlPendientes = '' +
-        '<div class="ev-thumb-item pending" style="border:1px dashed var(--line);display:grid;place-items:center;opacity:.5;" title="Foto por subir">' +
-          '<span style="font-size:1.1rem;">📷</span>' +
-        '</div>' +
-        '<div class="ev-thumb-item pending" style="border:1px dashed var(--line);display:grid;place-items:center;opacity:.5;" title="Foto por subir">' +
-          '<span style="font-size:1.1rem;">📷</span>' +
-        '</div>';
-
-      thumbsTrack.innerHTML = htmlFotos + htmlPendientes;
+      thumbsTrack.innerHTML = htmlFotos;
       setStagePhoto(0);
 
       [].forEach.call(thumbsTrack.querySelectorAll('.ev-thumb-item:not(.pending)'), function(thumb){
@@ -379,53 +375,6 @@
     }
 
     renderGaleria();
-
-    // Si está en modo administrador, activar uploader
-    if (esAdmin){
-      var dropZone = document.getElementById('drop-zone');
-      var inputFiles = document.getElementById('input-files');
-      var btnSelect = document.getElementById('btn-select-files');
-      var jsonOutputEl = document.getElementById('json-output');
-
-      btnSelect.addEventListener('click', function(){ inputFiles.click(); });
-
-      function procesarArchivos(files){
-        if (!files || !files.length) return;
-
-        [].forEach.call(files, function(file){
-          if (!file.type.startsWith('image/')) return;
-          var reader = new FileReader();
-          reader.onload = function(evt){
-            var dataUrl = evt.target.result;
-            galeriaFotos.push({
-              url: dataUrl,
-              caption: ev.titulo + ' — Foto de administración (' + file.name + ')',
-              nombreArchivo: file.name
-            });
-            renderGaleria();
-
-            var listaArchivos = galeriaFotos.map(function(f){ return f.nombreArchivo || 'assets/foto.jpg'; });
-            jsonOutputEl.style.display = 'block';
-            jsonOutputEl.innerHTML = '<strong>Copiar para data/eventos.json:</strong><br>' +
-              '<code>"galeria": ' + JSON.stringify(listaArchivos, null, 2) + '</code>';
-          };
-          reader.readAsDataURL(file);
-        });
-      }
-
-      inputFiles.addEventListener('change', function(e){ procesarArchivos(e.target.files); });
-
-      dropZone.addEventListener('dragover', function(e){
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-      });
-      dropZone.addEventListener('dragleave', function(){ dropZone.classList.remove('dragover'); });
-      dropZone.addEventListener('drop', function(e){
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
-        procesarArchivos(e.dataTransfer.files);
-      });
-    }
 
   }).catch(function(err){
     console.error(err);
