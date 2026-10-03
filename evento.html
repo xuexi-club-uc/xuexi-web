@@ -6,7 +6,7 @@
 <title>Detalle del Evento · Xuexi Club UC</title>
 <meta name="description" content="Detalle del evento y galería de fotos del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=20">
+<link rel="stylesheet" href="assets/site.css?v=21">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -106,9 +106,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script src="assets/firebase-config.js"></script>
-<script src="assets/nav.js?v=20"></script>
-<script src="assets/auth.js?v=20"></script>
-<script src="assets/datos.js?v=20"></script>
+<script src="assets/nav.js?v=21"></script>
+<script src="assets/auth.js?v=21"></script>
+<script src="assets/planilla.js?v=21"></script>
+<script src="assets/datos.js?v=21"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -248,8 +249,9 @@
         '</div>' +
         '<h1 class="ev-hero-title">' + esc(ev.titulo) + '<span class="zh">' + esc(ev.hanzi || '') + '</span></h1>' +
         '<div class="ev-meta-row">' +
-          '<div class="ev-meta-item">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()] + ' ' + d.getFullYear() + ' · ' + esc(ev.hora) + ' hrs.</span></div>' +
-          '<div class="ev-meta-item">' + PIN + '<span>' + esc(ev.lugar) + '</span></div>' +
+          '<div class="ev-meta-item">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()] + ' ' + d.getFullYear() + (ev.hora ? ' · ' + esc(ev.hora) + ' hrs.' : '') + '</span></div>' +
+          // Las actividades de la planilla de Wailian pueden no traer lugar.
+          (ev.lugar ? '<div class="ev-meta-item">' + PIN + '<span>' + esc(ev.lugar) + '</span></div>' : '') +
         '</div>' +
         '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px;">' +
           sello +

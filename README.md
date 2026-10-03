@@ -12,6 +12,13 @@ Universidad Católica de Chile.
 
 ## Cómo agregar o editar una actividad
 
+### Actividades de Wailian: desde su planilla
+
+Las actividades que Wailian planifica en su planilla de Google aparecen solas:
+las `Confirmado` o `Realizado` en la agenda pública, y todas en el calendario
+interno de miembros. No hay que copiarlas aquí. Cómo conectarla y cómo escribir
+las fechas: **[`data/LEEME-planilla.md`](data/LEEME-planilla.md)**.
+
 ### Opción recomendada: el panel
 
 Abre **[xuexiclub.cl/admin.html](https://xuexiclub.cl/admin.html)** y usa el formulario.
@@ -168,6 +175,7 @@ librerías. Lo que ves en el repositorio es exactamente lo que se publica.
 ├── admin.html          Panel para cargar actividades
 ├── data/
 │   ├── eventos.json    ← La agenda. Esto es lo que se edita seguido.
+│   ├── LEEME-planilla.md ← Cómo se conecta la planilla de Wailian.
 │   ├── equipo.json     ← El equipo y la coordinación.
 │   └── reportajes.json ← Los reportajes publicados.
 ├── assets/             Imágenes: logo, sello y fotos de actividades

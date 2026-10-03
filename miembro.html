@@ -6,7 +6,7 @@
 <title>Portal de Miembros · Xuexi Club UC</title>
 <meta name="description" content="Calendario interno de actividades y recursos para integrantes del Xuexi Club UC.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=20">
+<link rel="stylesheet" href="assets/site.css?v=21">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -164,9 +164,11 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
 <script src="assets/firebase-config.js"></script>
-<script src="assets/nav.js?v=20"></script>
-<script src="assets/auth.js?v=20"></script>
-<script src="assets/coordinacion.js?v=20"></script>
+<script src="assets/nav.js?v=21"></script>
+<script src="assets/auth.js?v=21"></script>
+<script src="assets/planilla.js?v=21"></script>
+<script src="assets/datos.js?v=21"></script>
+<script src="assets/coordinacion.js?v=21"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -197,19 +199,39 @@
   function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
 
+  // "9:30" → "093000"; '' si no es una hora.
+  function horaCompacta(h){
+    var m = String(h || '').trim().match(/^(\d{1,2}):(\d{2})$/);
+    return m ? ('0' + m[1]).slice(-2) + m[2] + '00' : '';
+  }
+
+  function diaSiguiente(iso){
+    var p = iso.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2] + 1);
+    return d.getFullYear() + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+  }
+
+  // La hora va en hora de Santiago (ctz). Antes se mandaba como UTC ("18:00Z")
+  // y la actividad quedaba agendada 3 o 4 horas antes de lo real.
   function crearUrlGCal(ev){
     var p = (ev.fecha || '').split('-');
     if (p.length < 3) return '#';
-    var dateStr = p[0] + p[1] + p[2];
-    var startTime = '180000Z'; // default 18:00 UTC
-    if (ev.hora) {
-      var h = ev.hora.replace(':', '').trim();
-      if (h.length === 4) startTime = h + '00Z';
+    var dia = p[0] + p[1] + p[2];
+    var ini = horaCompacta(ev.hora);
+    var dates;
+    if (ini){
+      // Sin hora de término se reserva una hora, sin pasar de medianoche.
+      var h = +ini.slice(0, 2);
+      var fin = horaCompacta(ev.horaFin) ||
+        (h >= 23 ? '235900' : ('0' + (h + 1)).slice(-2) + ini.slice(2));
+      dates = dia + 'T' + ini + '/' + dia + 'T' + fin;
+    } else {
+      // Sin hora: día completo, o todo el tramo si dura varios días. Google
+      // toma el día final como exclusivo, por eso es el siguiente.
+      dates = dia + '/' + diaSiguiente(ev.fechaFin || ev.fecha);
     }
-    var dates = dateStr + 'T' + startTime + '/' + dateStr + 'T' + startTime;
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
       '&text=' + encodeURIComponent(ev.titulo) +
-      '&dates=' + dates +
+      '&dates=' + dates + '&ctz=America/Santiago' +
       '&details=' + encodeURIComponent((ev.detalle||'') + ' (Xuexi Club UC)') +
       '&location=' + encodeURIComponent(ev.lugar||'UC CSJ');
   }
@@ -282,35 +304,48 @@
       return;
     }
 
+    // "4 Septiembre", o "21 al 28 Octubre" si ocupa varios días.
+    function textoFecha(ev){
+      var p = ev.fecha.split('-'), ini = +p[2] + ' ' + MESES[+p[1] - 1];
+      if (!ev.fechaFin) return ini;
+      var q = ev.fechaFin.split('-');
+      return (p[1] === q[1] ? +p[2] : ini) + ' al ' + +q[2] + ' ' + MESES[+q[1] - 1];
+    }
+
     var html = '';
     filtrados.forEach(function(ev){
-      var p = (ev.fecha||'').split('-');
-      var dia = p[2] || '';
-      var mesIdx = parseInt(p[1], 10) - 1;
-      var mesTxt = MESES[mesIdx] || '';
       var tieneFecha = !!ev.fecha;
       var porConfirmar = ev.confirmada === false;
+      var dePlanilla = ev.origen === 'planilla';
 
       // Sin fecha real mostramos lo que dice la planilla ("Octubre", "Sin fecha
       // definida"). Inventar un día para rellenar sería peor: se leería como
       // una fecha confirmada.
       var pastilla = tieneFecha
-        ? '<span class="date-pill">📅 ' + esc(dia) + ' ' + esc(mesTxt) + '</span>'
+        ? '<span class="date-pill">📅 ' + esc(textoFecha(ev)) + '</span>'
         : '<span class="date-pill date-pill-vaga">🗓 ' +
             esc(ev.fechaTexto || 'Fecha por definir') + '</span>';
 
+      // Las de la planilla no son documentos de Firestore: sin data-id no
+      // reciben el botón Eliminar. Se corrigen en la planilla.
       html += '<div class="timeline-item' + (porConfirmar ? ' timeline-tentativo' : '') + '">' +
         '<div class="timeline-node"></div>' +
-        '<div class="timeline-card" data-id="' + esc(ev.id || '') + '" data-titulo="' + esc(ev.titulo) + '">' +
+        '<div class="timeline-card"' + (dePlanilla ? '' : ' data-id="' + esc(ev.id || '') + '"') +
+          ' data-titulo="' + esc(ev.titulo) + '">' +
           '<div class="timeline-header">' +
             '<div class="timeline-datespan">' +
               pastilla +
-              (ev.hora ? '<span class="time-pill">🕒 ' + esc(ev.hora) + ' hrs</span>' : '') +
+              (ev.hora ? '<span class="time-pill">🕒 ' + esc(ev.hora) +
+                (ev.horaFin ? '–' + esc(ev.horaFin) : '') + ' hrs</span>' : '') +
               (porConfirmar ? '<span class="pill-tentativo">Por confirmar</span>' : '') +
             '</div>' +
             '<span class="timeline-hanzi zh">' + getHanzi(ev.tipo) + '</span>' +
           '</div>' +
           '<h3 class="timeline-title">' + esc(ev.titulo) + '</h3>' +
+          // Mientras no esté confirmada, lo que escribió Wailian tal cual
+          // ("21/10 CONFIRMAR 5 pm o 13:30") dice más que la fecha leída.
+          (dePlanilla && porConfirmar && tieneFecha && ev.fechaConComentario
+            ? '<p class="timeline-quien">En la planilla: «' + esc(ev.fechaTexto) + '»</p>' : '') +
           (ev.lugar ? '<p class="timeline-location">📍 ' + esc(ev.lugar) + '</p>' : '') +
           (ev.detalle ? '<p class="timeline-desc">' + esc(ev.detalle) + '</p>' : '') +
           (ev.responsable || ev.colaborador
@@ -322,6 +357,7 @@
             : '') +
           '<div class="timeline-footer">' +
             '<span class="int-tag">' + esc(getTipoLabel(ev.tipo)) + '</span>' +
+            (dePlanilla ? '<span class="int-tag" title="Se edita en la planilla de Wailian">Planilla Wailian</span>' : '') +
             // Sin fecha no se puede agendar: el botón llevaría a un evento vacío.
             (tieneFecha
               ? '<a href="' + crearUrlGCal(ev) + '" target="_blank" rel="noopener" class="cal-add-btn">+ Añadir a Google Calendar</a>'
@@ -531,8 +567,27 @@
 
     // Recargable: la coordinación la llama tras agregar o eliminar actividades.
     window.recargarCalendarioInterno = function(){
-    window.XuexiAuth.obtenerCalendarioInterno()
-      .then(function(list){
+    // Lo que agrega la coordinación vive en Firestore; las actividades de
+    // Wailian salen de su planilla (assets/planilla.js). Si la planilla no
+    // está configurada o no responde, queda solo Firestore, como antes.
+    var P = window.XuexiPlanilla;
+    var planilla = P && P.configurada()
+      ? P.actividadesInternas().catch(function(err){
+          console.warn('Calendario interno sin la planilla de Wailian:', err.message);
+          return null;
+        })
+      : Promise.resolve(null);
+
+    Promise.all([window.XuexiAuth.obtenerCalendarioInterno(), planilla])
+      .then(function(r){
+        var list = r[0], deLaPlanilla = r[1];
+        // Con la planilla conectada sobra la copia del Organizador Mensual que
+        // se importó a Firestore: es el mismo plan de Wailian, pero congelado y
+        // con fechas que ya cambiaron. Lo agregado a mano desde el panel se queda.
+        if (deLaPlanilla){
+          list = list.filter(function(e){ return e.origen !== 'organizador-mensual-2026'; })
+                     .concat(deLaPlanilla);
+        }
         // Por fecha ascendente. Las que no tienen fecha van al final, no al
         // principio: una cadena vacía ordenaría antes que cualquier fecha.
         todosLosEventos = list.sort(function(a,b){

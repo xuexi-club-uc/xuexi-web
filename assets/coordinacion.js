@@ -356,6 +356,27 @@
     });
   }
 
+  // Para que la coordinación sepa de dónde salen las actividades de Wailian
+  // sin abrir la consola del navegador.
+  function estadoPlanilla(){
+    var caja = document.getElementById('coord-planilla-estado');
+    var P = window.XuexiPlanilla;
+    if (!caja || !P) return;
+    if (!P.configurada()){
+      caja.textContent = 'Planilla de Wailian: sin conectar. Las actividades salen solo de este ' +
+        'panel (cómo conectarla: data/LEEME-planilla.md).';
+      return;
+    }
+    Promise.all([P.leer(), P.eventosPublicos()]).then(function(r){
+      caja.textContent = '✓ Planilla de Wailian conectada: ' + r[0].length + ' actividades en el ' +
+        'calendario de arriba; ' + r[1].length + ' Confirmadas o Realizadas con día van también ' +
+        'a la agenda pública. Se corrigen en la planilla, no aquí.';
+    }).catch(function(e){
+      caja.textContent = '⚠ La planilla de Wailian no respondió (' + e.message + '). Por ahora se ' +
+        'muestran solo las actividades de este panel.';
+    });
+  }
+
   // ─────────────────────────── Miembros ───────────────────────────
 
   // Guardamos el último listado leído para poder exportarlo y para marcar
@@ -532,6 +553,7 @@
       '<div class="coord-bloque">' +
         '<h3>Calendario interno</h3>' +
         '<p class="coord-desc">Solo lo ven miembros con sesión iniciada.</p>' +
+        '<p class="coord-sub" id="coord-planilla-estado"></p>' +
         '<div class="coord-grid">' +
           '<input type="text" id="coord-cal-titulo" placeholder="Nombre de la actividad">' +
           '<input type="date" id="coord-cal-fecha">' +
@@ -552,7 +574,9 @@
             'con el Organizador Mensual (' + PLAN_ORGANIZADOR.length + ')</button>' +
           '<p class="coord-sub">Borra TODO el calendario interno y lo deja solo con el ' +
             'organizador de agosto a diciembre de 2026, incluidas las actividades agregadas ' +
-            'a mano. Ninguna queda confirmada, así que no pasan a la agenda pública.</p>' +
+            'a mano. Ninguna queda confirmada, así que no pasan a la agenda pública. ' +
+            'Mientras la planilla de Wailian esté conectada, el organizador no se muestra: ' +
+            'manda la planilla.</p>' +
           '<div id="coord-import-resultado"></div>' +
         '</div>' +
       '</div>' +
@@ -601,12 +625,13 @@
     document.getElementById('coord-agregar-evento').addEventListener('click', agregarEvento);
     document.getElementById('coord-importar').addEventListener('click', importarPlan);
 
-    // Cargar eventos para el selector de fotos
+    // Cargar eventos para el selector de fotos. Con cargarEventos entran
+    // también las actividades de la planilla que ya están en la agenda pública.
     var selEventos = document.getElementById('coord-foto-evento-select');
     var btnIrEvento = document.getElementById('coord-btn-ir-evento');
 
-    fetch('data/eventos.json', {cache:'no-cache'})
-      .then(function(r){ return r.ok ? r.json() : {eventos:[]}; })
+    (window.cargarEventos ? window.cargarEventos() : fetch('data/eventos.json', {cache:'no-cache'})
+      .then(function(r){ return r.ok ? r.json() : {eventos:[]}; }))
       .then(function(d){
         var evs = d.eventos || [];
         selEventos.innerHTML = '<option value="">Selecciona una actividad…</option>' +
@@ -631,6 +656,7 @@
 
     listarCodigos();
     listarCalendario();
+    estadoPlanilla();
     listarMiembros();
   }
 

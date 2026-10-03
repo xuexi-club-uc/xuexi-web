@@ -6,7 +6,7 @@
 <title>Eventos · Xuexi Club UC</title>
 <meta name="description" content="Agenda de talleres, charlas y actividades del Xuexi Club UC, el club de Lengua, Cultura y Estudios sobre China de la Pontificia Universidad Católica de Chile.">
 <link rel="icon" href="assets/logo.png">
-<link rel="stylesheet" href="assets/site.css?v=20">
+<link rel="stylesheet" href="assets/site.css?v=21">
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
@@ -114,9 +114,10 @@
   </div>
 </footer>
 
-<script src="assets/nav.js?v=20"></script>
-<script src="assets/auth.js?v=20"></script>
-<script src="assets/datos.js?v=20"></script>
+<script src="assets/nav.js?v=21"></script>
+<script src="assets/auth.js?v=21"></script>
+<script src="assets/planilla.js?v=21"></script>
+<script src="assets/datos.js?v=21"></script>
 <script>
 (function(){
   document.getElementById('anio').textContent = new Date().getFullYear();
@@ -203,9 +204,10 @@
         '<h3><a href="' + urlSubpagina + '" class="ev-titulo-link">' + esc(e.titulo) + '</a></h3>' +
         (e.detalle ? '<p class="ev-det">' + esc(e.detalle) + '</p>' : '') +
         '<div class="meta">' +
-          '<span class="r">' + PIN + '<span>' + esc(e.lugar) + '</span></span>' +
+          // Las actividades de la planilla de Wailian pueden no traer lugar ni hora.
+          (e.lugar ? '<span class="r">' + PIN + '<span>' + esc(e.lugar) + '</span></span>' : '') +
           '<span class="r">' + CAL + '<span>' + DIAS[d.getDay()] + ' ' + d.getDate() + ' ' +
-             MESES[d.getMonth()] + ' · ' + esc(e.hora) + '</span></span>' +
+             MESES[d.getMonth()] + (e.hora ? ' · ' + esc(e.hora) : '') + '</span></span>' +
           '<span class="ev-pie">' + sello + badgeGaleria + cupos + '</span>' +
           '<div class="ev-accion">' +
             '<a href="' + urlSubpagina + '" class="btn-link-ev">Ver detalle y galería →</a>' +
@@ -255,9 +257,9 @@
     if (!prox) return;
     var d = fecha(prox.fecha);
     document.getElementById('destacado-titulo').textContent = 'Próximo: ' + prox.titulo;
-    var meta = DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()] +
-               ' · ' + prox.lugar + ' · ' + prox.hora;
-    if (prox.cupos > 0) meta += ' · ' + prox.cupos + ' cupos';
+    var meta = [DIAS[d.getDay()] + ' ' + d.getDate() + ' de ' + MESES[d.getMonth()],
+                prox.lugar, prox.hora, prox.cupos > 0 ? prox.cupos + ' cupos' : '']
+      .filter(Boolean).join(' · ');
     document.getElementById('destacado-meta').textContent = meta;
     document.getElementById('destacado').hidden = false;
   }
