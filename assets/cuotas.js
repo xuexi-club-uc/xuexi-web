@@ -185,7 +185,9 @@
 
   function origen(p){
     if (esDonacion(p)) return 'Donación';
-    if (p.kind === 'raffle') return 'Rifa';
+    // Los números que pidió la compra, no necesariamente los que tiene hoy:
+    // coordinación pudo moverlos. Los de hoy están en el panel de la rifa.
+    if (p.kind === 'raffle') return 'Rifa' + (p.numbers ? ' · ' + esc(String(p.numbers).split(',').join(', ')) : '');
     return p.recurring ? 'Suscripción' : 'Pago único';
   }
 

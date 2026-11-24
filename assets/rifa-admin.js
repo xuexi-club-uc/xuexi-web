@@ -4,16 +4,16 @@
  * Esconderlo es solo para no estorbar: lo que protege es el worker, que
  * responde 403 a /rifa/admin y /rifa/admin/log sin ese rol.
  *
- * Muestra las compras con sus números, permite corregirlos (mover, liberar,
- * venta manual, asignar) y sigue el log del worker pidiendo solo lo nuevo
- * cada pocos segundos. Cada cambio queda en ese log con el correo de quien
+ * Muestra las compras con sus números y sus pagos, los problemas que el
+ * worker encontró al revisar Mercado Pago, y el log. Permite corregir
+ * (mover, liberar, venta manual, asignar). Nada se actualiza solo: el botón
+ * Recargar lo relee todo. Cada cambio queda en el log con el correo de quien
  * lo hizo; esta página no guarda nada.
  */
 (function(){
   'use strict';
 
   var WORKER = 'https://mp.xuexiclub.workers.dev';
-  var LOG_MS = 10000;
 
   var ESTADOS = {
     reservado: ['Reservada', 'cuota-aviso'],
@@ -97,10 +97,11 @@
     var logBox = document.getElementById('rifa-admin-log');
     var grilla = document.getElementById('rifa-admin-grid');
     var detalle = document.getElementById('rifa-admin-detalle');
+    var problemasBox = document.getElementById('rifa-admin-problemas');
+    var actualizado = document.getElementById('rifa-admin-actualizado');
 
     var datos = null;   // la última respuesta de /rifa/admin
     var ultimo = null;  // el id del último registro del log que tenemos
-    var timer = null;
     var activo = false;
 
     function mensaje(msg, error){
@@ -151,8 +152,27 @@
       }
     }
 
+    var PAGOS = { approved: 'aprobado', rejected: 'rechazado', devuelto: 'devuelto', cancelled: 'cancelado',
+      pending: 'pendiente', in_process: 'en proceso', authorized: 'autorizado' };
+
+    function dibujarProblemas(){
+      var r = datos.revision || {};
+      var aviso = r.error
+        ? '<p class="coord-aviso coord-error">No se pudo revisar Mercado Pago: ' + esc(r.error) +
+          '. Lo de abajo puede estar incompleto.</p>'
+        : '';
+      problemasBox.innerHTML = aviso + (datos.problemas.length
+        ? '<ul class="rifa-admin-problemas">' + datos.problemas.map(function(p){
+            return '<li><b>' + esc(p.texto) + '</b>' + (p.nombre ? ' · ' + esc(p.nombre) : '') +
+              (p.pagos ? ' <span class="coord-sub">pago ' + esc(p.pagos.join(', ')) + '</span>' : '') +
+              ' <span class="coord-sub">' + esc(p.compra) + '</span></li>';
+          }).join('') + '</ul>'
+        : '<p class="coord-ok">Sin problemas detectados.</p>');
+    }
+
     function dibujarCompras(){
       dibujarGrilla();
+      dibujarProblemas();
       var f = filtroIn.value.trim().toLowerCase();
       var vendidos = 0, reservados = 0;
       datos.compras.forEach(function(c){
@@ -166,7 +186,8 @@
       var filas = datos.compras.filter(function(c){
         if (!verExpiradas.checked && !c.numeros.length && (c.estado === 'expirada' || c.estado === 'fallida')) return false;
         if (!f) return true;
-        return [c.nombre, c.email, c.telefono, c.numeros.join(' '), c.ref, c.pago]
+        return [c.nombre, c.email, c.telefono, c.numeros.join(' '), c.ref,
+          (c.pagos || []).map(function(p){ return p.id; }).join(' ')]
           .join(' ').toLowerCase().indexOf(f) !== -1;
       });
       tabla.innerHTML = filas.length ? '<table class="coord-tabla"><thead><tr>' +
@@ -179,7 +200,9 @@
             '<td>' + esc([c.email, c.telefono].filter(Boolean).join(' · ') || '—') + '</td>' +
             '<td><span class="' + e[1] + '">' + esc(e[0]) + '</span>' +
               (c.estado === 'reservado' && c.hasta ? '<br><span class="coord-sub">hasta ' + hora(c.hasta) + '</span>' : '') +
-              (c.pago ? '<br><span class="coord-sub">pago ' + esc(c.pago) + '</span>' : '') + '</td>' +
+              (c.pagos || []).map(function(p){
+                return '<br><span class="coord-sub">pago ' + esc(p.id) + ' · ' + esc(PAGOS[p.estado] || p.estado) + '</span>';
+              }).join('') + '</td>' +
             '<td>' + hora(c.creado, true) + '</td>' +
           '</tr>';
         }).join('') + '</tbody></table>' : '<p class="coord-aviso">Sin compras que mostrar.</p>';
@@ -214,22 +237,25 @@
       return li;
     }
 
-    // Lo nuevo del log, arriba. Si hubo algo nuevo, el estado cambió: se
-    // releen las compras y la grilla pública.
+    // Lo nuevo del log, arriba.
     function seguirLog(){
-      if (document.hidden) return Promise.resolve();
       return pedir('/rifa/admin/log' + (ultimo === null ? '' : '?after=' + ultimo)).then(function(res){
-        var primera = ultimo === null;
         ultimo = res.last;
-        if (!res.entries.length) return;
         res.entries.forEach(function(l){ logBox.insertBefore(lineaLog(l), logBox.firstChild); });
         while (logBox.children.length > 200) logBox.removeChild(logBox.lastChild);
-        if (!primera) {
-          cargarCompras();
-          if (window.XuexiRifa) window.XuexiRifa.recargar();
-        }
       }).catch(function(e){
         mensaje('No se pudo leer la actividad: ' + e.message, true);
+      });
+    }
+
+    // Todo de nuevo: compras y problemas (que traen la revisión de Mercado
+    // Pago), después el log (que usa las compras para los nombres) y la
+    // grilla pública.
+    function recargar(){
+      actualizado.textContent = 'Cargando…';
+      return cargarCompras().then(seguirLog).then(function(){
+        if (window.XuexiRifa) window.XuexiRifa.recargar();
+        actualizado.textContent = 'Actualizado a las ' + hora(Date.now());
       });
     }
 
@@ -240,9 +266,7 @@
       mensaje('Guardando…');
       pedir('/rifa/admin', 'POST', cuerpo).then(function(res){
         mensaje('Listo.' + (res.numbers ? ' Números: ' + res.numbers.join(', ') + '.' : ''));
-        return Promise.all([cargarCompras(), seguirLog()]);
-      }).then(function(){
-        if (window.XuexiRifa) window.XuexiRifa.recargar();
+        return recargar();
       }).catch(function(e){
         mensaje(e.message, true);
       }).then(function(){ boton.disabled = false; });
@@ -284,23 +308,21 @@
     filtroIn.addEventListener('input', function(){ if (datos) dibujarCompras(); });
     verExpiradas.addEventListener('change', function(){ if (datos) dibujarCompras(); });
     campo('rifa-admin-recargar').addEventListener('click', function(){
-      cargarCompras();
-      if (window.XuexiRifa) window.XuexiRifa.recargar();
+      var b = this;
+      b.disabled = true;
+      recargar().then(function(){ b.disabled = false; });
     });
 
     function encender(){
       if (activo) return;
       activo = true;
       host.hidden = false;
-      // Las compras primero: el log las usa para mostrar nombres.
-      cargarCompras().then(seguirLog);
-      timer = setInterval(seguirLog, LOG_MS);
+      recargar();
     }
 
     function apagar(){
       activo = false;
       host.hidden = true;
-      clearInterval(timer);
     }
 
     if (window.XuexiAuth && window.XuexiAuth.disponible()) {

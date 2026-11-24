@@ -1007,7 +1007,13 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   font-size:.86rem;color:var(--cream-dim)}
 /* Panel de coordinación de la rifa (solo admin) */
 .rifa-admin{margin-top:28px}
-.rifa-admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rifa-admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.rifa-admin-recargar{display:flex;align-items:center;gap:10px}
+.rifa-admin-problemas{list-style:none;margin:0 0 16px;padding:12px 14px;border:1px solid rgba(192,57,43,.5);
+  border-left:3px solid var(--vermilion);border-radius:var(--r);background:rgba(192,57,43,.12);font-size:.84rem}
+.rifa-admin-problemas li{padding:3px 0;color:var(--cream-dim)}
+.rifa-admin-problemas b{color:#F5B7B1}
+#rifa-admin-problemas .coord-ok{padding:0 0 12px}
 .rifa-admin-acciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
 .rifa-admin-acciones h4{font-family:var(--sans);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
   color:var(--gold);margin:0 0 8px}

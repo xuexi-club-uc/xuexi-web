@@ -10,7 +10,7 @@
 <meta property="og:description" content="Una comunidad para cruzar el puente a China. Talleres, tandems de mandarín, cine, té y jiaozi en la UC.">
 <meta property="og:image" content="assets/logo-oscuro.jpg">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/site.css?v=28">
+<link rel="stylesheet" href="assets/site.css?v=29">
 <style>
 /* ===== APERTURA · 学习 en tinta ===== */
 .intro{position:fixed;inset:0;z-index:200;overflow:hidden;background:#F2EDE3;
@@ -375,9 +375,13 @@ body.intro-activa{overflow:hidden}
     <div class="coord-bloque">
       <div class="rifa-admin-head">
         <h3>Rifa · coordinación</h3>
-        <button type="button" class="coord-btn-mini" id="rifa-admin-recargar">Recargar</button>
+        <span class="rifa-admin-recargar">
+          <span class="coord-sub" id="rifa-admin-actualizado"></span>
+          <button type="button" class="coord-btn-mini" id="rifa-admin-recargar">Recargar</button>
+        </span>
       </div>
       <p class="coord-desc" id="rifa-admin-resumen">Cargando…</p>
+      <div id="rifa-admin-problemas"></div>
       <div class="rifa-admin-acciones">
         <div>
           <h4>Mover un número</h4>
@@ -446,7 +450,7 @@ body.intro-activa{overflow:hidden}
 
     <div class="coord-bloque">
       <h3>Actividad</h3>
-      <p class="coord-desc">Cada reserva, pago, vencimiento y corrección, con quién la hizo. Se actualiza solo.</p>
+      <p class="coord-desc">Cada reserva, pago, devolución, vencimiento y corrección, con quién la hizo. Se actualiza con Recargar.</p>
       <ol class="rifa-admin-log" id="rifa-admin-log"></ol>
     </div>
   </div>
@@ -508,7 +512,7 @@ body.intro-activa{overflow:hidden}
 <script src="assets/nav.js?v=20"></script>
 <script src="assets/auth.js?v=20"></script>
 <script src="assets/rifa.js?v=4"></script>
-<script src="assets/rifa-admin.js?v=6"></script>
+<script src="assets/rifa-admin.js?v=7"></script>
 <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
 </body>
 </html>
