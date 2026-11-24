@@ -973,19 +973,72 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   text-transform:uppercase;cursor:pointer}
 .pay-btn-link:hover{background:rgba(192,57,43,.16)}
 
-/* Donación de la portada: el correo y el teléfono van lado a lado. */
-.donation-contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.donation-contact .pay-field{min-width:0}
-.donation-card .pay-actions-panel{flex:1 1 360px}
+/* ===== RIFA DE LA PORTADA ===== */
+.rifa-contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.rifa-contact .pay-field{min-width:0}
+.rifa-card .pay-actions-panel{flex:1 1 360px}
+.rifa-elegidos{display:flex;flex-wrap:wrap;gap:6px;font-size:.8rem;color:var(--cream-dim);min-height:1.6em}
+.rifa-elegidos b{background:rgba(46,125,107,.3);border:1px solid var(--jade-light);border-radius:3px;
+  padding:1px 8px;color:var(--cream);font-weight:700}
+
+.rifa-dialog{width:min(920px,calc(100% - 32px));max-height:calc(100% - 32px);padding:20px 22px;
+  background:#2A1111;color:var(--cream);border:1px solid var(--gold-deep);border-top:3px solid var(--gold);
+  border-radius:var(--r);box-shadow:0 24px 60px -10px rgba(0,0,0,.8)}
+.rifa-dialog[open]{display:flex;flex-direction:column;gap:12px}
+.rifa-dialog::backdrop{background:rgba(12,6,6,.75);backdrop-filter:blur(3px)}
+.rifa-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rifa-dialog-head h3{font-family:var(--serif);font-size:1.3rem}
+.rifa-cerrar{background:none;border:1px solid var(--line);color:var(--cream);border-radius:50%;
+  width:34px;height:34px;font-size:1.2rem;line-height:1;cursor:pointer}
+.rifa-cerrar:hover{border-color:var(--gold);color:var(--gold)}
+.rifa-leyenda{display:flex;gap:16px;flex-wrap:wrap;font-size:.76rem;color:var(--cream-dim)}
+.rifa-leyenda span{display:flex;align-items:center;gap:6px}
+.rifa-leyenda .rifa-n{display:inline-block;width:16px;height:16px;padding:0;cursor:default}
+.rifa-grid{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:5px;overflow:auto;
+  min-height:0;padding:2px}
+.rifa-n{font:700 .78rem/1 var(--sans);padding:9px 0;text-align:center;border-radius:4px;cursor:pointer;
+  border:1px solid rgba(212,175,97,.3);background:rgba(0,0,0,.22);color:var(--cream);font-variant-numeric:tabular-nums}
+.rifa-n:hover{border-color:var(--gold)}
+.rifa-n:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.rifa-n[aria-pressed="true"]{background:var(--jade);border-color:#A3E4D7}
+.rifa-n:disabled,.rifa-n.tomado{background:rgba(0,0,0,.4);border-color:rgba(245,239,230,.08);
+  color:var(--cream-faint);text-decoration:line-through;cursor:not-allowed}
+.rifa-dialog-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:.86rem;color:var(--cream-dim)}
+/* Panel de coordinación de la rifa (solo admin) */
+.rifa-admin{margin-top:28px}
+.rifa-admin-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.rifa-admin-acciones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+.rifa-admin-acciones h4{font-family:var(--sans);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin:0 0 8px}
+.rifa-admin-acciones .coord-fila{margin-bottom:8px}
+#rifa-admin .coord-fila input:not([type=checkbox]){min-width:0;flex:1 1 90px}
+#rifa-admin .coord-fila select{flex:1;min-width:0}
+.rifa-admin-nums{display:flex;flex-wrap:wrap;gap:4px}
+#rifa-admin .coord-check{white-space:nowrap}
+.rifa-n.reservado{background:rgba(212,175,97,.28);border-color:var(--gold)}
+.rifa-n.vendido{background:rgba(192,57,43,.45);border-color:#E07A6E}
+.rifa-admin-detalle{margin:12px 0 0;min-height:1.4em}
+.rifa-planilla{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.rifa-planilla:hover{color:var(--cream)}
+.rifa-admin-nums b{background:rgba(212,175,97,.14);border:1px solid var(--line);border-radius:3px;
+  padding:0 6px;color:var(--cream);font-weight:700;font-variant-numeric:tabular-nums}
+.rifa-admin-log{list-style:none;margin:0;padding:0;max-height:360px;overflow:auto;font-size:.82rem}
+.rifa-admin-log li{padding:7px 0;border-bottom:1px solid var(--line);color:var(--cream-dim)}
+.rifa-admin-log b{color:var(--cream)}
 
 @media(max-width:720px){
   .payment-card-status{align-items:stretch}
-  .donation-contact{grid-template-columns:1fr}
+  .rifa-contact{grid-template-columns:1fr}
+  .rifa-admin-acciones{grid-template-columns:1fr}
+  .rifa-grid{grid-template-columns:repeat(10,minmax(0,1fr))}
+  .rifa-n{padding:11px 0;font-size:.74rem}
   .pay-status-info{align-items:flex-start}
   .pay-actions-panel{width:100%;max-width:none}
   .pay-tier-group{grid-template-columns:1fr}
   .pay-action-row,.pay-subscribe-box{flex-direction:column}
   .pay-btn-gold,.pay-btn-jade,.pay-btn-link{width:100%}
+  .rifa-dialog-foot .pay-btn-jade{width:auto}
 }
 
 
@@ -1063,12 +1116,15 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
 .coord-fila{align-items:stretch}
 .coord-fila .btn{white-space:nowrap}
 
-#coordinacion input,#coordinacion select,#coordinacion textarea{
+#coordinacion input,#coordinacion select,#coordinacion textarea,
+#rifa-admin input:not([type=checkbox]),#rifa-admin select{
   background:var(--ground-2);border:1px solid var(--line);border-radius:var(--r);
   color:var(--cream);padding:10px 12px;font-family:var(--sans);font-size:.86rem}
 #coordinacion .coord-input{width:100%;margin:4px 0 14px}
-#coordinacion input::placeholder,#coordinacion textarea::placeholder{color:var(--cream-faint)}
-#coordinacion input:focus,#coordinacion select:focus,#coordinacion textarea:focus{
+#coordinacion input::placeholder,#coordinacion textarea::placeholder,
+#rifa-admin input::placeholder{color:var(--cream-faint)}
+#coordinacion input:focus,#coordinacion select:focus,#coordinacion textarea:focus,
+#rifa-admin input:focus,#rifa-admin select:focus{
   outline:2px solid var(--gold);outline-offset:1px;border-color:transparent}
 
 .coord-btn-mini{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;

@@ -10,7 +10,7 @@
 <meta property="og:description" content="Una comunidad para cruzar el puente a China. Talleres, tandems de mandarín, cine, té y jiaozi en la UC.">
 <meta property="og:image" content="assets/logo-oscuro.jpg">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/site.css?v=22">
+<link rel="stylesheet" href="assets/site.css?v=28">
 <style>
 /* ===== APERTURA · 学习 en tinta ===== */
 .intro{position:fixed;inset:0;z-index:200;overflow:hidden;background:#F2EDE3;
@@ -334,46 +334,140 @@ body.intro-activa{overflow:hidden}
   </div>
 </section>
 
-<!-- DONACIÓN: no pide cuenta. El monto y los datos los valida el worker. -->
-<section class="alt" id="donacion">
+<!-- RIFA: no pide cuenta. Qué números quedan, y que nadie compre uno ya
+     tomado, lo decide el worker. -->
+<section class="alt" id="rifa">
   <div class="wrap">
-    <div class="payment-card-status pendiente donation-card" id="donation-card">
+    <div class="payment-card-status pendiente rifa-card" id="rifa-card">
       <div class="pay-status-info">
-        <div class="pay-seal-icon">捐</div>
+        <div class="pay-seal-icon">抽</div>
         <div>
-          <h2 class="pay-status-title"><span class="zh">捐款</span>Donación</h2>
-          <p class="pay-status-sub" id="donation-return" role="status" hidden><b></b></p>
-          <p class="pay-status-sub">Tus datos solo los ve la coordinación del club.</p>
+          <h2 class="pay-status-title"><span class="zh">抽奖</span>Compra de números de rifa</h2>
+          <p class="pay-status-sub" id="rifa-return" role="status" hidden><b></b></p>
+          <p class="pay-status-sub">$1.000 por número.</p>
+          <p class="pay-status-sub"><a class="rifa-planilla" href="https://docs.google.com/spreadsheets/d/1-2wkzB3dVYOtwE37TzDx9R9VhgpWsOMMIDGJ_jbkJA8/edit?usp=sharing"
+            target="_blank" rel="noopener">Ver la planilla de la rifa ↗</a></p>
         </div>
       </div>
       <div class="pay-actions-panel">
         <label class="pay-field">Nombre
-          <input type="text" id="donation-name" autocomplete="name" maxlength="80" required></label>
-        <div class="donation-contact">
-          <label class="pay-field">Correo (opcional)
-            <input type="email" id="donation-email" autocomplete="email" maxlength="254"></label>
-          <label class="pay-field">Teléfono (opcional)
-            <input type="tel" id="donation-phone" autocomplete="tel" maxlength="20" placeholder="+56 9 1234 5678"></label>
+          <input type="text" id="rifa-name" autocomplete="name" maxlength="80" required></label>
+        <div class="rifa-contact">
+          <label class="pay-field">Correo
+            <input type="email" id="rifa-email" autocomplete="email" maxlength="254"></label>
+          <label class="pay-field">Teléfono
+            <input type="tel" id="rifa-phone" autocomplete="tel" maxlength="20" placeholder="+56 9 1234 5678"></label>
         </div>
-        <div class="pay-tier-group" role="radiogroup" aria-label="Monto de la donación">
-          <label class="pay-tier"><input type="radio" name="donation-amount" value="1000" checked>
-            <span><b>$1.000</b><small>CLP</small></span></label>
-          <label class="pay-tier"><input type="radio" name="donation-amount" value="3000">
-            <span><b>$3.000</b><small>CLP</small></span></label>
-          <label class="pay-tier"><input type="radio" name="donation-amount" value="5000">
-            <span><b>$5.000</b><small>CLP</small></span></label>
-          <label class="pay-tier"><input type="radio" name="donation-amount" value="otro">
-            <span><b>Otro monto</b><small>$1.000 a $20.000</small></span></label>
-        </div>
-        <label class="pay-field" id="donation-custom-field" style="display:none">Monto en CLP
-          <input type="number" id="donation-custom" inputmode="numeric" min="1000" max="20000" step="1" placeholder="Ej: 2000"></label>
+        <div class="rifa-elegidos" id="rifa-elegidos" aria-live="polite"><span>Aún no eliges números.</span></div>
         <div class="pay-action-row">
-          <button type="button" class="pay-btn-jade" id="donation-submit">Donar $1.000</button>
+          <button type="button" class="pay-btn-gold" id="rifa-abrir">Seleccionar números</button>
+          <button type="button" class="pay-btn-jade" id="rifa-comprar">Comprar</button>
         </div>
-        <p class="pay-result" id="donation-result" aria-live="polite"></p>
+        <p class="pay-result" id="rifa-result" aria-live="polite"></p>
       </div>
     </div>
   </div>
+
+  <!-- PANEL DE COORDINACIÓN DE LA RIFA: lo muestra assets/rifa-admin.js solo
+       a quien tiene rol admin. Esconderlo no protege nada: el worker responde
+       403 a todo lo de /rifa/admin sin ese rol. -->
+  <div class="wrap rifa-admin" id="rifa-admin" hidden>
+    <div class="coord-bloque">
+      <div class="rifa-admin-head">
+        <h3>Rifa · coordinación</h3>
+        <button type="button" class="coord-btn-mini" id="rifa-admin-recargar">Recargar</button>
+      </div>
+      <p class="coord-desc" id="rifa-admin-resumen">Cargando…</p>
+      <div class="rifa-admin-acciones">
+        <div>
+          <h4>Mover un número</h4>
+          <div class="coord-fila">
+            <input type="number" id="rifa-mover-de" min="1" max="200" placeholder="De" aria-label="Número actual">
+            <input type="number" id="rifa-mover-a" min="1" max="200" placeholder="A" aria-label="Número nuevo">
+            <button type="button" class="coord-btn-mini" id="rifa-mover">Mover</button>
+          </div>
+          <p class="coord-sub">La compra que tiene el primero pasa a tener el segundo, que debe estar libre.</p>
+        </div>
+        <div>
+          <h4>Liberar números</h4>
+          <div class="coord-fila">
+            <input type="text" id="rifa-liberar-nums" placeholder="Ej: 5, 7, 12" aria-label="Números a liberar">
+            <button type="button" class="coord-btn-mini" id="rifa-liberar">Liberar</button>
+          </div>
+          <p class="coord-sub">Quedan libres para cualquiera. La compra se conserva.</p>
+        </div>
+        <div>
+          <h4>Venta manual</h4>
+          <div class="coord-fila">
+            <input type="text" id="rifa-venta-nums" placeholder="Números" aria-label="Números vendidos">
+            <input type="text" id="rifa-venta-nombre" placeholder="Nombre (opcional)" aria-label="Nombre">
+          </div>
+          <div class="coord-fila">
+            <input type="email" id="rifa-venta-email" placeholder="Correo (opcional)" aria-label="Correo">
+            <input type="tel" id="rifa-venta-tel" placeholder="Teléfono (opcional)" aria-label="Teléfono">
+            <button type="button" class="coord-btn-mini" id="rifa-venta">Registrar</button>
+          </div>
+          <p class="coord-sub">Una venta hecha fuera del sitio, por ejemplo en efectivo.</p>
+        </div>
+        <div>
+          <h4>Asignar a una compra</h4>
+          <div class="coord-fila">
+            <select id="rifa-asignar-compra" aria-label="Compra"></select>
+          </div>
+          <div class="coord-fila">
+            <input type="text" id="rifa-asignar-nums" placeholder="Números libres" aria-label="Números a asignar">
+            <button type="button" class="coord-btn-mini" id="rifa-asignar">Asignar</button>
+          </div>
+          <p class="coord-sub">Suma números libres a una compra existente.</p>
+        </div>
+      </div>
+      <p class="pay-result" id="rifa-admin-msg" aria-live="polite"></p>
+    </div>
+
+    <div class="coord-bloque">
+      <h3>Números</h3>
+      <div class="rifa-leyenda" aria-hidden="true">
+        <span><i class="rifa-n"></i> Libre</span>
+        <span><i class="rifa-n reservado"></i> Reservado, en pago</span>
+        <span><i class="rifa-n vendido"></i> Vendido</span>
+      </div>
+      <div class="rifa-grid rifa-admin-grid" id="rifa-admin-grid" role="group" aria-label="Estado de los números"></div>
+      <p class="coord-desc rifa-admin-detalle" id="rifa-admin-detalle" aria-live="polite">Toca un número para ver quién lo tiene.</p>
+    </div>
+
+    <div class="coord-bloque">
+      <h3>Compras</h3>
+      <div class="coord-fila">
+        <input type="text" id="rifa-admin-filtro" placeholder="Filtrar por nombre, contacto o número…" aria-label="Filtrar compras">
+        <label class="coord-check"><input type="checkbox" id="rifa-admin-expiradas"> Mostrar expiradas</label>
+      </div>
+      <div id="rifa-admin-compras"><p class="coord-aviso">Cargando…</p></div>
+    </div>
+
+    <div class="coord-bloque">
+      <h3>Actividad</h3>
+      <p class="coord-desc">Cada reserva, pago, vencimiento y corrección, con quién la hizo. Se actualiza solo.</p>
+      <ol class="rifa-admin-log" id="rifa-admin-log"></ol>
+    </div>
+  </div>
+
+  <dialog class="rifa-dialog" id="rifa-dialog" aria-labelledby="rifa-dialog-title">
+    <div class="rifa-dialog-head">
+      <h3 id="rifa-dialog-title">Seleccionar números</h3>
+      <button type="button" class="rifa-cerrar" id="rifa-cerrar" aria-label="Cerrar">×</button>
+    </div>
+    <div class="rifa-leyenda" aria-hidden="true">
+      <span><i class="rifa-n"></i> Libre</span>
+      <span><i class="rifa-n" aria-pressed="true"></i> Elegido</span>
+      <span><i class="rifa-n tomado"></i> Tomado</span>
+    </div>
+    <div class="rifa-grid" id="rifa-grid" role="group" aria-label="Números de la rifa"></div>
+    <p class="pay-result" id="rifa-grid-msg" aria-live="polite"></p>
+    <div class="rifa-dialog-foot">
+      <span id="rifa-cuenta"></span>
+      <button type="button" class="pay-btn-jade" id="rifa-listo">Listo</button>
+    </div>
+  </dialog>
 </section>
 
 </main>
@@ -413,7 +507,8 @@ body.intro-activa{overflow:hidden}
 <script src="assets/firebase-config.js"></script>
 <script src="assets/nav.js?v=20"></script>
 <script src="assets/auth.js?v=20"></script>
-<script src="assets/donacion.js?v=3"></script>
+<script src="assets/rifa.js?v=4"></script>
+<script src="assets/rifa-admin.js?v=6"></script>
 <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
 </body>
 </html>

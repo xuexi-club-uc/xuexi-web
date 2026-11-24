@@ -10,10 +10,11 @@
  * se dibuja.
  *
  * Las donaciones llegan mezcladas con los cobros, marcadas con
- * kind: 'donation'. No conceden días: todo lo que calcula el estado de cuota
- * las deja fuera (ver pagosDe). Donar no pide cuenta, así que una donación no
- * trae userId sino donor: el nombre, correo y teléfono que escribió quien
- * donó, sin verificar.
+ * kind: 'donation', y las compras de la rifa con kind: 'raffle'. Ninguna
+ * concede días: todo lo que calcula el estado de cuota se queda solo con
+ * kind: 'dues' (ver esCuota). Ninguna pide cuenta, así que no traen userId
+ * sino donor: el nombre, correo y teléfono que escribió quien pagó, sin
+ * verificar. El detalle de la rifa está en su propio panel, en la portada.
  */
 (function(){
   'use strict';
@@ -142,22 +143,26 @@
     return !filtro || String(texto == null ? '' : texto).toLowerCase().indexOf(filtro) !== -1;
   }
 
-  // Igual que el contrato: cada cobro aprobado y no devuelto concede 30 días.
-  // Los días se apilan desde el vencimiento anterior o desde la fecha del cobro,
-  // lo que ocurra más tarde.
   function esDonacion(p){
     return p.kind === 'donation';
+  }
+
+  // Solo una cuota concede días. Lo que llega sin kind es de un worker anterior
+  // a las donaciones, cuando todo cobro era cuota.
+  function esCuota(p){
+    return !p.kind || p.kind === 'dues';
   }
 
   function aprobado(p){
     return p.status === 'approved' && !p.refunded;
   }
 
-  // Solo cuotas: una donación contada aquí dejaría al día a quien solo donó.
+  // Solo cuotas: una donación o una compra de rifa contada aquí dejaría al día
+  // a quien no pagó la cuota.
   function pagosDe(uid){
     uid = normalizarUid(uid);
     return datos.pagos.filter(function(p){
-      return !esDonacion(p) && normalizarUid(p.userId) === uid;
+      return esCuota(p) && normalizarUid(p.userId) === uid;
     });
   }
 
@@ -166,7 +171,7 @@
   }
 
   function cuotas(){
-    return datos.pagos.filter(function(p){ return !esDonacion(p); });
+    return datos.pagos.filter(esCuota);
   }
 
   // Verde lo aprobado, rojo lo rechazado, amarillo todo lo demás (pendiente,
@@ -179,7 +184,9 @@
   }
 
   function origen(p){
-    return esDonacion(p) ? 'Donación' : (p.recurring ? 'Suscripción' : 'Pago único');
+    if (esDonacion(p)) return 'Donación';
+    if (p.kind === 'raffle') return 'Rifa';
+    return p.recurring ? 'Suscripción' : 'Pago único';
   }
 
   function suscripcionesDe(uid){
@@ -187,6 +194,9 @@
     return datos.suscripciones.filter(function(s){ return normalizarUid(s.userId) === uid; });
   }
 
+  // Igual que el contrato: cada cobro aprobado y no devuelto concede 30 días.
+  // Los días se apilan desde el vencimiento anterior o desde la fecha del cobro,
+  // lo que ocurra más tarde.
   function diasDesdePagos(pagos){
     var DAY = 86400000;
     var expiry = pagos
@@ -313,7 +323,7 @@
   function tablaPagos(aplicarFiltro){
     var filas = datos.pagos.filter(function(p){
       return aplicarFiltro === false || coincide(p.userId) || coincide(p.status) ||
-        (esDonacion(p) && donacionCoincide(p));
+        (!esCuota(p) && donacionCoincide(p));
     });
     if (!filas.length) return '<p class="coord-aviso">Sin cobros que mostrar.</p>';
     return '<table class="coord-tabla"><thead><tr>' +
