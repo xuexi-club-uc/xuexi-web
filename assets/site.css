@@ -973,8 +973,14 @@ footer{border-top:1px solid var(--line);padding:clamp(34px,5vw,58px) 0 40px}
   text-transform:uppercase;cursor:pointer}
 .pay-btn-link:hover{background:rgba(192,57,43,.16)}
 
+/* Donación de la portada: el correo y el teléfono van lado a lado. */
+.donation-contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.donation-contact .pay-field{min-width:0}
+.donation-card .pay-actions-panel{flex:1 1 360px}
+
 @media(max-width:720px){
   .payment-card-status{align-items:stretch}
+  .donation-contact{grid-template-columns:1fr}
   .pay-status-info{align-items:flex-start}
   .pay-actions-panel{width:100%;max-width:none}
   .pay-tier-group{grid-template-columns:1fr}

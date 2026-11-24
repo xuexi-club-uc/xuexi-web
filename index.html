@@ -10,7 +10,7 @@
 <meta property="og:description" content="Una comunidad para cruzar el puente a China. Talleres, tandems de mandarín, cine, té y jiaozi en la UC.">
 <meta property="og:image" content="assets/logo-oscuro.jpg">
 <meta property="og:type" content="website">
-<link rel="stylesheet" href="assets/site.css?v=20">
+<link rel="stylesheet" href="assets/site.css?v=22">
 <style>
 /* ===== APERTURA · 学习 en tinta ===== */
 .intro{position:fixed;inset:0;z-index:200;overflow:hidden;background:#F2EDE3;
@@ -334,6 +334,48 @@ body.intro-activa{overflow:hidden}
   </div>
 </section>
 
+<!-- DONACIÓN: no pide cuenta. El monto y los datos los valida el worker. -->
+<section class="alt" id="donacion">
+  <div class="wrap">
+    <div class="payment-card-status pendiente donation-card" id="donation-card">
+      <div class="pay-status-info">
+        <div class="pay-seal-icon">捐</div>
+        <div>
+          <h2 class="pay-status-title"><span class="zh">捐款</span>Donación</h2>
+          <p class="pay-status-sub" id="donation-return" role="status" hidden><b></b></p>
+          <p class="pay-status-sub">Tus datos solo los ve la coordinación del club.</p>
+        </div>
+      </div>
+      <div class="pay-actions-panel">
+        <label class="pay-field">Nombre
+          <input type="text" id="donation-name" autocomplete="name" maxlength="80" required></label>
+        <div class="donation-contact">
+          <label class="pay-field">Correo (opcional)
+            <input type="email" id="donation-email" autocomplete="email" maxlength="254"></label>
+          <label class="pay-field">Teléfono (opcional)
+            <input type="tel" id="donation-phone" autocomplete="tel" maxlength="20" placeholder="+56 9 1234 5678"></label>
+        </div>
+        <div class="pay-tier-group" role="radiogroup" aria-label="Monto de la donación">
+          <label class="pay-tier"><input type="radio" name="donation-amount" value="1000" checked>
+            <span><b>$1.000</b><small>CLP</small></span></label>
+          <label class="pay-tier"><input type="radio" name="donation-amount" value="3000">
+            <span><b>$3.000</b><small>CLP</small></span></label>
+          <label class="pay-tier"><input type="radio" name="donation-amount" value="5000">
+            <span><b>$5.000</b><small>CLP</small></span></label>
+          <label class="pay-tier"><input type="radio" name="donation-amount" value="otro">
+            <span><b>Otro monto</b><small>$1.000 a $20.000</small></span></label>
+        </div>
+        <label class="pay-field" id="donation-custom-field" style="display:none">Monto en CLP
+          <input type="number" id="donation-custom" inputmode="numeric" min="1000" max="20000" step="1" placeholder="Ej: 2000"></label>
+        <div class="pay-action-row">
+          <button type="button" class="pay-btn-jade" id="donation-submit">Donar $1.000</button>
+        </div>
+        <p class="pay-result" id="donation-result" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -365,8 +407,13 @@ body.intro-activa{overflow:hidden}
   </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
 <script src="assets/nav.js?v=20"></script>
 <script src="assets/auth.js?v=20"></script>
+<script src="assets/donacion.js?v=3"></script>
 <script>document.getElementById('anio').textContent = new Date().getFullYear();</script>
 </body>
 </html>
